@@ -9,10 +9,10 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
 module.exports = {
     entry: {
-        'polyfills': './polyfills.ts',
-        'vendor': './vendor.ts',
-        'ng1': './index.ts',
-        'app':'./Scripts/Apps/Main.ts'
+        'polyfills': './public/polyfills.ts',
+        'vendor': './public/vendor.ts',
+        'ng1': './public/index.ts',
+        'app': './public/main.ts'
     },
     output: {
         path: helpers.root('dist/dev'),
@@ -53,6 +53,7 @@ module.exports = {
             chunks: ['vendor', 'app'],
             minChunks: 2
         }),
+
         new webpack.SourceMapDevToolPlugin({
             "filename": "[file].map[query]",
             "moduleFilenameTemplate": "[resource-path]",
@@ -73,11 +74,15 @@ module.exports = {
 
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)@angular/,
-            helpers.root('.src'),
+            helpers.root('./src'),
             {}
         ),
 
-         new webpack.ProvidePlugin({
+    //    new BundleAnalyzerPlugin({
+    //         analyzerMode: 'static'
+    //     }),
+
+        new webpack.ProvidePlugin({
              $: "jquery/src/jquery",
              jquery: "jquery/src/jquery",
              "window.jQuery": "jquery/src/jquery",

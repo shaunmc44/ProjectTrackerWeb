@@ -1,18 +1,17 @@
-﻿import * as angular from "angular";
-import ProjectModel from "../app/Models/ProjectModel";
-
+﻿import ProjectModel from "../Models/ProjectModel";
+import {EventUtility} from "../Utilities/EventUtility.service";
+import { Injectable, Inject } from "@angular/core";
+import {ProjectsDataAccess} from "../DataAccess/ProjectsDataAccess.service";
+import {iProjectModel} from '../Models/ProjectModel';
 export var EVENT_PROJECT_LIST_LOADED = "ProjectList_Loaded";
 export var EVENT_PROJECT_LIST_ERROR = "ProjectList_Error";
 
-angular.module("ProjectTrackerApp").service("ProjectTrackerListViewModel", class ProjectTrackerListViewModel {
-    ProjectsDataAccess: any;
-    EventUtility: any;
+@Injectable()
+export class ProjectTrackerListViewModel {
     isBusy: boolean;
-    AllProjects: any;
+    AllProjects: ProjectModel[];
 
-    constructor(ProjectsDataAccess, EventUtility) {
-        this.ProjectsDataAccess = ProjectsDataAccess;
-        this.EventUtility = EventUtility;
+    constructor(@Inject(ProjectsDataAccess) private ProjectsDataAccess, @Inject(EventUtility) private EventUtility) {
         this.AllProjects = [];
 
         this.LoadItems(null);
@@ -34,13 +33,12 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerListViewModel", class
         this.AllProjects.length = 0;
         this.isBusy = true;
 
-        this.ProjectsDataAccess.SelectAll().$promise.then((result) => {
-            var i = 0;
-            var n = result.value.length;
-
-            while (i < n) {
-                this.AllProjects.push(new ProjectModel(result.value[i]));
-                i++;
+        this.ProjectsDataAccess.SelectAll()
+        .subscribe(
+            (result : iProjectModel[]) => {
+           
+            for(var i =0; i < (result as any).value.length; i++) {
+                this.AllProjects.push(new ProjectModel((result as any).value[i]));
             }
 
             if (PassThroughMessage) {
@@ -66,4 +64,4 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerListViewModel", class
             this.LoadItems(PassThroughMessage);
         }
     }
-});
+}

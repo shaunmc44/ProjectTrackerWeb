@@ -1,15 +1,6 @@
 ﻿import "./ProjectTrackerApp";
-import "./ViewModels/ProjectTrackerAdminViewModel";
-import "./ViewModels/ProjectTrackerDetailRecordViewModel";
-import "./ViewModels/ProjectTrackerDetailViewModel";
-import "./ViewModels/ProjectTrackerListViewModel";
-import "./DataAccess/ProjectPhasesDataAccess";
-import "./DataAccess/ProjectStatusesDataAccess";
-import "./DataAccess/ProjectTypesDataAccess";
-import "./DataAccess/ProjectsDataAccess";
 import "./app/Utilities/DateUtility";
 import "./app/Models/PhaseModel";
 import "./app/Models/ProjectModel";
 import "./app/Models/StatusModel";
 import "./app/Models/TypeModel";
-import "./ProjectTracker";

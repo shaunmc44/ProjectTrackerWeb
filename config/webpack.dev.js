@@ -12,7 +12,7 @@ module.exports = {
         'polyfills': './public/polyfills.ts',
         'vendor': './public/vendor.ts',
         'ng1': './public/index.ts',
-        'app': './public/main.ts'
+        'app': './public/Main.ts'
     },
     output: {
         path: helpers.root('dist/dev'),

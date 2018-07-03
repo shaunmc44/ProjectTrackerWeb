@@ -1,4 +1,10 @@
-﻿export default class PhaseModel {
+﻿export interface iPhaseModel{
+    ProjectPhaseId: number;
+    ProjectPhaseName: string;
+    ProjectPhaseDescription: string;
+}
+
+export default class PhaseModel {
     ProjectPhaseId: number;
     ProjectPhaseName: string;
     ProjectPhaseDescription: string;

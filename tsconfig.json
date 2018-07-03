@@ -16,7 +16,6 @@
       "es2015.iterable"
     ]
   },
-  "files": ["index.ts"],
   "exclude": [
     "node_modules"
   ]

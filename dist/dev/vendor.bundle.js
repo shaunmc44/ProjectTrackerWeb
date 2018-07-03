@@ -3,602 +3,7 @@ webpackJsonp([2],[
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var root_1 = __webpack_require__(35);
-var toSubscriber_1 = __webpack_require__(245);
-var observable_1 = __webpack_require__(113);
-var pipe_1 = __webpack_require__(179);
-/**
- * A representation of any set of values over any amount of time. This is the most basic building block
- * of RxJS.
- *
- * @class Observable<T>
- */
-var Observable = (function () {
-    /**
-     * @constructor
-     * @param {Function} subscribe the function that is called when the Observable is
-     * initially subscribed to. This function is given a Subscriber, to which new values
-     * can be `next`ed, or an `error` method can be called to raise an error, or
-     * `complete` can be called to notify of a successful completion.
-     */
-    function Observable(subscribe) {
-        this._isScalar = false;
-        if (subscribe) {
-            this._subscribe = subscribe;
-        }
-    }
-    /**
-     * Creates a new Observable, with this Observable as the source, and the passed
-     * operator defined as the new observable's operator.
-     * @method lift
-     * @param {Operator} operator the operator defining the operation to take on the observable
-     * @return {Observable} a new observable with the Operator applied
-     */
-    Observable.prototype.lift = function (operator) {
-        var observable = new Observable();
-        observable.source = this;
-        observable.operator = operator;
-        return observable;
-    };
-    /**
-     * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
-     *
-     * <span class="informal">Use it when you have all these Observables, but still nothing is happening.</span>
-     *
-     * `subscribe` is not a regular operator, but a method that calls Observable's internal `subscribe` function. It
-     * might be for example a function that you passed to a {@link create} static factory, but most of the time it is
-     * a library implementation, which defines what and when will be emitted by an Observable. This means that calling
-     * `subscribe` is actually the moment when Observable starts its work, not when it is created, as it is often
-     * thought.
-     *
-     * Apart from starting the execution of an Observable, this method allows you to listen for values
-     * that an Observable emits, as well as for when it completes or errors. You can achieve this in two
-     * following ways.
-     *
-     * The first way is creating an object that implements {@link Observer} interface. It should have methods
-     * defined by that interface, but note that it should be just a regular JavaScript object, which you can create
-     * yourself in any way you want (ES6 class, classic function constructor, object literal etc.). In particular do
-     * not attempt to use any RxJS implementation details to create Observers - you don't need them. Remember also
-     * that your object does not have to implement all methods. If you find yourself creating a method that doesn't
-     * do anything, you can simply omit it. Note however, that if `error` method is not provided, all errors will
-     * be left uncaught.
-     *
-     * The second way is to give up on Observer object altogether and simply provide callback functions in place of its methods.
-     * This means you can provide three functions as arguments to `subscribe`, where first function is equivalent
-     * of a `next` method, second of an `error` method and third of a `complete` method. Just as in case of Observer,
-     * if you do not need to listen for something, you can omit a function, preferably by passing `undefined` or `null`,
-     * since `subscribe` recognizes these functions by where they were placed in function call. When it comes
-     * to `error` function, just as before, if not provided, errors emitted by an Observable will be thrown.
-     *
-     * Whatever style of calling `subscribe` you use, in both cases it returns a Subscription object.
-     * This object allows you to call `unsubscribe` on it, which in turn will stop work that an Observable does and will clean
-     * up all resources that an Observable used. Note that cancelling a subscription will not call `complete` callback
-     * provided to `subscribe` function, which is reserved for a regular completion signal that comes from an Observable.
-     *
-     * Remember that callbacks provided to `subscribe` are not guaranteed to be called asynchronously.
-     * It is an Observable itself that decides when these functions will be called. For example {@link of}
-     * by default emits all its values synchronously. Always check documentation for how given Observable
-     * will behave when subscribed and if its default behavior can be modified with a {@link Scheduler}.
-     *
-     * @example <caption>Subscribe with an Observer</caption>
-     * const sumObserver = {
-     *   sum: 0,
-     *   next(value) {
-     *     console.log('Adding: ' + value);
-     *     this.sum = this.sum + value;
-     *   },
-     *   error() { // We actually could just remove this method,
-     *   },        // since we do not really care about errors right now.
-     *   complete() {
-     *     console.log('Sum equals: ' + this.sum);
-     *   }
-     * };
-     *
-     * Rx.Observable.of(1, 2, 3) // Synchronously emits 1, 2, 3 and then completes.
-     * .subscribe(sumObserver);
-     *
-     * // Logs:
-     * // "Adding: 1"
-     * // "Adding: 2"
-     * // "Adding: 3"
-     * // "Sum equals: 6"
-     *
-     *
-     * @example <caption>Subscribe with functions</caption>
-     * let sum = 0;
-     *
-     * Rx.Observable.of(1, 2, 3)
-     * .subscribe(
-     *   function(value) {
-     *     console.log('Adding: ' + value);
-     *     sum = sum + value;
-     *   },
-     *   undefined,
-     *   function() {
-     *     console.log('Sum equals: ' + sum);
-     *   }
-     * );
-     *
-     * // Logs:
-     * // "Adding: 1"
-     * // "Adding: 2"
-     * // "Adding: 3"
-     * // "Sum equals: 6"
-     *
-     *
-     * @example <caption>Cancel a subscription</caption>
-     * const subscription = Rx.Observable.interval(1000).subscribe(
-     *   num => console.log(num),
-     *   undefined,
-     *   () => console.log('completed!') // Will not be called, even
-     * );                                // when cancelling subscription
-     *
-     *
-     * setTimeout(() => {
-     *   subscription.unsubscribe();
-     *   console.log('unsubscribed!');
-     * }, 2500);
-     *
-     * // Logs:
-     * // 0 after 1s
-     * // 1 after 2s
-     * // "unsubscribed!" after 2.5s
-     *
-     *
-     * @param {Observer|Function} observerOrNext (optional) Either an observer with methods to be called,
-     *  or the first of three possible handlers, which is the handler for each value emitted from the subscribed
-     *  Observable.
-     * @param {Function} error (optional) A handler for a terminal event resulting from an error. If no error handler is provided,
-     *  the error will be thrown as unhandled.
-     * @param {Function} complete (optional) A handler for a terminal event resulting from successful completion.
-     * @return {ISubscription} a subscription reference to the registered handlers
-     * @method subscribe
-     */
-    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
-        var operator = this.operator;
-        var sink = toSubscriber_1.toSubscriber(observerOrNext, error, complete);
-        if (operator) {
-            operator.call(sink, this.source);
-        }
-        else {
-            sink.add(this.source || !sink.syncErrorThrowable ? this._subscribe(sink) : this._trySubscribe(sink));
-        }
-        if (sink.syncErrorThrowable) {
-            sink.syncErrorThrowable = false;
-            if (sink.syncErrorThrown) {
-                throw sink.syncErrorValue;
-            }
-        }
-        return sink;
-    };
-    Observable.prototype._trySubscribe = function (sink) {
-        try {
-            return this._subscribe(sink);
-        }
-        catch (err) {
-            sink.syncErrorThrown = true;
-            sink.syncErrorValue = err;
-            sink.error(err);
-        }
-    };
-    /**
-     * @method forEach
-     * @param {Function} next a handler for each value emitted by the observable
-     * @param {PromiseConstructor} [PromiseCtor] a constructor function used to instantiate the Promise
-     * @return {Promise} a promise that either resolves on observable completion or
-     *  rejects with the handled error
-     */
-    Observable.prototype.forEach = function (next, PromiseCtor) {
-        var _this = this;
-        if (!PromiseCtor) {
-            if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
-                PromiseCtor = root_1.root.Rx.config.Promise;
-            }
-            else if (root_1.root.Promise) {
-                PromiseCtor = root_1.root.Promise;
-            }
-        }
-        if (!PromiseCtor) {
-            throw new Error('no Promise impl found');
-        }
-        return new PromiseCtor(function (resolve, reject) {
-            // Must be declared in a separate statement to avoid a RefernceError when
-            // accessing subscription below in the closure due to Temporal Dead Zone.
-            var subscription;
-            subscription = _this.subscribe(function (value) {
-                if (subscription) {
-                    // if there is a subscription, then we can surmise
-                    // the next handling is asynchronous. Any errors thrown
-                    // need to be rejected explicitly and unsubscribe must be
-                    // called manually
-                    try {
-                        next(value);
-                    }
-                    catch (err) {
-                        reject(err);
-                        subscription.unsubscribe();
-                    }
-                }
-                else {
-                    // if there is NO subscription, then we're getting a nexted
-                    // value synchronously during subscription. We can just call it.
-                    // If it errors, Observable's `subscribe` will ensure the
-                    // unsubscription logic is called, then synchronously rethrow the error.
-                    // After that, Promise will trap the error and send it
-                    // down the rejection path.
-                    next(value);
-                }
-            }, reject, resolve);
-        });
-    };
-    /** @deprecated internal use only */ Observable.prototype._subscribe = function (subscriber) {
-        return this.source.subscribe(subscriber);
-    };
-    /**
-     * An interop point defined by the es7-observable spec https://github.com/zenparsing/es-observable
-     * @method Symbol.observable
-     * @return {Observable} this instance of the observable
-     */
-    Observable.prototype[observable_1.observable] = function () {
-        return this;
-    };
-    /* tslint:enable:max-line-length */
-    /**
-     * Used to stitch together functional operators into a chain.
-     * @method pipe
-     * @return {Observable} the Observable result of all of the operators having
-     * been called in the order they were passed in.
-     *
-     * @example
-     *
-     * import { map, filter, scan } from 'rxjs/operators';
-     *
-     * Rx.Observable.interval(1000)
-     *   .pipe(
-     *     filter(x => x % 2 === 0),
-     *     map(x => x + x),
-     *     scan((acc, x) => acc + x)
-     *   )
-     *   .subscribe(x => console.log(x))
-     */
-    Observable.prototype.pipe = function () {
-        var operations = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            operations[_i - 0] = arguments[_i];
-        }
-        if (operations.length === 0) {
-            return this;
-        }
-        return pipe_1.pipeFromArray(operations)(this);
-    };
-    /* tslint:enable:max-line-length */
-    Observable.prototype.toPromise = function (PromiseCtor) {
-        var _this = this;
-        if (!PromiseCtor) {
-            if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
-                PromiseCtor = root_1.root.Rx.config.Promise;
-            }
-            else if (root_1.root.Promise) {
-                PromiseCtor = root_1.root.Promise;
-            }
-        }
-        if (!PromiseCtor) {
-            throw new Error('no Promise impl found');
-        }
-        return new PromiseCtor(function (resolve, reject) {
-            var value;
-            _this.subscribe(function (x) { return value = x; }, function (err) { return reject(err); }, function () { return resolve(value); });
-        });
-    };
-    // HACK: Since TypeScript inherits static properties too, we have to
-    // fight against TypeScript here so Subject can have a different static create signature
-    /**
-     * Creates a new cold Observable by calling the Observable constructor
-     * @static true
-     * @owner Observable
-     * @method create
-     * @param {Function} subscribe? the subscriber function to be passed to the Observable constructor
-     * @return {Observable} a new cold observable
-     */
-    Observable.create = function (subscribe) {
-        return new Observable(subscribe);
-    };
-    return Observable;
-}());
-exports.Observable = Observable;
-//# sourceMappingURL=Observable.js.map
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var isFunction_1 = __webpack_require__(175);
-var Subscription_1 = __webpack_require__(93);
-var Observer_1 = __webpack_require__(178);
-var rxSubscriber_1 = __webpack_require__(112);
-/**
- * Implements the {@link Observer} interface and extends the
- * {@link Subscription} class. While the {@link Observer} is the public API for
- * consuming the values of an {@link Observable}, all Observers get converted to
- * a Subscriber, in order to provide Subscription-like capabilities such as
- * `unsubscribe`. Subscriber is a common type in RxJS, and crucial for
- * implementing operators, but it is rarely used as a public API.
- *
- * @class Subscriber<T>
- */
-var Subscriber = (function (_super) {
-    __extends(Subscriber, _super);
-    /**
-     * @param {Observer|function(value: T): void} [destinationOrNext] A partially
-     * defined Observer or a `next` callback function.
-     * @param {function(e: ?any): void} [error] The `error` callback of an
-     * Observer.
-     * @param {function(): void} [complete] The `complete` callback of an
-     * Observer.
-     */
-    function Subscriber(destinationOrNext, error, complete) {
-        _super.call(this);
-        this.syncErrorValue = null;
-        this.syncErrorThrown = false;
-        this.syncErrorThrowable = false;
-        this.isStopped = false;
-        switch (arguments.length) {
-            case 0:
-                this.destination = Observer_1.empty;
-                break;
-            case 1:
-                if (!destinationOrNext) {
-                    this.destination = Observer_1.empty;
-                    break;
-                }
-                if (typeof destinationOrNext === 'object') {
-                    // HACK(benlesh): To resolve an issue where Node users may have multiple
-                    // copies of rxjs in their node_modules directory.
-                    if (isTrustedSubscriber(destinationOrNext)) {
-                        var trustedSubscriber = destinationOrNext[rxSubscriber_1.rxSubscriber]();
-                        this.syncErrorThrowable = trustedSubscriber.syncErrorThrowable;
-                        this.destination = trustedSubscriber;
-                        trustedSubscriber.add(this);
-                    }
-                    else {
-                        this.syncErrorThrowable = true;
-                        this.destination = new SafeSubscriber(this, destinationOrNext);
-                    }
-                    break;
-                }
-            default:
-                this.syncErrorThrowable = true;
-                this.destination = new SafeSubscriber(this, destinationOrNext, error, complete);
-                break;
-        }
-    }
-    Subscriber.prototype[rxSubscriber_1.rxSubscriber] = function () { return this; };
-    /**
-     * A static factory for a Subscriber, given a (potentially partial) definition
-     * of an Observer.
-     * @param {function(x: ?T): void} [next] The `next` callback of an Observer.
-     * @param {function(e: ?any): void} [error] The `error` callback of an
-     * Observer.
-     * @param {function(): void} [complete] The `complete` callback of an
-     * Observer.
-     * @return {Subscriber<T>} A Subscriber wrapping the (partially defined)
-     * Observer represented by the given arguments.
-     */
-    Subscriber.create = function (next, error, complete) {
-        var subscriber = new Subscriber(next, error, complete);
-        subscriber.syncErrorThrowable = false;
-        return subscriber;
-    };
-    /**
-     * The {@link Observer} callback to receive notifications of type `next` from
-     * the Observable, with a value. The Observable may call this method 0 or more
-     * times.
-     * @param {T} [value] The `next` value.
-     * @return {void}
-     */
-    Subscriber.prototype.next = function (value) {
-        if (!this.isStopped) {
-            this._next(value);
-        }
-    };
-    /**
-     * The {@link Observer} callback to receive notifications of type `error` from
-     * the Observable, with an attached {@link Error}. Notifies the Observer that
-     * the Observable has experienced an error condition.
-     * @param {any} [err] The `error` exception.
-     * @return {void}
-     */
-    Subscriber.prototype.error = function (err) {
-        if (!this.isStopped) {
-            this.isStopped = true;
-            this._error(err);
-        }
-    };
-    /**
-     * The {@link Observer} callback to receive a valueless notification of type
-     * `complete` from the Observable. Notifies the Observer that the Observable
-     * has finished sending push-based notifications.
-     * @return {void}
-     */
-    Subscriber.prototype.complete = function () {
-        if (!this.isStopped) {
-            this.isStopped = true;
-            this._complete();
-        }
-    };
-    Subscriber.prototype.unsubscribe = function () {
-        if (this.closed) {
-            return;
-        }
-        this.isStopped = true;
-        _super.prototype.unsubscribe.call(this);
-    };
-    Subscriber.prototype._next = function (value) {
-        this.destination.next(value);
-    };
-    Subscriber.prototype._error = function (err) {
-        this.destination.error(err);
-        this.unsubscribe();
-    };
-    Subscriber.prototype._complete = function () {
-        this.destination.complete();
-        this.unsubscribe();
-    };
-    /** @deprecated internal use only */ Subscriber.prototype._unsubscribeAndRecycle = function () {
-        var _a = this, _parent = _a._parent, _parents = _a._parents;
-        this._parent = null;
-        this._parents = null;
-        this.unsubscribe();
-        this.closed = false;
-        this.isStopped = false;
-        this._parent = _parent;
-        this._parents = _parents;
-        return this;
-    };
-    return Subscriber;
-}(Subscription_1.Subscription));
-exports.Subscriber = Subscriber;
-/**
- * We need this JSDoc comment for affecting ESDoc.
- * @ignore
- * @extends {Ignored}
- */
-var SafeSubscriber = (function (_super) {
-    __extends(SafeSubscriber, _super);
-    function SafeSubscriber(_parentSubscriber, observerOrNext, error, complete) {
-        _super.call(this);
-        this._parentSubscriber = _parentSubscriber;
-        var next;
-        var context = this;
-        if (isFunction_1.isFunction(observerOrNext)) {
-            next = observerOrNext;
-        }
-        else if (observerOrNext) {
-            next = observerOrNext.next;
-            error = observerOrNext.error;
-            complete = observerOrNext.complete;
-            if (observerOrNext !== Observer_1.empty) {
-                context = Object.create(observerOrNext);
-                if (isFunction_1.isFunction(context.unsubscribe)) {
-                    this.add(context.unsubscribe.bind(context));
-                }
-                context.unsubscribe = this.unsubscribe.bind(this);
-            }
-        }
-        this._context = context;
-        this._next = next;
-        this._error = error;
-        this._complete = complete;
-    }
-    SafeSubscriber.prototype.next = function (value) {
-        if (!this.isStopped && this._next) {
-            var _parentSubscriber = this._parentSubscriber;
-            if (!_parentSubscriber.syncErrorThrowable) {
-                this.__tryOrUnsub(this._next, value);
-            }
-            else if (this.__tryOrSetError(_parentSubscriber, this._next, value)) {
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.error = function (err) {
-        if (!this.isStopped) {
-            var _parentSubscriber = this._parentSubscriber;
-            if (this._error) {
-                if (!_parentSubscriber.syncErrorThrowable) {
-                    this.__tryOrUnsub(this._error, err);
-                    this.unsubscribe();
-                }
-                else {
-                    this.__tryOrSetError(_parentSubscriber, this._error, err);
-                    this.unsubscribe();
-                }
-            }
-            else if (!_parentSubscriber.syncErrorThrowable) {
-                this.unsubscribe();
-                throw err;
-            }
-            else {
-                _parentSubscriber.syncErrorValue = err;
-                _parentSubscriber.syncErrorThrown = true;
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.complete = function () {
-        var _this = this;
-        if (!this.isStopped) {
-            var _parentSubscriber = this._parentSubscriber;
-            if (this._complete) {
-                var wrappedComplete = function () { return _this._complete.call(_this._context); };
-                if (!_parentSubscriber.syncErrorThrowable) {
-                    this.__tryOrUnsub(wrappedComplete);
-                    this.unsubscribe();
-                }
-                else {
-                    this.__tryOrSetError(_parentSubscriber, wrappedComplete);
-                    this.unsubscribe();
-                }
-            }
-            else {
-                this.unsubscribe();
-            }
-        }
-    };
-    SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
-        try {
-            fn.call(this._context, value);
-        }
-        catch (err) {
-            this.unsubscribe();
-            throw err;
-        }
-    };
-    SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
-        try {
-            fn.call(this._context, value);
-        }
-        catch (err) {
-            parent.syncErrorValue = err;
-            parent.syncErrorThrown = true;
-            return true;
-        }
-        return false;
-    };
-    /** @deprecated internal use only */ SafeSubscriber.prototype._unsubscribe = function () {
-        var _parentSubscriber = this._parentSubscriber;
-        this._context = null;
-        this._parentSubscriber = null;
-        _parentSubscriber.unsubscribe();
-    };
-    return SafeSubscriber;
-}(Subscriber));
-function isTrustedSubscriber(obj) {
-    return obj instanceof Subscriber || ('syncErrorThrowable' in obj && obj[rxSubscriber_1.rxSubscriber]);
-}
-//# sourceMappingURL=Subscriber.js.map
-
-/***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -797,14 +202,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵa", function() { return makeParamDecorator; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵt", function() { return _def; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵu", function() { return DebugContext; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_merge__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_merge__ = __webpack_require__(255);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_merge__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share__ = __webpack_require__(252);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__);
 
 /**
@@ -6449,7 +5854,7 @@ var SystemJsNgModuleLoader = (function () {
         if (exportName === undefined) {
             exportName = 'default';
         }
-        return __webpack_require__(186)(module)
+        return __webpack_require__(199)(module)
             .then(function (module) { return module[exportName]; })
             .then(function (type) { return checkNotEmpty(type, module, exportName); })
             .then(function (type) { return _this._compiler.compileModuleAsync(type); });
@@ -6465,7 +5870,7 @@ var SystemJsNgModuleLoader = (function () {
             exportName = 'default';
             factoryClassSuffix = '';
         }
-        return __webpack_require__(186)(this._config.factoryPathPrefix + module + this._config.factoryPathSuffix)
+        return __webpack_require__(199)(this._config.factoryPathPrefix + module + this._config.factoryPathSuffix)
             .then(function (module) { return module[exportName + factoryClassSuffix]; })
             .then(function (factory) { return checkNotEmpty(factory, module, exportName); });
     };
@@ -15597,9 +15002,604 @@ function transition$$1(stateChangeExpr, steps) {
 
 //# sourceMappingURL=core.es5.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(92)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(93)))
 
 /***/ }),
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var root_1 = __webpack_require__(34);
+var toSubscriber_1 = __webpack_require__(251);
+var observable_1 = __webpack_require__(119);
+var pipe_1 = __webpack_require__(192);
+/**
+ * A representation of any set of values over any amount of time. This is the most basic building block
+ * of RxJS.
+ *
+ * @class Observable<T>
+ */
+var Observable = (function () {
+    /**
+     * @constructor
+     * @param {Function} subscribe the function that is called when the Observable is
+     * initially subscribed to. This function is given a Subscriber, to which new values
+     * can be `next`ed, or an `error` method can be called to raise an error, or
+     * `complete` can be called to notify of a successful completion.
+     */
+    function Observable(subscribe) {
+        this._isScalar = false;
+        if (subscribe) {
+            this._subscribe = subscribe;
+        }
+    }
+    /**
+     * Creates a new Observable, with this Observable as the source, and the passed
+     * operator defined as the new observable's operator.
+     * @method lift
+     * @param {Operator} operator the operator defining the operation to take on the observable
+     * @return {Observable} a new observable with the Operator applied
+     */
+    Observable.prototype.lift = function (operator) {
+        var observable = new Observable();
+        observable.source = this;
+        observable.operator = operator;
+        return observable;
+    };
+    /**
+     * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
+     *
+     * <span class="informal">Use it when you have all these Observables, but still nothing is happening.</span>
+     *
+     * `subscribe` is not a regular operator, but a method that calls Observable's internal `subscribe` function. It
+     * might be for example a function that you passed to a {@link create} static factory, but most of the time it is
+     * a library implementation, which defines what and when will be emitted by an Observable. This means that calling
+     * `subscribe` is actually the moment when Observable starts its work, not when it is created, as it is often
+     * thought.
+     *
+     * Apart from starting the execution of an Observable, this method allows you to listen for values
+     * that an Observable emits, as well as for when it completes or errors. You can achieve this in two
+     * following ways.
+     *
+     * The first way is creating an object that implements {@link Observer} interface. It should have methods
+     * defined by that interface, but note that it should be just a regular JavaScript object, which you can create
+     * yourself in any way you want (ES6 class, classic function constructor, object literal etc.). In particular do
+     * not attempt to use any RxJS implementation details to create Observers - you don't need them. Remember also
+     * that your object does not have to implement all methods. If you find yourself creating a method that doesn't
+     * do anything, you can simply omit it. Note however, that if `error` method is not provided, all errors will
+     * be left uncaught.
+     *
+     * The second way is to give up on Observer object altogether and simply provide callback functions in place of its methods.
+     * This means you can provide three functions as arguments to `subscribe`, where first function is equivalent
+     * of a `next` method, second of an `error` method and third of a `complete` method. Just as in case of Observer,
+     * if you do not need to listen for something, you can omit a function, preferably by passing `undefined` or `null`,
+     * since `subscribe` recognizes these functions by where they were placed in function call. When it comes
+     * to `error` function, just as before, if not provided, errors emitted by an Observable will be thrown.
+     *
+     * Whatever style of calling `subscribe` you use, in both cases it returns a Subscription object.
+     * This object allows you to call `unsubscribe` on it, which in turn will stop work that an Observable does and will clean
+     * up all resources that an Observable used. Note that cancelling a subscription will not call `complete` callback
+     * provided to `subscribe` function, which is reserved for a regular completion signal that comes from an Observable.
+     *
+     * Remember that callbacks provided to `subscribe` are not guaranteed to be called asynchronously.
+     * It is an Observable itself that decides when these functions will be called. For example {@link of}
+     * by default emits all its values synchronously. Always check documentation for how given Observable
+     * will behave when subscribed and if its default behavior can be modified with a {@link Scheduler}.
+     *
+     * @example <caption>Subscribe with an Observer</caption>
+     * const sumObserver = {
+     *   sum: 0,
+     *   next(value) {
+     *     console.log('Adding: ' + value);
+     *     this.sum = this.sum + value;
+     *   },
+     *   error() { // We actually could just remove this method,
+     *   },        // since we do not really care about errors right now.
+     *   complete() {
+     *     console.log('Sum equals: ' + this.sum);
+     *   }
+     * };
+     *
+     * Rx.Observable.of(1, 2, 3) // Synchronously emits 1, 2, 3 and then completes.
+     * .subscribe(sumObserver);
+     *
+     * // Logs:
+     * // "Adding: 1"
+     * // "Adding: 2"
+     * // "Adding: 3"
+     * // "Sum equals: 6"
+     *
+     *
+     * @example <caption>Subscribe with functions</caption>
+     * let sum = 0;
+     *
+     * Rx.Observable.of(1, 2, 3)
+     * .subscribe(
+     *   function(value) {
+     *     console.log('Adding: ' + value);
+     *     sum = sum + value;
+     *   },
+     *   undefined,
+     *   function() {
+     *     console.log('Sum equals: ' + sum);
+     *   }
+     * );
+     *
+     * // Logs:
+     * // "Adding: 1"
+     * // "Adding: 2"
+     * // "Adding: 3"
+     * // "Sum equals: 6"
+     *
+     *
+     * @example <caption>Cancel a subscription</caption>
+     * const subscription = Rx.Observable.interval(1000).subscribe(
+     *   num => console.log(num),
+     *   undefined,
+     *   () => console.log('completed!') // Will not be called, even
+     * );                                // when cancelling subscription
+     *
+     *
+     * setTimeout(() => {
+     *   subscription.unsubscribe();
+     *   console.log('unsubscribed!');
+     * }, 2500);
+     *
+     * // Logs:
+     * // 0 after 1s
+     * // 1 after 2s
+     * // "unsubscribed!" after 2.5s
+     *
+     *
+     * @param {Observer|Function} observerOrNext (optional) Either an observer with methods to be called,
+     *  or the first of three possible handlers, which is the handler for each value emitted from the subscribed
+     *  Observable.
+     * @param {Function} error (optional) A handler for a terminal event resulting from an error. If no error handler is provided,
+     *  the error will be thrown as unhandled.
+     * @param {Function} complete (optional) A handler for a terminal event resulting from successful completion.
+     * @return {ISubscription} a subscription reference to the registered handlers
+     * @method subscribe
+     */
+    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+        var operator = this.operator;
+        var sink = toSubscriber_1.toSubscriber(observerOrNext, error, complete);
+        if (operator) {
+            operator.call(sink, this.source);
+        }
+        else {
+            sink.add(this.source || !sink.syncErrorThrowable ? this._subscribe(sink) : this._trySubscribe(sink));
+        }
+        if (sink.syncErrorThrowable) {
+            sink.syncErrorThrowable = false;
+            if (sink.syncErrorThrown) {
+                throw sink.syncErrorValue;
+            }
+        }
+        return sink;
+    };
+    Observable.prototype._trySubscribe = function (sink) {
+        try {
+            return this._subscribe(sink);
+        }
+        catch (err) {
+            sink.syncErrorThrown = true;
+            sink.syncErrorValue = err;
+            sink.error(err);
+        }
+    };
+    /**
+     * @method forEach
+     * @param {Function} next a handler for each value emitted by the observable
+     * @param {PromiseConstructor} [PromiseCtor] a constructor function used to instantiate the Promise
+     * @return {Promise} a promise that either resolves on observable completion or
+     *  rejects with the handled error
+     */
+    Observable.prototype.forEach = function (next, PromiseCtor) {
+        var _this = this;
+        if (!PromiseCtor) {
+            if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
+                PromiseCtor = root_1.root.Rx.config.Promise;
+            }
+            else if (root_1.root.Promise) {
+                PromiseCtor = root_1.root.Promise;
+            }
+        }
+        if (!PromiseCtor) {
+            throw new Error('no Promise impl found');
+        }
+        return new PromiseCtor(function (resolve, reject) {
+            // Must be declared in a separate statement to avoid a RefernceError when
+            // accessing subscription below in the closure due to Temporal Dead Zone.
+            var subscription;
+            subscription = _this.subscribe(function (value) {
+                if (subscription) {
+                    // if there is a subscription, then we can surmise
+                    // the next handling is asynchronous. Any errors thrown
+                    // need to be rejected explicitly and unsubscribe must be
+                    // called manually
+                    try {
+                        next(value);
+                    }
+                    catch (err) {
+                        reject(err);
+                        subscription.unsubscribe();
+                    }
+                }
+                else {
+                    // if there is NO subscription, then we're getting a nexted
+                    // value synchronously during subscription. We can just call it.
+                    // If it errors, Observable's `subscribe` will ensure the
+                    // unsubscription logic is called, then synchronously rethrow the error.
+                    // After that, Promise will trap the error and send it
+                    // down the rejection path.
+                    next(value);
+                }
+            }, reject, resolve);
+        });
+    };
+    /** @deprecated internal use only */ Observable.prototype._subscribe = function (subscriber) {
+        return this.source.subscribe(subscriber);
+    };
+    /**
+     * An interop point defined by the es7-observable spec https://github.com/zenparsing/es-observable
+     * @method Symbol.observable
+     * @return {Observable} this instance of the observable
+     */
+    Observable.prototype[observable_1.observable] = function () {
+        return this;
+    };
+    /* tslint:enable:max-line-length */
+    /**
+     * Used to stitch together functional operators into a chain.
+     * @method pipe
+     * @return {Observable} the Observable result of all of the operators having
+     * been called in the order they were passed in.
+     *
+     * @example
+     *
+     * import { map, filter, scan } from 'rxjs/operators';
+     *
+     * Rx.Observable.interval(1000)
+     *   .pipe(
+     *     filter(x => x % 2 === 0),
+     *     map(x => x + x),
+     *     scan((acc, x) => acc + x)
+     *   )
+     *   .subscribe(x => console.log(x))
+     */
+    Observable.prototype.pipe = function () {
+        var operations = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            operations[_i - 0] = arguments[_i];
+        }
+        if (operations.length === 0) {
+            return this;
+        }
+        return pipe_1.pipeFromArray(operations)(this);
+    };
+    /* tslint:enable:max-line-length */
+    Observable.prototype.toPromise = function (PromiseCtor) {
+        var _this = this;
+        if (!PromiseCtor) {
+            if (root_1.root.Rx && root_1.root.Rx.config && root_1.root.Rx.config.Promise) {
+                PromiseCtor = root_1.root.Rx.config.Promise;
+            }
+            else if (root_1.root.Promise) {
+                PromiseCtor = root_1.root.Promise;
+            }
+        }
+        if (!PromiseCtor) {
+            throw new Error('no Promise impl found');
+        }
+        return new PromiseCtor(function (resolve, reject) {
+            var value;
+            _this.subscribe(function (x) { return value = x; }, function (err) { return reject(err); }, function () { return resolve(value); });
+        });
+    };
+    // HACK: Since TypeScript inherits static properties too, we have to
+    // fight against TypeScript here so Subject can have a different static create signature
+    /**
+     * Creates a new cold Observable by calling the Observable constructor
+     * @static true
+     * @owner Observable
+     * @method create
+     * @param {Function} subscribe? the subscriber function to be passed to the Observable constructor
+     * @return {Observable} a new cold observable
+     */
+    Observable.create = function (subscribe) {
+        return new Observable(subscribe);
+    };
+    return Observable;
+}());
+exports.Observable = Observable;
+//# sourceMappingURL=Observable.js.map
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var isFunction_1 = __webpack_require__(188);
+var Subscription_1 = __webpack_require__(94);
+var Observer_1 = __webpack_require__(191);
+var rxSubscriber_1 = __webpack_require__(118);
+/**
+ * Implements the {@link Observer} interface and extends the
+ * {@link Subscription} class. While the {@link Observer} is the public API for
+ * consuming the values of an {@link Observable}, all Observers get converted to
+ * a Subscriber, in order to provide Subscription-like capabilities such as
+ * `unsubscribe`. Subscriber is a common type in RxJS, and crucial for
+ * implementing operators, but it is rarely used as a public API.
+ *
+ * @class Subscriber<T>
+ */
+var Subscriber = (function (_super) {
+    __extends(Subscriber, _super);
+    /**
+     * @param {Observer|function(value: T): void} [destinationOrNext] A partially
+     * defined Observer or a `next` callback function.
+     * @param {function(e: ?any): void} [error] The `error` callback of an
+     * Observer.
+     * @param {function(): void} [complete] The `complete` callback of an
+     * Observer.
+     */
+    function Subscriber(destinationOrNext, error, complete) {
+        _super.call(this);
+        this.syncErrorValue = null;
+        this.syncErrorThrown = false;
+        this.syncErrorThrowable = false;
+        this.isStopped = false;
+        switch (arguments.length) {
+            case 0:
+                this.destination = Observer_1.empty;
+                break;
+            case 1:
+                if (!destinationOrNext) {
+                    this.destination = Observer_1.empty;
+                    break;
+                }
+                if (typeof destinationOrNext === 'object') {
+                    // HACK(benlesh): To resolve an issue where Node users may have multiple
+                    // copies of rxjs in their node_modules directory.
+                    if (isTrustedSubscriber(destinationOrNext)) {
+                        var trustedSubscriber = destinationOrNext[rxSubscriber_1.rxSubscriber]();
+                        this.syncErrorThrowable = trustedSubscriber.syncErrorThrowable;
+                        this.destination = trustedSubscriber;
+                        trustedSubscriber.add(this);
+                    }
+                    else {
+                        this.syncErrorThrowable = true;
+                        this.destination = new SafeSubscriber(this, destinationOrNext);
+                    }
+                    break;
+                }
+            default:
+                this.syncErrorThrowable = true;
+                this.destination = new SafeSubscriber(this, destinationOrNext, error, complete);
+                break;
+        }
+    }
+    Subscriber.prototype[rxSubscriber_1.rxSubscriber] = function () { return this; };
+    /**
+     * A static factory for a Subscriber, given a (potentially partial) definition
+     * of an Observer.
+     * @param {function(x: ?T): void} [next] The `next` callback of an Observer.
+     * @param {function(e: ?any): void} [error] The `error` callback of an
+     * Observer.
+     * @param {function(): void} [complete] The `complete` callback of an
+     * Observer.
+     * @return {Subscriber<T>} A Subscriber wrapping the (partially defined)
+     * Observer represented by the given arguments.
+     */
+    Subscriber.create = function (next, error, complete) {
+        var subscriber = new Subscriber(next, error, complete);
+        subscriber.syncErrorThrowable = false;
+        return subscriber;
+    };
+    /**
+     * The {@link Observer} callback to receive notifications of type `next` from
+     * the Observable, with a value. The Observable may call this method 0 or more
+     * times.
+     * @param {T} [value] The `next` value.
+     * @return {void}
+     */
+    Subscriber.prototype.next = function (value) {
+        if (!this.isStopped) {
+            this._next(value);
+        }
+    };
+    /**
+     * The {@link Observer} callback to receive notifications of type `error` from
+     * the Observable, with an attached {@link Error}. Notifies the Observer that
+     * the Observable has experienced an error condition.
+     * @param {any} [err] The `error` exception.
+     * @return {void}
+     */
+    Subscriber.prototype.error = function (err) {
+        if (!this.isStopped) {
+            this.isStopped = true;
+            this._error(err);
+        }
+    };
+    /**
+     * The {@link Observer} callback to receive a valueless notification of type
+     * `complete` from the Observable. Notifies the Observer that the Observable
+     * has finished sending push-based notifications.
+     * @return {void}
+     */
+    Subscriber.prototype.complete = function () {
+        if (!this.isStopped) {
+            this.isStopped = true;
+            this._complete();
+        }
+    };
+    Subscriber.prototype.unsubscribe = function () {
+        if (this.closed) {
+            return;
+        }
+        this.isStopped = true;
+        _super.prototype.unsubscribe.call(this);
+    };
+    Subscriber.prototype._next = function (value) {
+        this.destination.next(value);
+    };
+    Subscriber.prototype._error = function (err) {
+        this.destination.error(err);
+        this.unsubscribe();
+    };
+    Subscriber.prototype._complete = function () {
+        this.destination.complete();
+        this.unsubscribe();
+    };
+    /** @deprecated internal use only */ Subscriber.prototype._unsubscribeAndRecycle = function () {
+        var _a = this, _parent = _a._parent, _parents = _a._parents;
+        this._parent = null;
+        this._parents = null;
+        this.unsubscribe();
+        this.closed = false;
+        this.isStopped = false;
+        this._parent = _parent;
+        this._parents = _parents;
+        return this;
+    };
+    return Subscriber;
+}(Subscription_1.Subscription));
+exports.Subscriber = Subscriber;
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var SafeSubscriber = (function (_super) {
+    __extends(SafeSubscriber, _super);
+    function SafeSubscriber(_parentSubscriber, observerOrNext, error, complete) {
+        _super.call(this);
+        this._parentSubscriber = _parentSubscriber;
+        var next;
+        var context = this;
+        if (isFunction_1.isFunction(observerOrNext)) {
+            next = observerOrNext;
+        }
+        else if (observerOrNext) {
+            next = observerOrNext.next;
+            error = observerOrNext.error;
+            complete = observerOrNext.complete;
+            if (observerOrNext !== Observer_1.empty) {
+                context = Object.create(observerOrNext);
+                if (isFunction_1.isFunction(context.unsubscribe)) {
+                    this.add(context.unsubscribe.bind(context));
+                }
+                context.unsubscribe = this.unsubscribe.bind(this);
+            }
+        }
+        this._context = context;
+        this._next = next;
+        this._error = error;
+        this._complete = complete;
+    }
+    SafeSubscriber.prototype.next = function (value) {
+        if (!this.isStopped && this._next) {
+            var _parentSubscriber = this._parentSubscriber;
+            if (!_parentSubscriber.syncErrorThrowable) {
+                this.__tryOrUnsub(this._next, value);
+            }
+            else if (this.__tryOrSetError(_parentSubscriber, this._next, value)) {
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.error = function (err) {
+        if (!this.isStopped) {
+            var _parentSubscriber = this._parentSubscriber;
+            if (this._error) {
+                if (!_parentSubscriber.syncErrorThrowable) {
+                    this.__tryOrUnsub(this._error, err);
+                    this.unsubscribe();
+                }
+                else {
+                    this.__tryOrSetError(_parentSubscriber, this._error, err);
+                    this.unsubscribe();
+                }
+            }
+            else if (!_parentSubscriber.syncErrorThrowable) {
+                this.unsubscribe();
+                throw err;
+            }
+            else {
+                _parentSubscriber.syncErrorValue = err;
+                _parentSubscriber.syncErrorThrown = true;
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.complete = function () {
+        var _this = this;
+        if (!this.isStopped) {
+            var _parentSubscriber = this._parentSubscriber;
+            if (this._complete) {
+                var wrappedComplete = function () { return _this._complete.call(_this._context); };
+                if (!_parentSubscriber.syncErrorThrowable) {
+                    this.__tryOrUnsub(wrappedComplete);
+                    this.unsubscribe();
+                }
+                else {
+                    this.__tryOrSetError(_parentSubscriber, wrappedComplete);
+                    this.unsubscribe();
+                }
+            }
+            else {
+                this.unsubscribe();
+            }
+        }
+    };
+    SafeSubscriber.prototype.__tryOrUnsub = function (fn, value) {
+        try {
+            fn.call(this._context, value);
+        }
+        catch (err) {
+            this.unsubscribe();
+            throw err;
+        }
+    };
+    SafeSubscriber.prototype.__tryOrSetError = function (parent, fn, value) {
+        try {
+            fn.call(this._context, value);
+        }
+        catch (err) {
+            parent.syncErrorValue = err;
+            parent.syncErrorThrown = true;
+            return true;
+        }
+        return false;
+    };
+    /** @deprecated internal use only */ SafeSubscriber.prototype._unsubscribe = function () {
+        var _parentSubscriber = this._parentSubscriber;
+        this._context = null;
+        this._parentSubscriber = null;
+        _parentSubscriber.unsubscribe();
+    };
+    return SafeSubscriber;
+}(Subscriber));
+function isTrustedSubscriber(obj) {
+    return obj instanceof Subscriber || ('syncErrorThrowable' in obj && obj[rxSubscriber_1.rxSubscriber]);
+}
+//# sourceMappingURL=Subscriber.js.map
+
+/***/ }),
+/* 11 */,
+/* 12 */,
+/* 13 */,
 /* 14 */,
 /* 15 */,
 /* 16 */,
@@ -15617,8 +15617,7 @@ function transition$$1(stateChangeExpr, steps) {
 /* 28 */,
 /* 29 */,
 /* 30 */,
-/* 31 */,
-/* 32 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15822,9 +15821,9 @@ function __importDefault(mod) {
 
 
 /***/ }),
+/* 32 */,
 /* 33 */,
-/* 34 */,
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15847,9 +15846,10 @@ exports.root = _root;
     }
 })();
 //# sourceMappingURL=root.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(92)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(93)))
 
 /***/ }),
+/* 35 */,
 /* 36 */,
 /* 37 */,
 /* 38 */,
@@ -15865,11 +15865,2202 @@ exports.root = _root;
 /* 48 */,
 /* 49 */,
 /* 50 */,
-/* 51 */,
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpBackend", function() { return HttpBackend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHandler", function() { return HttpHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClient", function() { return HttpClient; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHeaders", function() { return HttpHeaders; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HTTP_INTERCEPTORS", function() { return HTTP_INTERCEPTORS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonpClientBackend", function() { return JsonpClientBackend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonpInterceptor", function() { return JsonpInterceptor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientJsonpModule", function() { return HttpClientJsonpModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientModule", function() { return HttpClientModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientXsrfModule", function() { return HttpClientXsrfModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵinterceptingHandler", function() { return interceptingHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpParams", function() { return HttpParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpUrlEncodingCodec", function() { return HttpUrlEncodingCodec; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpRequest", function() { return HttpRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpErrorResponse", function() { return HttpErrorResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpEventType", function() { return HttpEventType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHeaderResponse", function() { return HttpHeaderResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpResponse", function() { return HttpResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpResponseBase", function() { return HttpResponseBase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpXhrBackend", function() { return HttpXhrBackend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XhrFactory", function() { return XhrFactory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpXsrfTokenExtractor", function() { return HttpXsrfTokenExtractor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵa", function() { return NoopInterceptor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵb", function() { return JsonpCallbackContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵc", function() { return jsonpCallbackContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵd", function() { return BrowserXhr; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵg", function() { return HttpXsrfCookieExtractor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵh", function() { return HttpXsrfInterceptor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵe", function() { return XSRF_COOKIE_NAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵf", function() { return XSRF_HEADER_NAME; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__);
+
+/**
+ * @license Angular v4.3.0
+ * (c) 2010-2017 Google, Inc. https://angular.io/
+ * License: MIT
+ */
+
+
+
+
+
+
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Transforms an `HttpRequest` into a stream of `HttpEvent`s, one of which will likely be a
+ * `HttpResponse`.
+ *
+ * `HttpHandler` is injectable. When injected, the handler instance dispatches requests to the
+ * first interceptor in the chain, which dispatches to the second, etc, eventually reaching the
+ * `HttpBackend`.
+ *
+ * In an `HttpInterceptor`, the `HttpHandler` parameter is the next interceptor in the chain.
+ *
+ * \@experimental
+ * @abstract
+ */
+var HttpHandler = (function () {
+    function HttpHandler() {
+    }
+    /**
+     * @abstract
+     * @param {?} req
+     * @return {?}
+     */
+    HttpHandler.prototype.handle = function (req) { };
+    return HttpHandler;
+}());
+/**
+ * A final `HttpHandler` which will dispatch the request via browser HTTP APIs to a backend.
+ *
+ * Interceptors sit between the `HttpClient` interface and the `HttpBackend`.
+ *
+ * When injected, `HttpBackend` dispatches requests directly to the backend, without going
+ * through the interceptor chain.
+ *
+ * \@experimental
+ * @abstract
+ */
+var HttpBackend = (function () {
+    function HttpBackend() {
+    }
+    /**
+     * @abstract
+     * @param {?} req
+     * @return {?}
+     */
+    HttpBackend.prototype.handle = function (req) { };
+    return HttpBackend;
+}());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * A `HttpParameterCodec` that uses `encodeURIComponent` and `decodeURIComponent` to
+ * serialize and parse URL parameter keys and values.
+ *
+ * \@experimental
+ */
+var HttpUrlEncodingCodec = (function () {
+    function HttpUrlEncodingCodec() {
+    }
+    /**
+     * @param {?} k
+     * @return {?}
+     */
+    HttpUrlEncodingCodec.prototype.encodeKey = function (k) { return standardEncoding(k); };
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    HttpUrlEncodingCodec.prototype.encodeValue = function (v) { return standardEncoding(v); };
+    /**
+     * @param {?} k
+     * @return {?}
+     */
+    HttpUrlEncodingCodec.prototype.decodeKey = function (k) { return decodeURIComponent(k); };
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    HttpUrlEncodingCodec.prototype.decodeValue = function (v) { return decodeURIComponent(v); };
+    return HttpUrlEncodingCodec;
+}());
+/**
+ * @param {?} rawParams
+ * @param {?} codec
+ * @return {?}
+ */
+function paramParser(rawParams, codec) {
+    var /** @type {?} */ map$$1 = new Map();
+    if (rawParams.length > 0) {
+        var /** @type {?} */ params = rawParams.split('&');
+        params.forEach(function (param) {
+            var /** @type {?} */ eqIdx = param.indexOf('=');
+            var _a = eqIdx == -1 ?
+                [codec.decodeKey(param), ''] :
+                [codec.decodeKey(param.slice(0, eqIdx)), codec.decodeValue(param.slice(eqIdx + 1))], key = _a[0], val = _a[1];
+            var /** @type {?} */ list = map$$1.get(key) || [];
+            list.push(val);
+            map$$1.set(key, list);
+        });
+    }
+    return map$$1;
+}
+/**
+ * @param {?} v
+ * @return {?}
+ */
+function standardEncoding(v) {
+    return encodeURIComponent(v)
+        .replace(/%40/gi, '@')
+        .replace(/%3A/gi, ':')
+        .replace(/%24/gi, '$')
+        .replace(/%2C/gi, ',')
+        .replace(/%3B/gi, ';')
+        .replace(/%2B/gi, '+')
+        .replace(/%3D/gi, '=')
+        .replace(/%3F/gi, '?')
+        .replace(/%2F/gi, '/');
+}
+/**
+ * An HTTP request/response body that represents serialized parameters,
+ * per the MIME type `application/x-www-form-urlencoded`.
+ *
+ * This class is immuatable - all mutation operations return a new instance.
+ *
+ * \@experimental
+ */
+var HttpParams = (function () {
+    /**
+     * @param {?=} options
+     */
+    function HttpParams(options) {
+        if (options === void 0) { options = {}; }
+        this.updates = null;
+        this.cloneFrom = null;
+        this.encoder = options.encoder || new HttpUrlEncodingCodec();
+        this.map = !!options.fromString ? paramParser(options.fromString, this.encoder) : null;
+    }
+    /**
+     * Check whether the body has one or more values for the given parameter name.
+     * @param {?} param
+     * @return {?}
+     */
+    HttpParams.prototype.has = function (param) {
+        this.init();
+        return ((this.map)).has(param);
+    };
+    /**
+     * Get the first value for the given parameter name, or `null` if it's not present.
+     * @param {?} param
+     * @return {?}
+     */
+    HttpParams.prototype.get = function (param) {
+        this.init();
+        var /** @type {?} */ res = ((this.map)).get(param);
+        return !!res ? res[0] : null;
+    };
+    /**
+     * Get all values for the given parameter name, or `null` if it's not present.
+     * @param {?} param
+     * @return {?}
+     */
+    HttpParams.prototype.getAll = function (param) {
+        this.init();
+        return ((this.map)).get(param) || null;
+    };
+    /**
+     * Get all the parameter names for this body.
+     * @return {?}
+     */
+    HttpParams.prototype.keys = function () {
+        this.init();
+        return Array.from(/** @type {?} */ ((this.map)).keys());
+    };
+    /**
+     * Construct a new body with an appended value for the given parameter name.
+     * @param {?} param
+     * @param {?} value
+     * @return {?}
+     */
+    HttpParams.prototype.append = function (param, value) { return this.clone({ param: param, value: value, op: 'a' }); };
+    /**
+     * Construct a new body with a new value for the given parameter name.
+     * @param {?} param
+     * @param {?} value
+     * @return {?}
+     */
+    HttpParams.prototype.set = function (param, value) { return this.clone({ param: param, value: value, op: 's' }); };
+    /**
+     * Construct a new body with either the given value for the given parameter
+     * removed, if a value is given, or all values for the given parameter removed
+     * if not.
+     * @param {?} param
+     * @param {?=} value
+     * @return {?}
+     */
+    HttpParams.prototype.delete = function (param, value) { return this.clone({ param: param, value: value, op: 'd' }); };
+    /**
+     * Serialize the body to an encoded string, where key-value pairs (separated by `=`) are
+     * separated by `&`s.
+     * @return {?}
+     */
+    HttpParams.prototype.toString = function () {
+        var _this = this;
+        this.init();
+        return this.keys()
+            .map(function (key) {
+            var /** @type {?} */ eKey = _this.encoder.encodeKey(key);
+            return ((((_this.map)).get(key))).map(function (value) { return eKey + '=' + _this.encoder.encodeValue(value); })
+                .join('&');
+        })
+            .join('&');
+    };
+    /**
+     * @param {?} update
+     * @return {?}
+     */
+    HttpParams.prototype.clone = function (update) {
+        var /** @type {?} */ clone = new HttpParams({ encoder: this.encoder });
+        clone.cloneFrom = this.cloneFrom || this;
+        clone.updates = (this.updates || []).concat([update]);
+        return clone;
+    };
+    /**
+     * @return {?}
+     */
+    HttpParams.prototype.init = function () {
+        var _this = this;
+        if (this.map === null) {
+            this.map = new Map();
+        }
+        if (this.cloneFrom !== null) {
+            this.cloneFrom.init();
+            this.cloneFrom.keys().forEach(function (key) { return ((_this.map)).set(key, /** @type {?} */ ((((((_this.cloneFrom)).map)).get(key)))); }); /** @type {?} */
+            ((this.updates)).forEach(function (update) {
+                switch (update.op) {
+                    case 'a':
+                    case 's':
+                        var /** @type {?} */ base = (update.op === 'a' ? ((_this.map)).get(update.param) : undefined) || [];
+                        base.push(/** @type {?} */ ((update.value))); /** @type {?} */
+                        ((_this.map)).set(update.param, base);
+                        break;
+                    case 'd':
+                        if (update.value !== undefined) {
+                            var /** @type {?} */ base_1 = ((_this.map)).get(update.param) || [];
+                            var /** @type {?} */ idx = base_1.indexOf(update.value);
+                            if (idx !== -1) {
+                                base_1.splice(idx, 1);
+                            }
+                            if (base_1.length > 0) {
+                                ((_this.map)).set(update.param, base_1);
+                            }
+                            else {
+                                ((_this.map)).delete(update.param);
+                            }
+                        }
+                        else {
+                            ((_this.map)).delete(update.param);
+                            break;
+                        }
+                }
+            });
+            this.cloneFrom = null;
+        }
+    };
+    return HttpParams;
+}());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Immutable set of Http headers, with lazy parsing.
+ * \@experimental
+ */
+var HttpHeaders = (function () {
+    /**
+     * @param {?=} headers
+     */
+    function HttpHeaders(headers) {
+        var _this = this;
+        /**
+         * Internal map of lowercased header names to the normalized
+         * form of the name (the form seen first).
+         */
+        this.normalizedNames = new Map();
+        /**
+         * Queued updates to be materialized the next initialization.
+         */
+        this.lazyUpdate = null;
+        if (!headers) {
+            this.headers = new Map();
+        }
+        else if (typeof headers === 'string') {
+            this.lazyInit = function () {
+                _this.headers = new Map();
+                headers.split('\n').forEach(function (line) {
+                    var index = line.indexOf(':');
+                    if (index > 0) {
+                        var name = line.slice(0, index);
+                        var key = name.toLowerCase();
+                        var value = line.slice(index + 1).trim();
+                        _this.maybeSetNormalizedName(name, key);
+                        if (_this.headers.has(key)) {
+                            _this.headers.get(key).push(value);
+                        }
+                        else {
+                            _this.headers.set(key, [value]);
+                        }
+                    }
+                });
+            };
+        }
+        else {
+            this.lazyInit = function () {
+                _this.headers = new Map();
+                Object.keys(headers).forEach(function (name) {
+                    var values = headers[name];
+                    var key = name.toLowerCase();
+                    if (typeof values === 'string') {
+                        values = [values];
+                    }
+                    if (values.length > 0) {
+                        _this.headers.set(key, values);
+                        _this.maybeSetNormalizedName(name, key);
+                    }
+                });
+            };
+        }
+    }
+    /**
+     * Checks for existence of header by given name.
+     * @param {?} name
+     * @return {?}
+     */
+    HttpHeaders.prototype.has = function (name) {
+        this.init();
+        return this.headers.has(name.toLowerCase());
+    };
+    /**
+     * Returns first header that matches given name.
+     * @param {?} name
+     * @return {?}
+     */
+    HttpHeaders.prototype.get = function (name) {
+        this.init();
+        var /** @type {?} */ values = this.headers.get(name.toLowerCase());
+        return values && values.length > 0 ? values[0] : null;
+    };
+    /**
+     * Returns the names of the headers
+     * @return {?}
+     */
+    HttpHeaders.prototype.keys = function () {
+        this.init();
+        return Array.from(this.normalizedNames.values());
+    };
+    /**
+     * Returns list of header values for a given name.
+     * @param {?} name
+     * @return {?}
+     */
+    HttpHeaders.prototype.getAll = function (name) {
+        this.init();
+        return this.headers.get(name.toLowerCase()) || null;
+    };
+    /**
+     * @param {?} name
+     * @param {?} value
+     * @return {?}
+     */
+    HttpHeaders.prototype.append = function (name, value) {
+        return this.clone({ name: name, value: value, op: 'a' });
+    };
+    /**
+     * @param {?} name
+     * @param {?} value
+     * @return {?}
+     */
+    HttpHeaders.prototype.set = function (name, value) {
+        return this.clone({ name: name, value: value, op: 's' });
+    };
+    /**
+     * @param {?} name
+     * @param {?=} value
+     * @return {?}
+     */
+    HttpHeaders.prototype.delete = function (name, value) {
+        return this.clone({ name: name, value: value, op: 'd' });
+    };
+    /**
+     * @param {?} name
+     * @param {?} lcName
+     * @return {?}
+     */
+    HttpHeaders.prototype.maybeSetNormalizedName = function (name, lcName) {
+        if (!this.normalizedNames.has(lcName)) {
+            this.normalizedNames.set(lcName, name);
+        }
+    };
+    /**
+     * @return {?}
+     */
+    HttpHeaders.prototype.init = function () {
+        var _this = this;
+        if (!!this.lazyInit) {
+            if (this.lazyInit instanceof HttpHeaders) {
+                this.copyFrom(this.lazyInit);
+            }
+            else {
+                this.lazyInit();
+            }
+            this.lazyInit = null;
+            if (!!this.lazyUpdate) {
+                this.lazyUpdate.forEach(function (update) { return _this.applyUpdate(update); });
+                this.lazyUpdate = null;
+            }
+        }
+    };
+    /**
+     * @param {?} other
+     * @return {?}
+     */
+    HttpHeaders.prototype.copyFrom = function (other) {
+        var _this = this;
+        other.init();
+        Array.from(other.headers.keys()).forEach(function (key) {
+            _this.headers.set(key, /** @type {?} */ ((other.headers.get(key))));
+            _this.normalizedNames.set(key, /** @type {?} */ ((other.normalizedNames.get(key))));
+        });
+    };
+    /**
+     * @param {?} update
+     * @return {?}
+     */
+    HttpHeaders.prototype.clone = function (update) {
+        var /** @type {?} */ clone = new HttpHeaders();
+        clone.lazyInit =
+            (!!this.lazyInit && this.lazyInit instanceof HttpHeaders) ? this.lazyInit : this;
+        clone.lazyUpdate = (this.lazyUpdate || []).concat([update]);
+        return clone;
+    };
+    /**
+     * @param {?} update
+     * @return {?}
+     */
+    HttpHeaders.prototype.applyUpdate = function (update) {
+        var /** @type {?} */ key = update.name.toLowerCase();
+        switch (update.op) {
+            case 'a':
+            case 's':
+                var /** @type {?} */ value = ((update.value));
+                if (typeof value === 'string') {
+                    value = [value];
+                }
+                if (value.length === 0) {
+                    return;
+                }
+                this.maybeSetNormalizedName(update.name, key);
+                var /** @type {?} */ base = (update.op === 'a' ? this.headers.get(key) : undefined) || [];
+                base.push.apply(base, value);
+                this.headers.set(key, base);
+                break;
+            case 'd':
+                var /** @type {?} */ toDelete_1 = (update.value);
+                if (!toDelete_1) {
+                    this.headers.delete(key);
+                    this.normalizedNames.delete(key);
+                }
+                else {
+                    var /** @type {?} */ existing = this.headers.get(key);
+                    if (!existing) {
+                        return;
+                    }
+                    existing = existing.filter(function (value) { return toDelete_1.indexOf(value) === -1; });
+                    if (existing.length === 0) {
+                        this.headers.delete(key);
+                        this.normalizedNames.delete(key);
+                    }
+                    else {
+                        this.headers.set(key, existing);
+                    }
+                }
+                break;
+        }
+    };
+    /**
+     * \@internal
+     * @param {?} fn
+     * @return {?}
+     */
+    HttpHeaders.prototype.forEach = function (fn) {
+        var _this = this;
+        this.init();
+        Array.from(this.normalizedNames.keys())
+            .forEach(function (key) { return fn(/** @type {?} */ ((_this.normalizedNames.get(key))), /** @type {?} */ ((_this.headers.get(key)))); });
+    };
+    return HttpHeaders;
+}());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Determine whether the given HTTP method may include a body.
+ * @param {?} method
+ * @return {?}
+ */
+function mightHaveBody(method) {
+    switch (method) {
+        case 'DELETE':
+        case 'GET':
+        case 'HEAD':
+        case 'OPTIONS':
+        case 'JSONP':
+            return false;
+        default:
+            return true;
+    }
+}
+/**
+ * Safely assert whether the given value is an ArrayBuffer.
+ *
+ * In some execution environments ArrayBuffer is not defined.
+ * @param {?} value
+ * @return {?}
+ */
+function isArrayBuffer(value) {
+    return typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer;
+}
+/**
+ * Safely assert whether the given value is a Blob.
+ *
+ * In some execution environments Blob is not defined.
+ * @param {?} value
+ * @return {?}
+ */
+function isBlob(value) {
+    return typeof Blob !== 'undefined' && value instanceof Blob;
+}
+/**
+ * Safely assert whether the given value is a FormData instance.
+ *
+ * In some execution environments FormData is not defined.
+ * @param {?} value
+ * @return {?}
+ */
+function isFormData(value) {
+    return typeof FormData !== 'undefined' && value instanceof FormData;
+}
+/**
+ * An outgoing HTTP request with an optional typed body.
+ *
+ * `HttpRequest` represents an outgoing request, including URL, method,
+ * headers, body, and other request configuration options. Instances should be
+ * assumed to be immutable. To modify a `HttpRequest`, the `clone`
+ * method should be used.
+ *
+ * \@experimental
+ */
+var HttpRequest = (function () {
+    /**
+     * @param {?} method
+     * @param {?} url
+     * @param {?=} third
+     * @param {?=} fourth
+     */
+    function HttpRequest(method, url, third, fourth) {
+        this.url = url;
+        /**
+         * The request body, or `null` if one isn't set.
+         *
+         * Bodies are not enforced to be immutable, as they can include a reference to any
+         * user-defined data type. However, interceptors should take care to preserve
+         * idempotence by treating them as such.
+         */
+        this.body = null;
+        /**
+         * Whether this request should be made in a way that exposes progress events.
+         *
+         * Progress events are expensive (change detection runs on each event) and so
+         * they should only be requested if the consumer intends to monitor them.
+         */
+        this.reportProgress = false;
+        /**
+         * Whether this request should be sent with outgoing credentials (cookies).
+         */
+        this.withCredentials = false;
+        /**
+         * The expected response type of the server.
+         *
+         * This is used to parse the response appropriately before returning it to
+         * the requestee.
+         */
+        this.responseType = 'json';
+        this.method = method.toUpperCase();
+        // Next, need to figure out which argument holds the HttpRequestInit
+        // options, if any.
+        var options;
+        // Check whether a body argument is expected. The only valid way to omit
+        // the body argument is to use a known no-body method like GET.
+        if (mightHaveBody(this.method) || !!fourth) {
+            // Body is the third argument, options are the fourth.
+            this.body = third || null;
+            options = fourth;
+        }
+        else {
+            // No body required, options are the third argument. The body stays null.
+            options = third;
+        }
+        // If options have been passed, interpret them.
+        if (options) {
+            // Normalize reportProgress and withCredentials.
+            this.reportProgress = !!options.reportProgress;
+            this.withCredentials = !!options.withCredentials;
+            // Override default response type of 'json' if one is provided.
+            if (!!options.responseType) {
+                this.responseType = options.responseType;
+            }
+            // Override headers if they're provided.
+            if (!!options.headers) {
+                this.headers = options.headers;
+            }
+            if (!!options.params) {
+                this.params = options.params;
+            }
+        }
+        // If no headers have been passed in, construct a new HttpHeaders instance.
+        if (!this.headers) {
+            this.headers = new HttpHeaders();
+        }
+        // If no parameters have been passed in, construct a new HttpUrlEncodedParams instance.
+        if (!this.params) {
+            this.params = new HttpParams();
+            this.urlWithParams = url;
+        }
+        else {
+            // Encode the parameters to a string in preparation for inclusion in the URL.
+            var params = this.params.toString();
+            if (params.length === 0) {
+                // No parameters, the visible URL is just the URL given at creation time.
+                this.urlWithParams = url;
+            }
+            else {
+                // Does the URL already have query parameters? Look for '?'.
+                var qIdx = url.indexOf('?');
+                // There are 3 cases to handle:
+                // 1) No existing parameters -> append '?' followed by params.
+                // 2) '?' exists and is followed by existing query string ->
+                //    append '&' followed by params.
+                // 3) '?' exists at the end of the url -> append params directly.
+                // This basically amounts to determining the character, if any, with
+                // which to join the URL and parameters.
+                var sep = qIdx === -1 ? '?' : (qIdx < url.length - 1 ? '&' : '');
+                this.urlWithParams = url + sep + params;
+            }
+        }
+    }
+    /**
+     * Transform the free-form body into a serialized format suitable for
+     * transmission to the server.
+     * @return {?}
+     */
+    HttpRequest.prototype.serializeBody = function () {
+        // If no body is present, no need to serialize it.
+        if (this.body === null) {
+            return null;
+        }
+        // Check whether the body is already in a serialized form. If so,
+        // it can just be returned directly.
+        if (isArrayBuffer(this.body) || isBlob(this.body) || isFormData(this.body) ||
+            typeof this.body === 'string') {
+            return this.body;
+        }
+        // Check whether the body is an instance of HttpUrlEncodedParams.
+        if (this.body instanceof HttpParams) {
+            return this.body.toString();
+        }
+        // Check whether the body is an object or array, and serialize with JSON if so.
+        if (typeof this.body === 'object' || typeof this.body === 'boolean' ||
+            Array.isArray(this.body)) {
+            return JSON.stringify(this.body);
+        }
+        // Fall back on toString() for everything else.
+        return ((this.body)).toString();
+    };
+    /**
+     * Examine the body and attempt to infer an appropriate MIME type
+     * for it.
+     *
+     * If no such type can be inferred, this method will return `null`.
+     * @return {?}
+     */
+    HttpRequest.prototype.detectContentTypeHeader = function () {
+        // An empty body has no content type.
+        if (this.body === null) {
+            return null;
+        }
+        // FormData bodies rely on the browser's content type assignment.
+        if (isFormData(this.body)) {
+            return null;
+        }
+        // Blobs usually have their own content type. If it doesn't, then
+        // no type can be inferred.
+        if (isBlob(this.body)) {
+            return this.body.type || null;
+        }
+        // Array buffers have unknown contents and thus no type can be inferred.
+        if (isArrayBuffer(this.body)) {
+            return null;
+        }
+        // Technically, strings could be a form of JSON data, but it's safe enough
+        // to assume they're plain strings.
+        if (typeof this.body === 'string') {
+            return 'text/plain';
+        }
+        // `HttpUrlEncodedParams` has its own content-type.
+        if (this.body instanceof HttpParams) {
+            return 'application/x-www-form-urlencoded;charset=UTF-8';
+        }
+        // Arrays, objects, and numbers will be encoded as JSON.
+        if (typeof this.body === 'object' || typeof this.body === 'number' ||
+            Array.isArray(this.body)) {
+            return 'application/json';
+        }
+        // No type could be inferred.
+        return null;
+    };
+    /**
+     * @param {?=} update
+     * @return {?}
+     */
+    HttpRequest.prototype.clone = function (update) {
+        if (update === void 0) { update = {}; }
+        // For method, url, and responseType, take the current value unless
+        // it is overridden in the update hash.
+        var /** @type {?} */ method = update.method || this.method;
+        var /** @type {?} */ url = update.url || this.url;
+        var /** @type {?} */ responseType = update.responseType || this.responseType;
+        // The body is somewhat special - a `null` value in update.body means
+        // whatever current body is present is being overridden with an empty
+        // body, whereas an `undefined` value in update.body implies no
+        // override.
+        var /** @type {?} */ body = (update.body !== undefined) ? update.body : this.body;
+        // Carefully handle the boolean options to differentiate between
+        // `false` and `undefined` in the update args.
+        var /** @type {?} */ withCredentials = (update.withCredentials !== undefined) ? update.withCredentials : this.withCredentials;
+        var /** @type {?} */ reportProgress = (update.reportProgress !== undefined) ? update.reportProgress : this.reportProgress;
+        // Headers and params may be appended to if `setHeaders` or
+        // `setParams` are used.
+        var /** @type {?} */ headers = update.headers || this.headers;
+        var /** @type {?} */ params = update.params || this.params;
+        // Check whether the caller has asked to add headers.
+        if (update.setHeaders !== undefined) {
+            // Set every requested header.
+            headers =
+                Object.keys(update.setHeaders)
+                    .reduce(function (headers, name) { return headers.set(name, /** @type {?} */ ((update.setHeaders))[name]); }, headers);
+        }
+        // Check whether the caller has asked to set params.
+        if (update.setParams) {
+            // Set every requested param.
+            params = Object.keys(update.setParams)
+                .reduce(function (params, param) { return params.set(param, /** @type {?} */ ((update.setParams))[param]); }, params);
+        }
+        // Finally, construct the new HttpRequest using the pieces from above.
+        return new HttpRequest(method, url, body, {
+            params: params, headers: headers, reportProgress: reportProgress, responseType: responseType, withCredentials: withCredentials,
+        });
+    };
+    return HttpRequest;
+}());
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var HttpEventType = {};
+HttpEventType.Sent = 0;
+HttpEventType.UploadProgress = 1;
+HttpEventType.ResponseHeader = 2;
+HttpEventType.DownloadProgress = 3;
+HttpEventType.Response = 4;
+HttpEventType.User = 5;
+HttpEventType[HttpEventType.Sent] = "Sent";
+HttpEventType[HttpEventType.UploadProgress] = "UploadProgress";
+HttpEventType[HttpEventType.ResponseHeader] = "ResponseHeader";
+HttpEventType[HttpEventType.DownloadProgress] = "DownloadProgress";
+HttpEventType[HttpEventType.Response] = "Response";
+HttpEventType[HttpEventType.User] = "User";
+/**
+ * Base class for both `HttpResponse` and `HttpHeaderResponse`.
+ *
+ * \@experimental
+ * @abstract
+ */
+var HttpResponseBase = (function () {
+    /**
+     * Super-constructor for all responses.
+     *
+     * The single parameter accepted is an initialization hash. Any properties
+     * of the response passed there will override the default values.
+     * @param {?} init
+     * @param {?=} defaultStatus
+     * @param {?=} defaultStatusText
+     */
+    function HttpResponseBase(init, defaultStatus, defaultStatusText) {
+        if (defaultStatus === void 0) { defaultStatus = 200; }
+        if (defaultStatusText === void 0) { defaultStatusText = 'OK'; }
+        // If the hash has values passed, use them to initialize the response.
+        // Otherwise use the default values.
+        this.headers = init.headers || new HttpHeaders();
+        this.status = init.status !== undefined ? init.status : defaultStatus;
+        this.statusText = init.statusText || defaultStatusText;
+        this.url = init.url || null;
+        // Cache the ok value to avoid defining a getter.
+        this.ok = this.status >= 200 && this.status < 300;
+    }
+    return HttpResponseBase;
+}());
+/**
+ * A partial HTTP response which only includes the status and header data,
+ * but no response body.
+ *
+ * `HttpHeaderResponse` is a `HttpEvent` available on the response
+ * event stream, only when progress events are requested.
+ *
+ * \@experimental
+ */
+var HttpHeaderResponse = (function (_super) {
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpHeaderResponse, _super);
+    /**
+     * Create a new `HttpHeaderResponse` with the given parameters.
+     * @param {?=} init
+     */
+    function HttpHeaderResponse(init) {
+        if (init === void 0) { init = {}; }
+        var _this = _super.call(this, init) || this;
+        _this.type = HttpEventType.ResponseHeader;
+        return _this;
+    }
+    /**
+     * Copy this `HttpHeaderResponse`, overriding its contents with the
+     * given parameter hash.
+     * @param {?=} update
+     * @return {?}
+     */
+    HttpHeaderResponse.prototype.clone = function (update) {
+        if (update === void 0) { update = {}; }
+        // Perform a straightforward initialization of the new HttpHeaderResponse,
+        // overriding the current parameters with new ones if given.
+        return new HttpHeaderResponse({
+            headers: update.headers || this.headers,
+            status: update.status !== undefined ? update.status : this.status,
+            statusText: update.statusText || this.statusText,
+            url: update.url || this.url || undefined,
+        });
+    };
+    return HttpHeaderResponse;
+}(HttpResponseBase));
+/**
+ * A full HTTP response, including a typed response body (which may be `null`
+ * if one was not returned).
+ *
+ * `HttpResponse` is a `HttpEvent` available on the response event
+ * stream.
+ *
+ * \@experimental
+ */
+var HttpResponse = (function (_super) {
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpResponse, _super);
+    /**
+     * Construct a new `HttpResponse`.
+     * @param {?=} init
+     */
+    function HttpResponse(init) {
+        if (init === void 0) { init = {}; }
+        var _this = _super.call(this, init) || this;
+        _this.type = HttpEventType.Response;
+        _this.body = init.body || null;
+        return _this;
+    }
+    /**
+     * @param {?=} update
+     * @return {?}
+     */
+    HttpResponse.prototype.clone = function (update) {
+        if (update === void 0) { update = {}; }
+        return new HttpResponse({
+            body: (update.body !== undefined) ? update.body : this.body,
+            headers: update.headers || this.headers,
+            status: (update.status !== undefined) ? update.status : this.status,
+            statusText: update.statusText || this.statusText,
+            url: update.url || this.url || undefined,
+        });
+    };
+    return HttpResponse;
+}(HttpResponseBase));
+/**
+ * A response that represents an error or failure, either from a
+ * non-successful HTTP status, an error while executing the request,
+ * or some other failure which occurred during the parsing of the response.
+ *
+ * Any error returned on the `Observable` response stream will be
+ * wrapped in an `HttpErrorResponse` to provide additional context about
+ * the state of the HTTP layer when the error occurred. The error property
+ * will contain either a wrapped Error object or the error response returned
+ * from the server.
+ *
+ * \@experimental
+ */
+var HttpErrorResponse = (function (_super) {
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpErrorResponse, _super);
+    /**
+     * @param {?} init
+     */
+    function HttpErrorResponse(init) {
+        var _this = 
+        // Initialize with a default status of 0 / Unknown Error.
+        _super.call(this, init, 0, 'Unknown Error') || this;
+        _this.name = 'HttpErrorResponse';
+        /**
+         * Errors are never okay, even when the status code is in the 2xx success range.
+         */
+        _this.ok = false;
+        // If the response was successful, then this was a parse error. Otherwise, it was
+        // a protocol-level failure of some sort. Either the request failed in transit
+        // or the server returned an unsuccessful status code.
+        if (_this.status >= 200 && _this.status < 300) {
+            _this.message = "Http failure during parsing for " + (init.url || '(unknown url)');
+        }
+        else {
+            _this.message =
+                "Http failure response for " + (init.url || '(unknown url)') + ": " + init.status + " " + init.statusText;
+        }
+        _this.error = init.error || null;
+        return _this;
+    }
+    return HttpErrorResponse;
+}(HttpResponseBase));
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Construct an instance of `HttpRequestOptions<T>` from a source `HttpMethodOptions` and
+ * the given `body`. Basically, this clones the object and adds the body.
+ * @template T
+ * @param {?} options
+ * @param {?} body
+ * @return {?}
+ */
+function addBody(options, body) {
+    return {
+        body: body,
+        headers: options.headers,
+        observe: options.observe,
+        params: options.params,
+        reportProgress: options.reportProgress,
+        responseType: options.responseType,
+        withCredentials: options.withCredentials,
+    };
+}
+/**
+ * Perform HTTP requests.
+ *
+ * `HttpClient` is available as an injectable class, with methods to perform HTTP requests.
+ * Each request method has multiple signatures, and the return type varies according to which
+ * signature is called (mainly the values of `observe` and `responseType`).
+ *
+ * \@experimental
+ */
+var HttpClient = (function () {
+    /**
+     * @param {?} handler
+     */
+    function HttpClient(handler) {
+        this.handler = handler;
+    }
+    /**
+     * Constructs an `Observable` for a particular HTTP request that, when subscribed,
+     * fires the request through the chain of registered interceptors and on to the
+     * server.
+     *
+     * This method can be called in one of two ways. Either an `HttpRequest`
+     * instance can be passed directly as the only parameter, or a method can be
+     * passed as the first parameter, a string URL as the second, and an
+     * options hash as the third.
+     *
+     * If a `HttpRequest` object is passed directly, an `Observable` of the
+     * raw `HttpEvent` stream will be returned.
+     *
+     * If a request is instead built by providing a URL, the options object
+     * determines the return type of `request()`. In addition to configuring
+     * request parameters such as the outgoing headers and/or the body, the options
+     * hash specifies two key pieces of information about the request: the
+     * `responseType` and what to `observe`.
+     *
+     * The `responseType` value determines how a successful response body will be
+     * parsed. If `responseType` is the default `json`, a type interface for the
+     * resulting object may be passed as a type parameter to `request()`.
+     *
+     * The `observe` value determines the return type of `request()`, based on what
+     * the consumer is interested in observing. A value of `events` will return an
+     * `Observable<HttpEvent>` representing the raw `HttpEvent` stream,
+     * including progress events by default. A value of `response` will return an
+     * `Observable<HttpResponse<T>>` where the `T` parameter of `HttpResponse`
+     * depends on the `responseType` and any optionally provided type parameter.
+     * A value of `body` will return an `Observable<T>` with the same `T` body type.
+     * @param {?} first
+     * @param {?=} url
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.request = function (first, url, options) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        var /** @type {?} */ req;
+        // Firstly, check whether the primary argument is an instance of `HttpRequest`.
+        if (first instanceof HttpRequest) {
+            // It is. The other arguments must be undefined (per the signatures) and can be
+            // ignored.
+            req = (first);
+        }
+        else {
+            // It's a string, so it represents a URL. Construct a request based on it,
+            // and incorporate the remaining arguments (assuming GET unless a method is
+            // provided.
+            req = new HttpRequest(first, /** @type {?} */ ((url)), options.body || null, {
+                headers: options.headers,
+                params: options.params,
+                reportProgress: options.reportProgress,
+                // By default, JSON is assumed to be returned for all calls.
+                responseType: options.responseType || 'json',
+                withCredentials: options.withCredentials,
+            });
+        }
+        // Start with an Observable.of() the initial request, and run the handler (which
+        // includes all interceptors) inside a concatMap(). This way, the handler runs
+        // inside an Observable chain, which causes interceptors to be re-run on every
+        // subscription (this also makes retries re-run the handler, including interceptors).
+        var /** @type {?} */ events$ = __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__["concatMap"].call(Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(req), function (req) { return _this.handler.handle(req); });
+        // If coming via the API signature which accepts a previously constructed HttpRequest,
+        // the only option is to get the event stream. Otherwise, return the event stream if
+        // that is what was requested.
+        if (first instanceof HttpRequest || options.observe === 'events') {
+            return events$;
+        }
+        // The requested stream contains either the full response or the body. In either
+        // case, the first step is to filter the event stream to extract a stream of
+        // responses(s).
+        var /** @type {?} */ res$ = __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__["filter"].call(events$, function (event) { return event instanceof HttpResponse; });
+        // Decide which stream to return.
+        switch (options.observe || 'body') {
+            case 'body':
+                // The requested stream is the body. Map the response stream to the response
+                // body. This could be done more simply, but a misbehaving interceptor might
+                // transform the response body into a different format and ignore the requested
+                // responseType. Guard against this by validating that the response is of the
+                // requested type.
+                switch (req.responseType) {
+                    case 'arraybuffer':
+                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
+                            // Validate that the body is an ArrayBuffer.
+                            if (res.body !== null && !(res.body instanceof ArrayBuffer)) {
+                                throw new Error('Response is not an ArrayBuffer.');
+                            }
+                            return res.body;
+                        });
+                    case 'blob':
+                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
+                            // Validate that the body is a Blob.
+                            if (res.body !== null && !(res.body instanceof Blob)) {
+                                throw new Error('Response is not a Blob.');
+                            }
+                            return res.body;
+                        });
+                    case 'text':
+                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
+                            // Validate that the body is a string.
+                            if (res.body !== null && typeof res.body !== 'string') {
+                                throw new Error('Response is not a string.');
+                            }
+                            return res.body;
+                        });
+                    case 'json':
+                    default:
+                        // No validation needed for JSON responses, as they can be of any type.
+                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) { return res.body; });
+                }
+            case 'response':
+                // The response stream was requested directly, so return it.
+                return res$;
+            default:
+                // Guard against new future observe types being added.
+                throw new Error("Unreachable: unhandled observe type " + options.observe + "}");
+        }
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * DELETE request to be executed on the server. See the individual overloads for
+     * details of `delete()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.delete = function (url, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('DELETE', url, /** @type {?} */ (options));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * GET request to be executed on the server. See the individual overloads for
+     * details of `get()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.get = function (url, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('GET', url, /** @type {?} */ (options));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * HEAD request to be executed on the server. See the individual overloads for
+     * details of `head()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.head = function (url, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('HEAD', url, /** @type {?} */ (options));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause a request
+     * with the special method `JSONP` to be dispatched via the interceptor pipeline.
+     *
+     * A suitable interceptor must be installed (e.g. via the `HttpClientJsonpModule`).
+     * If no such interceptor is reached, then the `JSONP` request will likely be
+     * rejected by the configured backend.
+     * @template T
+     * @param {?} url
+     * @param {?} callbackParam
+     * @return {?}
+     */
+    HttpClient.prototype.jsonp = function (url, callbackParam) {
+        return this.request('JSONP', url, {
+            params: new HttpParams().append(callbackParam, 'JSONP_CALLBACK'),
+            observe: 'body',
+            responseType: 'json',
+        });
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * OPTIONS request to be executed on the server. See the individual overloads for
+     * details of `options()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.options = function (url, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('OPTIONS', url, /** @type {?} */ (options));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * PATCH request to be executed on the server. See the individual overloads for
+     * details of `patch()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?} body
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.patch = function (url, body, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('PATCH', url, addBody(options, body));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * POST request to be executed on the server. See the individual overloads for
+     * details of `post()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?} body
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.post = function (url, body, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('POST', url, addBody(options, body));
+    };
+    /**
+     * Constructs an `Observable` which, when subscribed, will cause the configured
+     * POST request to be executed on the server. See the individual overloads for
+     * details of `post()`'s return type based on the provided options.
+     * @param {?} url
+     * @param {?} body
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClient.prototype.put = function (url, body, options) {
+        if (options === void 0) { options = {}; }
+        return this.request('PUT', url, addBody(options, body));
+    };
+    return HttpClient;
+}());
+HttpClient.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+HttpClient.ctorParameters = function () { return [
+    { type: HttpHandler, },
+]; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * `HttpHandler` which applies an `HttpInterceptor` to an `HttpRequest`.
+ *
+ * \@experimental
+ */
+var HttpInterceptorHandler = (function () {
+    /**
+     * @param {?} next
+     * @param {?} interceptor
+     */
+    function HttpInterceptorHandler(next, interceptor) {
+        this.next = next;
+        this.interceptor = interceptor;
+    }
+    /**
+     * @param {?} req
+     * @return {?}
+     */
+    HttpInterceptorHandler.prototype.handle = function (req) {
+        return this.interceptor.intercept(req, this.next);
+    };
+    return HttpInterceptorHandler;
+}());
+/**
+ * A multi-provider token which represents the array of `HttpInterceptor`s that
+ * are registered.
+ *
+ * \@experimental
+ */
+var HTTP_INTERCEPTORS = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('HTTP_INTERCEPTORS');
+var NoopInterceptor = (function () {
+    function NoopInterceptor() {
+    }
+    /**
+     * @param {?} req
+     * @param {?} next
+     * @return {?}
+     */
+    NoopInterceptor.prototype.intercept = function (req, next) {
+        return next.handle(req);
+    };
+    return NoopInterceptor;
+}());
+NoopInterceptor.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+NoopInterceptor.ctorParameters = function () { return []; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+// Every request made through JSONP needs a callback name that's unique across the
+// whole page. Each request is assigned an id and the callback name is constructed
+// from that. The next id to be assigned is tracked in a global variable here that
+// is shared among all applications on the page.
+var nextRequestId = 0;
+// Error text given when a JSONP script is injected, but doesn't invoke the callback
+// passed in its URL.
+var JSONP_ERR_NO_CALLBACK = 'JSONP injected script did not invoke callback.';
+// Error text given when a request is passed to the JsonpClientBackend that doesn't
+// have a request method JSONP.
+var JSONP_ERR_WRONG_METHOD = 'JSONP requests must use JSONP request method.';
+var JSONP_ERR_WRONG_RESPONSE_TYPE = 'JSONP requests must use Json response type.';
+/**
+ * DI token/abstract type representing a map of JSONP callbacks.
+ *
+ * In the browser, this should always be the `window` object.
+ *
+ * \@experimental
+ * @abstract
+ */
+var JsonpCallbackContext = (function () {
+    function JsonpCallbackContext() {
+    }
+    return JsonpCallbackContext;
+}());
+/**
+ * `HttpBackend` that only processes `HttpRequest` with the JSONP method,
+ * by performing JSONP style requests.
+ *
+ * \@experimental
+ */
+var JsonpClientBackend = (function () {
+    /**
+     * @param {?} callbackMap
+     * @param {?} document
+     */
+    function JsonpClientBackend(callbackMap, document) {
+        this.callbackMap = callbackMap;
+        this.document = document;
+    }
+    /**
+     * Get the name of the next callback method, by incrementing the global `nextRequestId`.
+     * @return {?}
+     */
+    JsonpClientBackend.prototype.nextCallback = function () { return "ng_jsonp_callback_" + nextRequestId++; };
+    /**
+     * Process a JSONP request and return an event stream of the results.
+     * @param {?} req
+     * @return {?}
+     */
+    JsonpClientBackend.prototype.handle = function (req) {
+        var _this = this;
+        // Firstly, check both the method and response type. If either doesn't match
+        // then the request was improperly routed here and cannot be handled.
+        if (req.method !== 'JSONP') {
+            throw new Error(JSONP_ERR_WRONG_METHOD);
+        }
+        else if (req.responseType !== 'json') {
+            throw new Error(JSONP_ERR_WRONG_RESPONSE_TYPE);
+        }
+        // Everything else happens inside the Observable boundary.
+        return new __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__["Observable"](function (observer) {
+            // The first step to make a request is to generate the callback name, and replace the
+            // callback placeholder in the URL with the name. Care has to be taken here to ensure
+            // a trailing &, if matched, gets inserted back into the URL in the correct place.
+            var /** @type {?} */ callback = _this.nextCallback();
+            var /** @type {?} */ url = req.urlWithParams.replace(/=JSONP_CALLBACK(&|$)/, "=" + callback + "$1");
+            // Construct the <script> tag and point it at the URL.
+            var /** @type {?} */ node = _this.document.createElement('script');
+            node.src = url;
+            // A JSONP request requires waiting for multiple callbacks. These variables
+            // are closed over and track state across those callbacks.
+            // The response object, if one has been received, or null otherwise.
+            var /** @type {?} */ body = null;
+            // Whether the response callback has been called.
+            var /** @type {?} */ finished = false;
+            // Whether the request has been cancelled (and thus any other callbacks)
+            // should be ignored.
+            var /** @type {?} */ cancelled = false;
+            // Set the response callback in this.callbackMap (which will be the window
+            // object in the browser. The script being loaded via the <script> tag will
+            // eventually call this callback.
+            _this.callbackMap[callback] = function (data) {
+                // Data has been received from the JSONP script. Firstly, delete this callback.
+                delete _this.callbackMap[callback];
+                // Next, make sure the request wasn't cancelled in the meantime.
+                if (cancelled) {
+                    return;
+                }
+                // Set state to indicate data was received.
+                body = data;
+                finished = true;
+            };
+            // cleanup() is a utility closure that removes the <script> from the page and
+            // the response callback from the window. This logic is used in both the
+            // success, error, and cancellation paths, so it's extracted out for convenience.
+            var /** @type {?} */ cleanup = function () {
+                // Remove the <script> tag if it's still on the page.
+                if (node.parentNode) {
+                    node.parentNode.removeChild(node);
+                }
+                // Remove the response callback from the callbackMap (window object in the
+                // browser).
+                delete _this.callbackMap[callback];
+            };
+            // onLoad() is the success callback which runs after the response callback
+            // if the JSONP script loads successfully. The event itself is unimportant.
+            // If something went wrong, onLoad() may run without the response callback
+            // having been invoked.
+            var /** @type {?} */ onLoad = function (event) {
+                // Do nothing if the request has been cancelled.
+                if (cancelled) {
+                    return;
+                }
+                // Cleanup the page.
+                cleanup();
+                // Check whether the response callback has run.
+                if (!finished) {
+                    // It hasn't, something went wrong with the request. Return an error via
+                    // the Observable error path. All JSONP errors have status 0.
+                    observer.error(new HttpErrorResponse({
+                        url: url,
+                        status: 0,
+                        statusText: 'JSONP Error',
+                        error: new Error(JSONP_ERR_NO_CALLBACK),
+                    }));
+                    return;
+                }
+                // Success. body either contains the response body or null if none was
+                // returned.
+                observer.next(new HttpResponse({
+                    body: body,
+                    status: 200,
+                    statusText: 'OK', url: url,
+                }));
+                // Complete the stream, the resposne is over.
+                observer.complete();
+            };
+            // onError() is the error callback, which runs if the script returned generates
+            // a Javascript error. It emits the error via the Observable error channel as
+            // a HttpErrorResponse.
+            var /** @type {?} */ onError = function (error) {
+                // If the request was already cancelled, no need to emit anything.
+                if (cancelled) {
+                    return;
+                }
+                cleanup();
+                // Wrap the error in a HttpErrorResponse.
+                observer.error(new HttpErrorResponse({
+                    error: error,
+                    status: 0,
+                    statusText: 'JSONP Error', url: url,
+                }));
+            };
+            // Subscribe to both the success (load) and error events on the <script> tag,
+            // and add it to the page.
+            node.addEventListener('load', onLoad);
+            node.addEventListener('error', onError);
+            _this.document.body.appendChild(node);
+            // The request has now been successfully sent.
+            observer.next({ type: HttpEventType.Sent });
+            // Cancellation handler.
+            return function () {
+                // Track the cancellation so event listeners won't do anything even if already scheduled.
+                cancelled = true;
+                // Remove the event listeners so they won't run if the events later fire.
+                node.removeEventListener('load', onLoad);
+                node.removeEventListener('error', onError);
+                // And finally, clean up the page.
+                cleanup();
+            };
+        });
+    };
+    return JsonpClientBackend;
+}());
+JsonpClientBackend.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+JsonpClientBackend.ctorParameters = function () { return [
+    { type: JsonpCallbackContext, },
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_6__angular_common__["DOCUMENT"],] },] },
+]; };
+/**
+ * An `HttpInterceptor` which identifies requests with the method JSONP and
+ * shifts them to the `JsonpClientBackend`.
+ *
+ * \@experimental
+ */
+var JsonpInterceptor = (function () {
+    /**
+     * @param {?} jsonp
+     */
+    function JsonpInterceptor(jsonp) {
+        this.jsonp = jsonp;
+    }
+    /**
+     * @param {?} req
+     * @param {?} next
+     * @return {?}
+     */
+    JsonpInterceptor.prototype.intercept = function (req, next) {
+        if (req.method === 'JSONP') {
+            return this.jsonp.handle(/** @type {?} */ (req));
+        }
+        // Fall through for normal HTTP requests.
+        return next.handle(req);
+    };
+    return JsonpInterceptor;
+}());
+JsonpInterceptor.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+JsonpInterceptor.ctorParameters = function () { return [
+    { type: JsonpClientBackend, },
+]; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var XSSI_PREFIX = /^\)\]\}',?\n/;
+/**
+ * Determine an appropriate URL for the response, by checking either
+ * XMLHttpRequest.responseURL or the X-Request-URL header.
+ * @param {?} xhr
+ * @return {?}
+ */
+function getResponseUrl(xhr) {
+    if ('responseURL' in xhr && xhr.responseURL) {
+        return xhr.responseURL;
+    }
+    if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+        return xhr.getResponseHeader('X-Request-URL');
+    }
+    return null;
+}
+/**
+ * A wrapper around the `XMLHttpRequest` constructor.
+ *
+ * \@experimental
+ * @abstract
+ */
+var XhrFactory = (function () {
+    function XhrFactory() {
+    }
+    /**
+     * @abstract
+     * @return {?}
+     */
+    XhrFactory.prototype.build = function () { };
+    return XhrFactory;
+}());
+/**
+ * A factory for \@{link HttpXhrBackend} that uses the `XMLHttpRequest` browser API.
+ *
+ * \@experimental
+ */
+var BrowserXhr = (function () {
+    function BrowserXhr() {
+    }
+    /**
+     * @return {?}
+     */
+    BrowserXhr.prototype.build = function () { return ((new XMLHttpRequest())); };
+    return BrowserXhr;
+}());
+BrowserXhr.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+BrowserXhr.ctorParameters = function () { return []; };
+/**
+ * An `HttpBackend` which uses the XMLHttpRequest API to send
+ * requests to a backend server.
+ *
+ * \@experimental
+ */
+var HttpXhrBackend = (function () {
+    /**
+     * @param {?} xhrFactory
+     */
+    function HttpXhrBackend(xhrFactory) {
+        this.xhrFactory = xhrFactory;
+    }
+    /**
+     * Process a request and return a stream of response events.
+     * @param {?} req
+     * @return {?}
+     */
+    HttpXhrBackend.prototype.handle = function (req) {
+        var _this = this;
+        // Quick check to give a better error message when a user attempts to use
+        // HttpClient.jsonp() without installing the JsonpClientModule
+        if (req.method === 'JSONP') {
+            throw new Error("Attempted to construct Jsonp request without JsonpClientModule installed.");
+        }
+        // Everything happens on Observable subscription.
+        return new __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__["Observable"](function (observer) {
+            // Start by setting up the XHR object with request method, URL, and withCredentials flag.
+            var /** @type {?} */ xhr = _this.xhrFactory.build();
+            xhr.open(req.method, req.urlWithParams);
+            if (!!req.withCredentials) {
+                xhr.withCredentials = true;
+            }
+            // Add all the requested headers.
+            req.headers.forEach(function (name, values) { return xhr.setRequestHeader(name, values.join(',')); });
+            // Add an Accept header if one isn't present already.
+            if (!req.headers.has('Accept')) {
+                xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
+            }
+            // Auto-detect the Content-Type header if one isn't present already.
+            if (!req.headers.has('Content-Type')) {
+                var /** @type {?} */ detectedType = req.detectContentTypeHeader();
+                // Sometimes Content-Type detection fails.
+                if (detectedType !== null) {
+                    xhr.setRequestHeader('Content-Type', detectedType);
+                }
+            }
+            // Set the responseType if one was requested.
+            if (req.responseType) {
+                xhr.responseType = (req.responseType.toLowerCase());
+            }
+            // Serialize the request body if one is present. If not, this will be set to null.
+            var /** @type {?} */ reqBody = req.serializeBody();
+            // If progress events are enabled, response headers will be delivered
+            // in two events - the HttpHeaderResponse event and the full HttpResponse
+            // event. However, since response headers don't change in between these
+            // two events, it doesn't make sense to parse them twice. So headerResponse
+            // caches the data extracted from the response whenever it's first parsed,
+            // to ensure parsing isn't duplicated.
+            var /** @type {?} */ headerResponse = null;
+            // partialFromXhr extracts the HttpHeaderResponse from the current XMLHttpRequest
+            // state, and memoizes it into headerResponse.
+            var /** @type {?} */ partialFromXhr = function () {
+                if (headerResponse !== null) {
+                    return headerResponse;
+                }
+                // Read status and normalize an IE9 bug (http://bugs.jquery.com/ticket/1450).
+                var /** @type {?} */ status = xhr.status === 1223 ? 204 : xhr.status;
+                var /** @type {?} */ statusText = xhr.statusText || 'OK';
+                // Parse headers from XMLHttpRequest - this step is lazy.
+                var /** @type {?} */ headers = new HttpHeaders(xhr.getAllResponseHeaders());
+                // Read the response URL from the XMLHttpResponse instance and fall back on the
+                // request URL.
+                var /** @type {?} */ url = getResponseUrl(xhr) || req.url;
+                // Construct the HttpHeaderResponse and memoize it.
+                headerResponse = new HttpHeaderResponse({ headers: headers, status: status, statusText: statusText, url: url });
+                return headerResponse;
+            };
+            // Next, a few closures are defined for the various events which XMLHttpRequest can
+            // emit. This allows them to be unregistered as event listeners later.
+            // First up is the load event, which represents a response being fully available.
+            var /** @type {?} */ onLoad = function () {
+                // Read response state from the memoized partial data.
+                var _a = partialFromXhr(), headers = _a.headers, status = _a.status, statusText = _a.statusText, url = _a.url;
+                // The body will be read out if present.
+                var /** @type {?} */ body = null;
+                if (status !== 204) {
+                    // Use XMLHttpRequest.response if set, responseText otherwise.
+                    body = (typeof xhr.response === 'undefined') ? xhr.responseText : xhr.response;
+                    // Strip a common XSSI prefix from string responses.
+                    // TODO: determine if this behavior should be optional and moved to an interceptor.
+                    if (typeof body === 'string') {
+                        body = body.replace(XSSI_PREFIX, '');
+                    }
+                }
+                // Normalize another potential bug (this one comes from CORS).
+                if (status === 0) {
+                    status = !!body ? 200 : 0;
+                }
+                // ok determines whether the response will be transmitted on the event or
+                // error channel. Unsuccessful status codes (not 2xx) will always be errors,
+                // but a successful status code can still result in an error if the user
+                // asked for JSON data and the body cannot be parsed as such.
+                var /** @type {?} */ ok = status >= 200 && status < 300;
+                // Check whether the body needs to be parsed as JSON (in many cases the browser
+                // will have done that already).
+                if (ok && typeof body === 'string' && req.responseType === 'json') {
+                    // Attempt the parse. If it fails, a parse error should be delivered to the user.
+                    try {
+                        body = JSON.parse(body);
+                    }
+                    catch (error) {
+                        // Even though the response status was 2xx, this is still an error.
+                        ok = false;
+                        // The parse error contains the text of the body that failed to parse.
+                        body = ({ error: error, text: body });
+                    }
+                }
+                if (ok) {
+                    // A successful response is delivered on the event stream.
+                    observer.next(new HttpResponse({
+                        body: body,
+                        headers: headers,
+                        status: status,
+                        statusText: statusText,
+                        url: url || undefined,
+                    }));
+                    // The full body has been received and delivered, no further events
+                    // are possible. This request is complete.
+                    observer.complete();
+                }
+                else {
+                    // An unsuccessful request is delivered on the error channel.
+                    observer.error(new HttpErrorResponse({
+                        // The error in this case is the response body (error from the server).
+                        error: body,
+                        headers: headers,
+                        status: status,
+                        statusText: statusText,
+                        url: url || undefined,
+                    }));
+                }
+            };
+            // The onError callback is called when something goes wrong at the network level.
+            // Connection timeout, DNS error, offline, etc. These are actual errors, and are
+            // transmitted on the error channel.
+            var /** @type {?} */ onError = function (error) {
+                var /** @type {?} */ res = new HttpErrorResponse({
+                    error: error,
+                    status: xhr.status || 0,
+                    statusText: xhr.statusText || 'Unknown Error',
+                });
+                observer.error(res);
+            };
+            // The sentHeaders flag tracks whether the HttpResponseHeaders event
+            // has been sent on the stream. This is necessary to track if progress
+            // is enabled since the event will be sent on only the first download
+            // progerss event.
+            var /** @type {?} */ sentHeaders = false;
+            // The download progress event handler, which is only registered if
+            // progress events are enabled.
+            var /** @type {?} */ onDownProgress = function (event) {
+                // Send the HttpResponseHeaders event if it hasn't been sent already.
+                if (!sentHeaders) {
+                    observer.next(partialFromXhr());
+                    sentHeaders = true;
+                }
+                // Start building the download progress event to deliver on the response
+                // event stream.
+                var /** @type {?} */ progressEvent = {
+                    type: HttpEventType.DownloadProgress,
+                    loaded: event.loaded,
+                };
+                // Set the total number of bytes in the event if it's available.
+                if (event.lengthComputable) {
+                    progressEvent.total = event.total;
+                }
+                // If the request was for text content and a partial response is
+                // available on XMLHttpRequest, include it in the progress event
+                // to allow for streaming reads.
+                if (req.responseType === 'text' && !!xhr.responseText) {
+                    progressEvent.partialText = xhr.responseText;
+                }
+                // Finally, fire the event.
+                observer.next(progressEvent);
+            };
+            // The upload progress event handler, which is only registered if
+            // progress events are enabled.
+            var /** @type {?} */ onUpProgress = function (event) {
+                // Upload progress events are simpler. Begin building the progress
+                // event.
+                var /** @type {?} */ progress = {
+                    type: HttpEventType.UploadProgress,
+                    loaded: event.loaded,
+                };
+                // If the total number of bytes being uploaded is available, include
+                // it.
+                if (event.lengthComputable) {
+                    progress.total = event.total;
+                }
+                // Send the event.
+                observer.next(progress);
+            };
+            // By default, register for load and error events.
+            xhr.addEventListener('load', onLoad);
+            xhr.addEventListener('error', onError);
+            // Progress events are only enabled if requested.
+            if (req.reportProgress) {
+                // Download progress is always enabled if requested.
+                xhr.addEventListener('progress', onDownProgress);
+                // Upload progress depends on whether there is a body to upload.
+                if (reqBody !== null && xhr.upload) {
+                    xhr.upload.addEventListener('progress', onUpProgress);
+                }
+            }
+            // Fire the request, and notify the event stream that it was fired.
+            xhr.send(reqBody);
+            observer.next({ type: HttpEventType.Sent });
+            // This is the return from the Observable function, which is the
+            // request cancellation handler.
+            return function () {
+                // On a cancellation, remove all registered event listeners.
+                xhr.removeEventListener('error', onError);
+                xhr.removeEventListener('load', onLoad);
+                if (req.reportProgress) {
+                    xhr.removeEventListener('progress', onDownProgress);
+                    if (reqBody !== null && xhr.upload) {
+                        xhr.upload.removeEventListener('progress', onUpProgress);
+                    }
+                }
+                // Finally, abort the in-flight request.
+                xhr.abort();
+            };
+        });
+    };
+    return HttpXhrBackend;
+}());
+HttpXhrBackend.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+HttpXhrBackend.ctorParameters = function () { return [
+    { type: XhrFactory, },
+]; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var XSRF_COOKIE_NAME = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('XSRF_COOKIE_NAME');
+var XSRF_HEADER_NAME = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('XSRF_HEADER_NAME');
+/**
+ * Retrieves the current XSRF token to use with the next outgoing request.
+ *
+ * \@experimental
+ * @abstract
+ */
+var HttpXsrfTokenExtractor = (function () {
+    function HttpXsrfTokenExtractor() {
+    }
+    /**
+     * Get the XSRF token to use with an outgoing request.
+     *
+     * Will be called for every request, so the token may change between requests.
+     * @abstract
+     * @return {?}
+     */
+    HttpXsrfTokenExtractor.prototype.getToken = function () { };
+    return HttpXsrfTokenExtractor;
+}());
+/**
+ * `HttpXsrfTokenExtractor` which retrieves the token from a cookie.
+ */
+var HttpXsrfCookieExtractor = (function () {
+    /**
+     * @param {?} doc
+     * @param {?} platform
+     * @param {?} cookieName
+     */
+    function HttpXsrfCookieExtractor(doc, platform, cookieName) {
+        this.doc = doc;
+        this.platform = platform;
+        this.cookieName = cookieName;
+        this.lastCookieString = '';
+        this.lastToken = null;
+        /**
+         * \@internal for testing
+         */
+        this.parseCount = 0;
+    }
+    /**
+     * @return {?}
+     */
+    HttpXsrfCookieExtractor.prototype.getToken = function () {
+        if (this.platform === 'server') {
+            return null;
+        }
+        var /** @type {?} */ cookieString = this.doc.cookie || '';
+        if (cookieString !== this.lastCookieString) {
+            this.parseCount++;
+            this.lastToken = Object(__WEBPACK_IMPORTED_MODULE_6__angular_common__["ɵparseCookieValue"])(cookieString, this.cookieName);
+            this.lastCookieString = cookieString;
+        }
+        return this.lastToken;
+    };
+    return HttpXsrfCookieExtractor;
+}());
+HttpXsrfCookieExtractor.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+HttpXsrfCookieExtractor.ctorParameters = function () { return [
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_6__angular_common__["DOCUMENT"],] },] },
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_1__angular_core__["PLATFORM_ID"],] },] },
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [XSRF_COOKIE_NAME,] },] },
+]; };
+/**
+ * `HttpInterceptor` which adds an XSRF token to eligible outgoing requests.
+ */
+var HttpXsrfInterceptor = (function () {
+    /**
+     * @param {?} tokenService
+     * @param {?} headerName
+     */
+    function HttpXsrfInterceptor(tokenService, headerName) {
+        this.tokenService = tokenService;
+        this.headerName = headerName;
+    }
+    /**
+     * @param {?} req
+     * @param {?} next
+     * @return {?}
+     */
+    HttpXsrfInterceptor.prototype.intercept = function (req, next) {
+        var /** @type {?} */ lcUrl = req.url.toLowerCase();
+        // Skip both non-mutating requests and absolute URLs.
+        // Non-mutating requests don't require a token, and absolute URLs require special handling
+        // anyway as the cookie set
+        // on our origin is not the same as the token expected by another origin.
+        if (req.method === 'GET' || req.method === 'HEAD' || lcUrl.startsWith('http://') ||
+            lcUrl.startsWith('https://')) {
+            return next.handle(req);
+        }
+        var /** @type {?} */ token = this.tokenService.getToken();
+        // Be careful not to overwrite an existing header of the same name.
+        if (token !== null && !req.headers.has(this.headerName)) {
+            req = req.clone({ headers: req.headers.set(this.headerName, token) });
+        }
+        return next.handle(req);
+    };
+    return HttpXsrfInterceptor;
+}());
+HttpXsrfInterceptor.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
+];
+/**
+ * @nocollapse
+ */
+HttpXsrfInterceptor.ctorParameters = function () { return [
+    { type: HttpXsrfTokenExtractor, },
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [XSRF_HEADER_NAME,] },] },
+]; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Constructs an `HttpHandler` that applies a bunch of `HttpInterceptor`s
+ * to a request before passing it to the given `HttpBackend`.
+ *
+ * Meant to be used as a factory function within `HttpClientModule`.
+ *
+ * \@experimental
+ * @param {?} backend
+ * @param {?=} interceptors
+ * @return {?}
+ */
+function interceptingHandler(backend, interceptors) {
+    if (interceptors === void 0) { interceptors = []; }
+    if (!interceptors) {
+        return backend;
+    }
+    return interceptors.reduceRight(function (next, interceptor) { return new HttpInterceptorHandler(next, interceptor); }, backend);
+}
+/**
+ * Factory function that determines where to store JSONP callbacks.
+ *
+ * Ordinarily JSONP callbacks are stored on the `window` object, but this may not exist
+ * in test environments. In that case, callbacks are stored on an anonymous object instead.
+ *
+ * \@experimental
+ * @return {?}
+ */
+function jsonpCallbackContext() {
+    if (typeof window === 'object') {
+        return window;
+    }
+    return {};
+}
+/**
+ * `NgModule` which adds XSRF protection support to outgoing requests.
+ *
+ * Provided the server supports a cookie-based XSRF protection system, this
+ * module can be used directly to configure XSRF protection with the correct
+ * cookie and header names.
+ *
+ * If no such names are provided, the default is to use `X-XSRF-TOKEN` for
+ * the header name and `XSRF-TOKEN` for the cookie name.
+ *
+ * \@experimental
+ */
+var HttpClientXsrfModule = (function () {
+    function HttpClientXsrfModule() {
+    }
+    /**
+     * Disable the default XSRF protection.
+     * @return {?}
+     */
+    HttpClientXsrfModule.disable = function () {
+        return {
+            ngModule: HttpClientXsrfModule,
+            providers: [
+                { provide: HttpXsrfInterceptor, useClass: NoopInterceptor },
+            ],
+        };
+    };
+    /**
+     * Configure XSRF protection to use the given cookie name or header name,
+     * or the default names (as described above) if not provided.
+     * @param {?=} options
+     * @return {?}
+     */
+    HttpClientXsrfModule.withOptions = function (options) {
+        if (options === void 0) { options = {}; }
+        return {
+            ngModule: HttpClientXsrfModule,
+            providers: [
+                options.cookieName ? { provide: XSRF_COOKIE_NAME, useValue: options.cookieName } : [],
+                options.headerName ? { provide: XSRF_HEADER_NAME, useValue: options.headerName } : [],
+            ],
+        };
+    };
+    return HttpClientXsrfModule;
+}());
+HttpClientXsrfModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
+                providers: [
+                    HttpXsrfInterceptor,
+                    { provide: HTTP_INTERCEPTORS, useExisting: HttpXsrfInterceptor, multi: true },
+                    { provide: HttpXsrfTokenExtractor, useClass: HttpXsrfCookieExtractor },
+                    { provide: XSRF_COOKIE_NAME, useValue: 'XSRF-TOKEN' },
+                    { provide: XSRF_HEADER_NAME, useValue: 'X-XSRF-TOKEN' },
+                ],
+            },] },
+];
+/**
+ * @nocollapse
+ */
+HttpClientXsrfModule.ctorParameters = function () { return []; };
+/**
+ * `NgModule` which provides the `HttpClient` and associated services.
+ *
+ * Interceptors can be added to the chain behind `HttpClient` by binding them
+ * to the multiprovider for `HTTP_INTERCEPTORS`.
+ *
+ * \@experimental
+ */
+var HttpClientModule = (function () {
+    function HttpClientModule() {
+    }
+    return HttpClientModule;
+}());
+HttpClientModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
+                imports: [
+                    HttpClientXsrfModule.withOptions({
+                        cookieName: 'XSRF-TOKEN',
+                        headerName: 'X-XSRF-TOKEN',
+                    }),
+                ],
+                providers: [
+                    HttpClient,
+                    // HttpHandler is the backend + interceptors and is constructed
+                    // using the interceptingHandler factory function.
+                    {
+                        provide: HttpHandler,
+                        useFactory: interceptingHandler,
+                        deps: [HttpBackend, [new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Optional"](), new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"](HTTP_INTERCEPTORS)]],
+                    },
+                    HttpXhrBackend,
+                    { provide: HttpBackend, useExisting: HttpXhrBackend },
+                    BrowserXhr,
+                    { provide: XhrFactory, useExisting: BrowserXhr },
+                ],
+            },] },
+];
+/**
+ * @nocollapse
+ */
+HttpClientModule.ctorParameters = function () { return []; };
+/**
+ * `NgModule` which enables JSONP support in `HttpClient`.
+ *
+ * Without this module, Jsonp requests will reach the backend
+ * with method JSONP, where they'll be rejected.
+ *
+ * \@experimental
+ */
+var HttpClientJsonpModule = (function () {
+    function HttpClientJsonpModule() {
+    }
+    return HttpClientJsonpModule;
+}());
+HttpClientJsonpModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
+                providers: [
+                    JsonpClientBackend,
+                    { provide: JsonpCallbackContext, useFactory: jsonpCallbackContext },
+                    { provide: HTTP_INTERCEPTORS, useClass: JsonpInterceptor, multi: true },
+                ],
+            },] },
+];
+/**
+ * @nocollapse
+ */
+HttpClientJsonpModule.ctorParameters = function () { return []; };
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+//# sourceMappingURL=http.es5.js.map
+
+
+/***/ }),
 /* 52 */,
 /* 53 */,
 /* 54 */,
-/* 55 */
+/* 55 */,
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15918,9 +18109,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵc", function() { return _createNgProbe; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵd", function() { return EventManagerPlugin; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵe", function() { return DomSanitizerImpl; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(4);
 
 /**
  * @license Angular v4.3.0
@@ -20359,7 +22550,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["Version"]('4.3.0'
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20413,8 +22604,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Location", function() { return Location; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵa", function() { return COMMON_DIRECTIVES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵb", function() { return COMMON_PIPES; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(4);
 
 /**
  * @license Angular v4.3.0
@@ -24394,7 +26585,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('4.3.0'
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24404,12 +26595,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
-var Subscriber_1 = __webpack_require__(9);
-var Subscription_1 = __webpack_require__(93);
-var ObjectUnsubscribedError_1 = __webpack_require__(184);
-var SubjectSubscription_1 = __webpack_require__(256);
-var rxSubscriber_1 = __webpack_require__(112);
+var Observable_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
+var Subscription_1 = __webpack_require__(94);
+var ObjectUnsubscribedError_1 = __webpack_require__(197);
+var SubjectSubscription_1 = __webpack_require__(262);
+var rxSubscriber_1 = __webpack_require__(118);
 /**
  * @class SubjectSubscriber<T>
  */
@@ -24568,7 +26759,6 @@ exports.AnonymousSubject = AnonymousSubject;
 //# sourceMappingURL=Subject.js.map
 
 /***/ }),
-/* 58 */,
 /* 59 */,
 /* 60 */,
 /* 61 */,
@@ -24602,7 +26792,8 @@ exports.AnonymousSubject = AnonymousSubject;
 /* 89 */,
 /* 90 */,
 /* 91 */,
-/* 92 */
+/* 92 */,
+/* 93 */
 /***/ (function(module, exports) {
 
 var g;
@@ -24629,17 +26820,17 @@ module.exports = g;
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var isArray_1 = __webpack_require__(111);
-var isObject_1 = __webpack_require__(176);
-var isFunction_1 = __webpack_require__(175);
-var tryCatch_1 = __webpack_require__(246);
-var errorObject_1 = __webpack_require__(177);
-var UnsubscriptionError_1 = __webpack_require__(247);
+var isArray_1 = __webpack_require__(117);
+var isObject_1 = __webpack_require__(189);
+var isFunction_1 = __webpack_require__(188);
+var tryCatch_1 = __webpack_require__(252);
+var errorObject_1 = __webpack_require__(190);
+var UnsubscriptionError_1 = __webpack_require__(253);
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
  * Subscription has one important method, `unsubscribe`, that takes no argument
@@ -24828,7 +27019,7 @@ function flattenUnsubscriptionErrors(errors) {
 //# sourceMappingURL=Subscription.js.map
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24838,7 +27029,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
+var Observable_1 = __webpack_require__(9);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -24915,7 +27106,6 @@ exports.EmptyObservable = EmptyObservable;
 //# sourceMappingURL=EmptyObservable.js.map
 
 /***/ }),
-/* 95 */,
 /* 96 */,
 /* 97 */,
 /* 98 */,
@@ -24931,7 +27121,13 @@ exports.EmptyObservable = EmptyObservable;
 /* 108 */,
 /* 109 */,
 /* 110 */,
-/* 111 */
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24940,12 +27136,12 @@ exports.isArray = Array.isArray || (function (x) { return x && typeof x.length =
 //# sourceMappingURL=isArray.js.map
 
 /***/ }),
-/* 112 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var root_1 = __webpack_require__(35);
+var root_1 = __webpack_require__(34);
 var Symbol = root_1.root.Symbol;
 exports.rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
     Symbol.for('rxSubscriber') : '@@rxSubscriber';
@@ -24956,12 +27152,12 @@ exports.$$rxSubscriber = exports.rxSubscriber;
 //# sourceMappingURL=rxSubscriber.js.map
 
 /***/ }),
-/* 113 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var root_1 = __webpack_require__(35);
+var root_1 = __webpack_require__(34);
 function getSymbolObservable(context) {
     var $$observable;
     var Symbol = context.Symbol;
@@ -24988,7 +27184,7 @@ exports.$$observable = exports.observable;
 //# sourceMappingURL=observable.js.map
 
 /***/ }),
-/* 114 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24998,10 +27194,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
-var ScalarObservable_1 = __webpack_require__(180);
-var EmptyObservable_1 = __webpack_require__(94);
-var isScheduler_1 = __webpack_require__(181);
+var Observable_1 = __webpack_require__(9);
+var ScalarObservable_1 = __webpack_require__(193);
+var EmptyObservable_1 = __webpack_require__(95);
+var isScheduler_1 = __webpack_require__(194);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -25116,13 +27312,13 @@ exports.ArrayObservable = ArrayObservable;
 //# sourceMappingURL=ArrayObservable.js.map
 
 /***/ }),
-/* 115 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var mergeMap_1 = __webpack_require__(116);
-var identity_1 = __webpack_require__(251);
+var mergeMap_1 = __webpack_require__(122);
+var identity_1 = __webpack_require__(257);
 /**
  * Converts a higher-order Observable into a first-order Observable which
  * concurrently delivers all values that are emitted on the inner Observables.
@@ -25175,7 +27371,7 @@ exports.mergeAll = mergeAll;
 //# sourceMappingURL=mergeAll.js.map
 
 /***/ }),
-/* 116 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25185,8 +27381,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var subscribeToResult_1 = __webpack_require__(117);
-var OuterSubscriber_1 = __webpack_require__(119);
+var subscribeToResult_1 = __webpack_require__(123);
+var OuterSubscriber_1 = __webpack_require__(125);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output
@@ -25354,19 +27550,19 @@ exports.MergeMapSubscriber = MergeMapSubscriber;
 //# sourceMappingURL=mergeMap.js.map
 
 /***/ }),
-/* 117 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var root_1 = __webpack_require__(35);
-var isArrayLike_1 = __webpack_require__(182);
-var isPromise_1 = __webpack_require__(183);
-var isObject_1 = __webpack_require__(176);
-var Observable_1 = __webpack_require__(8);
-var iterator_1 = __webpack_require__(118);
-var InnerSubscriber_1 = __webpack_require__(250);
-var observable_1 = __webpack_require__(113);
+var root_1 = __webpack_require__(34);
+var isArrayLike_1 = __webpack_require__(195);
+var isPromise_1 = __webpack_require__(196);
+var isObject_1 = __webpack_require__(189);
+var Observable_1 = __webpack_require__(9);
+var iterator_1 = __webpack_require__(124);
+var InnerSubscriber_1 = __webpack_require__(256);
+var observable_1 = __webpack_require__(119);
 function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
     var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
     if (destination.closed) {
@@ -25439,12 +27635,12 @@ exports.subscribeToResult = subscribeToResult;
 //# sourceMappingURL=subscribeToResult.js.map
 
 /***/ }),
-/* 118 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var root_1 = __webpack_require__(35);
+var root_1 = __webpack_require__(34);
 function symbolIteratorPonyfill(root) {
     var Symbol = root.Symbol;
     if (typeof Symbol === 'function') {
@@ -25483,7 +27679,7 @@ exports.$$iterator = exports.iterator;
 //# sourceMappingURL=iterator.js.map
 
 /***/ }),
-/* 119 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25493,7 +27689,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -25519,12 +27715,12 @@ exports.OuterSubscriber = OuterSubscriber;
 //# sourceMappingURL=OuterSubscriber.js.map
 
 /***/ }),
-/* 120 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var map_1 = __webpack_require__(260);
+var map_1 = __webpack_require__(266);
 /**
  * Applies a given `project` function to each value emitted by the source
  * Observable, and emits the resulting values as an Observable.
@@ -25565,7 +27761,7 @@ exports.map = map;
 //# sourceMappingURL=map.js.map
 
 /***/ }),
-/* 121 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25599,7 +27795,7 @@ exports.EmptyError = EmptyError;
 //# sourceMappingURL=EmptyError.js.map
 
 /***/ }),
-/* 122 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25616,7 +27812,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VERSION", function() { return VERSION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpgradeComponent", function() { return UpgradeComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpgradeModule", function() { return UpgradeModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(4);
 /**
  * @license Angular v4.3.0
  * (c) 2010-2017 Google, Inc. https://angular.io/
@@ -27013,12 +29209,6 @@ var NgAdapterInjector = (function () {
 
 
 /***/ }),
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
 /* 129 */,
 /* 130 */,
 /* 131 */,
@@ -27065,7 +29255,20 @@ var NgAdapterInjector = (function () {
 /* 172 */,
 /* 173 */,
 /* 174 */,
-/* 175 */
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27077,7 +29280,7 @@ exports.isFunction = isFunction;
 //# sourceMappingURL=isFunction.js.map
 
 /***/ }),
-/* 176 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27089,7 +29292,7 @@ exports.isObject = isObject;
 //# sourceMappingURL=isObject.js.map
 
 /***/ }),
-/* 177 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27099,7 +29302,7 @@ exports.errorObject = { e: {} };
 //# sourceMappingURL=errorObject.js.map
 
 /***/ }),
-/* 178 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27113,12 +29316,12 @@ exports.empty = {
 //# sourceMappingURL=Observer.js.map
 
 /***/ }),
-/* 179 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var noop_1 = __webpack_require__(248);
+var noop_1 = __webpack_require__(254);
 /* tslint:enable:max-line-length */
 function pipe() {
     var fns = [];
@@ -27144,7 +29347,7 @@ exports.pipeFromArray = pipeFromArray;
 //# sourceMappingURL=pipe.js.map
 
 /***/ }),
-/* 180 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27154,7 +29357,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
+var Observable_1 = __webpack_require__(9);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -27208,7 +29411,7 @@ exports.ScalarObservable = ScalarObservable;
 //# sourceMappingURL=ScalarObservable.js.map
 
 /***/ }),
-/* 181 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27220,7 +29423,7 @@ exports.isScheduler = isScheduler;
 //# sourceMappingURL=isScheduler.js.map
 
 /***/ }),
-/* 182 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27229,7 +29432,7 @@ exports.isArrayLike = (function (x) { return x && typeof x.length === 'number'; 
 //# sourceMappingURL=isArrayLike.js.map
 
 /***/ }),
-/* 183 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27241,7 +29444,7 @@ exports.isPromise = isPromise;
 //# sourceMappingURL=isPromise.js.map
 
 /***/ }),
-/* 184 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27274,7 +29477,7 @@ exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 //# sourceMappingURL=ObjectUnsubscribedError.js.map
 
 /***/ }),
-/* 185 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27284,7 +29487,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 function refCount() {
     return function refCountOperatorFunction(source) {
         return source.lift(new RefCountOperator(source));
@@ -27365,7 +29568,7 @@ var RefCountSubscriber = (function (_super) {
 //# sourceMappingURL=refCount.js.map
 
 /***/ }),
-/* 186 */
+/* 199 */
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -27374,10 +29577,10 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 186;
+webpackEmptyAsyncContext.id = 199;
 
 /***/ }),
-/* 187 */
+/* 200 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27387,11 +29590,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VERSION", function() { return VERSION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS", function() { return INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵResourceLoaderImpl", function() { return ResourceLoaderImpl; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_compiler__ = __webpack_require__(257);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_compiler__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__ = __webpack_require__(56);
 
 /**
  * @license Angular v4.3.0
@@ -27561,2213 +29764,22 @@ var platformBrowserDynamic = Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__[
 
 
 /***/ }),
-/* 188 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpBackend", function() { return HttpBackend; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHandler", function() { return HttpHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClient", function() { return HttpClient; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHeaders", function() { return HttpHeaders; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HTTP_INTERCEPTORS", function() { return HTTP_INTERCEPTORS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonpClientBackend", function() { return JsonpClientBackend; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonpInterceptor", function() { return JsonpInterceptor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientJsonpModule", function() { return HttpClientJsonpModule; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientModule", function() { return HttpClientModule; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpClientXsrfModule", function() { return HttpClientXsrfModule; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵinterceptingHandler", function() { return interceptingHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpParams", function() { return HttpParams; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpUrlEncodingCodec", function() { return HttpUrlEncodingCodec; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpRequest", function() { return HttpRequest; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpErrorResponse", function() { return HttpErrorResponse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpEventType", function() { return HttpEventType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpHeaderResponse", function() { return HttpHeaderResponse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpResponse", function() { return HttpResponse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpResponseBase", function() { return HttpResponseBase; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpXhrBackend", function() { return HttpXhrBackend; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XhrFactory", function() { return XhrFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpXsrfTokenExtractor", function() { return HttpXsrfTokenExtractor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵa", function() { return NoopInterceptor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵb", function() { return JsonpCallbackContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵc", function() { return jsonpCallbackContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵd", function() { return BrowserXhr; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵg", function() { return HttpXsrfCookieExtractor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵh", function() { return HttpXsrfInterceptor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵe", function() { return XSRF_COOKIE_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵf", function() { return XSRF_HEADER_NAME; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__(189);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__ = __webpack_require__(191);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__);
-
-/**
- * @license Angular v4.3.0
- * (c) 2010-2017 Google, Inc. https://angular.io/
- * License: MIT
- */
-
-
-
-
-
-
-
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Transforms an `HttpRequest` into a stream of `HttpEvent`s, one of which will likely be a
- * `HttpResponse`.
- *
- * `HttpHandler` is injectable. When injected, the handler instance dispatches requests to the
- * first interceptor in the chain, which dispatches to the second, etc, eventually reaching the
- * `HttpBackend`.
- *
- * In an `HttpInterceptor`, the `HttpHandler` parameter is the next interceptor in the chain.
- *
- * \@experimental
- * @abstract
- */
-var HttpHandler = (function () {
-    function HttpHandler() {
-    }
-    /**
-     * @abstract
-     * @param {?} req
-     * @return {?}
-     */
-    HttpHandler.prototype.handle = function (req) { };
-    return HttpHandler;
-}());
-/**
- * A final `HttpHandler` which will dispatch the request via browser HTTP APIs to a backend.
- *
- * Interceptors sit between the `HttpClient` interface and the `HttpBackend`.
- *
- * When injected, `HttpBackend` dispatches requests directly to the backend, without going
- * through the interceptor chain.
- *
- * \@experimental
- * @abstract
- */
-var HttpBackend = (function () {
-    function HttpBackend() {
-    }
-    /**
-     * @abstract
-     * @param {?} req
-     * @return {?}
-     */
-    HttpBackend.prototype.handle = function (req) { };
-    return HttpBackend;
-}());
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * A `HttpParameterCodec` that uses `encodeURIComponent` and `decodeURIComponent` to
- * serialize and parse URL parameter keys and values.
- *
- * \@experimental
- */
-var HttpUrlEncodingCodec = (function () {
-    function HttpUrlEncodingCodec() {
-    }
-    /**
-     * @param {?} k
-     * @return {?}
-     */
-    HttpUrlEncodingCodec.prototype.encodeKey = function (k) { return standardEncoding(k); };
-    /**
-     * @param {?} v
-     * @return {?}
-     */
-    HttpUrlEncodingCodec.prototype.encodeValue = function (v) { return standardEncoding(v); };
-    /**
-     * @param {?} k
-     * @return {?}
-     */
-    HttpUrlEncodingCodec.prototype.decodeKey = function (k) { return decodeURIComponent(k); };
-    /**
-     * @param {?} v
-     * @return {?}
-     */
-    HttpUrlEncodingCodec.prototype.decodeValue = function (v) { return decodeURIComponent(v); };
-    return HttpUrlEncodingCodec;
-}());
-/**
- * @param {?} rawParams
- * @param {?} codec
- * @return {?}
- */
-function paramParser(rawParams, codec) {
-    var /** @type {?} */ map$$1 = new Map();
-    if (rawParams.length > 0) {
-        var /** @type {?} */ params = rawParams.split('&');
-        params.forEach(function (param) {
-            var /** @type {?} */ eqIdx = param.indexOf('=');
-            var _a = eqIdx == -1 ?
-                [codec.decodeKey(param), ''] :
-                [codec.decodeKey(param.slice(0, eqIdx)), codec.decodeValue(param.slice(eqIdx + 1))], key = _a[0], val = _a[1];
-            var /** @type {?} */ list = map$$1.get(key) || [];
-            list.push(val);
-            map$$1.set(key, list);
-        });
-    }
-    return map$$1;
-}
-/**
- * @param {?} v
- * @return {?}
- */
-function standardEncoding(v) {
-    return encodeURIComponent(v)
-        .replace(/%40/gi, '@')
-        .replace(/%3A/gi, ':')
-        .replace(/%24/gi, '$')
-        .replace(/%2C/gi, ',')
-        .replace(/%3B/gi, ';')
-        .replace(/%2B/gi, '+')
-        .replace(/%3D/gi, '=')
-        .replace(/%3F/gi, '?')
-        .replace(/%2F/gi, '/');
-}
-/**
- * An HTTP request/response body that represents serialized parameters,
- * per the MIME type `application/x-www-form-urlencoded`.
- *
- * This class is immuatable - all mutation operations return a new instance.
- *
- * \@experimental
- */
-var HttpParams = (function () {
-    /**
-     * @param {?=} options
-     */
-    function HttpParams(options) {
-        if (options === void 0) { options = {}; }
-        this.updates = null;
-        this.cloneFrom = null;
-        this.encoder = options.encoder || new HttpUrlEncodingCodec();
-        this.map = !!options.fromString ? paramParser(options.fromString, this.encoder) : null;
-    }
-    /**
-     * Check whether the body has one or more values for the given parameter name.
-     * @param {?} param
-     * @return {?}
-     */
-    HttpParams.prototype.has = function (param) {
-        this.init();
-        return ((this.map)).has(param);
-    };
-    /**
-     * Get the first value for the given parameter name, or `null` if it's not present.
-     * @param {?} param
-     * @return {?}
-     */
-    HttpParams.prototype.get = function (param) {
-        this.init();
-        var /** @type {?} */ res = ((this.map)).get(param);
-        return !!res ? res[0] : null;
-    };
-    /**
-     * Get all values for the given parameter name, or `null` if it's not present.
-     * @param {?} param
-     * @return {?}
-     */
-    HttpParams.prototype.getAll = function (param) {
-        this.init();
-        return ((this.map)).get(param) || null;
-    };
-    /**
-     * Get all the parameter names for this body.
-     * @return {?}
-     */
-    HttpParams.prototype.keys = function () {
-        this.init();
-        return Array.from(/** @type {?} */ ((this.map)).keys());
-    };
-    /**
-     * Construct a new body with an appended value for the given parameter name.
-     * @param {?} param
-     * @param {?} value
-     * @return {?}
-     */
-    HttpParams.prototype.append = function (param, value) { return this.clone({ param: param, value: value, op: 'a' }); };
-    /**
-     * Construct a new body with a new value for the given parameter name.
-     * @param {?} param
-     * @param {?} value
-     * @return {?}
-     */
-    HttpParams.prototype.set = function (param, value) { return this.clone({ param: param, value: value, op: 's' }); };
-    /**
-     * Construct a new body with either the given value for the given parameter
-     * removed, if a value is given, or all values for the given parameter removed
-     * if not.
-     * @param {?} param
-     * @param {?=} value
-     * @return {?}
-     */
-    HttpParams.prototype.delete = function (param, value) { return this.clone({ param: param, value: value, op: 'd' }); };
-    /**
-     * Serialize the body to an encoded string, where key-value pairs (separated by `=`) are
-     * separated by `&`s.
-     * @return {?}
-     */
-    HttpParams.prototype.toString = function () {
-        var _this = this;
-        this.init();
-        return this.keys()
-            .map(function (key) {
-            var /** @type {?} */ eKey = _this.encoder.encodeKey(key);
-            return ((((_this.map)).get(key))).map(function (value) { return eKey + '=' + _this.encoder.encodeValue(value); })
-                .join('&');
-        })
-            .join('&');
-    };
-    /**
-     * @param {?} update
-     * @return {?}
-     */
-    HttpParams.prototype.clone = function (update) {
-        var /** @type {?} */ clone = new HttpParams({ encoder: this.encoder });
-        clone.cloneFrom = this.cloneFrom || this;
-        clone.updates = (this.updates || []).concat([update]);
-        return clone;
-    };
-    /**
-     * @return {?}
-     */
-    HttpParams.prototype.init = function () {
-        var _this = this;
-        if (this.map === null) {
-            this.map = new Map();
-        }
-        if (this.cloneFrom !== null) {
-            this.cloneFrom.init();
-            this.cloneFrom.keys().forEach(function (key) { return ((_this.map)).set(key, /** @type {?} */ ((((((_this.cloneFrom)).map)).get(key)))); }); /** @type {?} */
-            ((this.updates)).forEach(function (update) {
-                switch (update.op) {
-                    case 'a':
-                    case 's':
-                        var /** @type {?} */ base = (update.op === 'a' ? ((_this.map)).get(update.param) : undefined) || [];
-                        base.push(/** @type {?} */ ((update.value))); /** @type {?} */
-                        ((_this.map)).set(update.param, base);
-                        break;
-                    case 'd':
-                        if (update.value !== undefined) {
-                            var /** @type {?} */ base_1 = ((_this.map)).get(update.param) || [];
-                            var /** @type {?} */ idx = base_1.indexOf(update.value);
-                            if (idx !== -1) {
-                                base_1.splice(idx, 1);
-                            }
-                            if (base_1.length > 0) {
-                                ((_this.map)).set(update.param, base_1);
-                            }
-                            else {
-                                ((_this.map)).delete(update.param);
-                            }
-                        }
-                        else {
-                            ((_this.map)).delete(update.param);
-                            break;
-                        }
-                }
-            });
-            this.cloneFrom = null;
-        }
-    };
-    return HttpParams;
-}());
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Immutable set of Http headers, with lazy parsing.
- * \@experimental
- */
-var HttpHeaders = (function () {
-    /**
-     * @param {?=} headers
-     */
-    function HttpHeaders(headers) {
-        var _this = this;
-        /**
-         * Internal map of lowercased header names to the normalized
-         * form of the name (the form seen first).
-         */
-        this.normalizedNames = new Map();
-        /**
-         * Queued updates to be materialized the next initialization.
-         */
-        this.lazyUpdate = null;
-        if (!headers) {
-            this.headers = new Map();
-        }
-        else if (typeof headers === 'string') {
-            this.lazyInit = function () {
-                _this.headers = new Map();
-                headers.split('\n').forEach(function (line) {
-                    var index = line.indexOf(':');
-                    if (index > 0) {
-                        var name = line.slice(0, index);
-                        var key = name.toLowerCase();
-                        var value = line.slice(index + 1).trim();
-                        _this.maybeSetNormalizedName(name, key);
-                        if (_this.headers.has(key)) {
-                            _this.headers.get(key).push(value);
-                        }
-                        else {
-                            _this.headers.set(key, [value]);
-                        }
-                    }
-                });
-            };
-        }
-        else {
-            this.lazyInit = function () {
-                _this.headers = new Map();
-                Object.keys(headers).forEach(function (name) {
-                    var values = headers[name];
-                    var key = name.toLowerCase();
-                    if (typeof values === 'string') {
-                        values = [values];
-                    }
-                    if (values.length > 0) {
-                        _this.headers.set(key, values);
-                        _this.maybeSetNormalizedName(name, key);
-                    }
-                });
-            };
-        }
-    }
-    /**
-     * Checks for existence of header by given name.
-     * @param {?} name
-     * @return {?}
-     */
-    HttpHeaders.prototype.has = function (name) {
-        this.init();
-        return this.headers.has(name.toLowerCase());
-    };
-    /**
-     * Returns first header that matches given name.
-     * @param {?} name
-     * @return {?}
-     */
-    HttpHeaders.prototype.get = function (name) {
-        this.init();
-        var /** @type {?} */ values = this.headers.get(name.toLowerCase());
-        return values && values.length > 0 ? values[0] : null;
-    };
-    /**
-     * Returns the names of the headers
-     * @return {?}
-     */
-    HttpHeaders.prototype.keys = function () {
-        this.init();
-        return Array.from(this.normalizedNames.values());
-    };
-    /**
-     * Returns list of header values for a given name.
-     * @param {?} name
-     * @return {?}
-     */
-    HttpHeaders.prototype.getAll = function (name) {
-        this.init();
-        return this.headers.get(name.toLowerCase()) || null;
-    };
-    /**
-     * @param {?} name
-     * @param {?} value
-     * @return {?}
-     */
-    HttpHeaders.prototype.append = function (name, value) {
-        return this.clone({ name: name, value: value, op: 'a' });
-    };
-    /**
-     * @param {?} name
-     * @param {?} value
-     * @return {?}
-     */
-    HttpHeaders.prototype.set = function (name, value) {
-        return this.clone({ name: name, value: value, op: 's' });
-    };
-    /**
-     * @param {?} name
-     * @param {?=} value
-     * @return {?}
-     */
-    HttpHeaders.prototype.delete = function (name, value) {
-        return this.clone({ name: name, value: value, op: 'd' });
-    };
-    /**
-     * @param {?} name
-     * @param {?} lcName
-     * @return {?}
-     */
-    HttpHeaders.prototype.maybeSetNormalizedName = function (name, lcName) {
-        if (!this.normalizedNames.has(lcName)) {
-            this.normalizedNames.set(lcName, name);
-        }
-    };
-    /**
-     * @return {?}
-     */
-    HttpHeaders.prototype.init = function () {
-        var _this = this;
-        if (!!this.lazyInit) {
-            if (this.lazyInit instanceof HttpHeaders) {
-                this.copyFrom(this.lazyInit);
-            }
-            else {
-                this.lazyInit();
-            }
-            this.lazyInit = null;
-            if (!!this.lazyUpdate) {
-                this.lazyUpdate.forEach(function (update) { return _this.applyUpdate(update); });
-                this.lazyUpdate = null;
-            }
-        }
-    };
-    /**
-     * @param {?} other
-     * @return {?}
-     */
-    HttpHeaders.prototype.copyFrom = function (other) {
-        var _this = this;
-        other.init();
-        Array.from(other.headers.keys()).forEach(function (key) {
-            _this.headers.set(key, /** @type {?} */ ((other.headers.get(key))));
-            _this.normalizedNames.set(key, /** @type {?} */ ((other.normalizedNames.get(key))));
-        });
-    };
-    /**
-     * @param {?} update
-     * @return {?}
-     */
-    HttpHeaders.prototype.clone = function (update) {
-        var /** @type {?} */ clone = new HttpHeaders();
-        clone.lazyInit =
-            (!!this.lazyInit && this.lazyInit instanceof HttpHeaders) ? this.lazyInit : this;
-        clone.lazyUpdate = (this.lazyUpdate || []).concat([update]);
-        return clone;
-    };
-    /**
-     * @param {?} update
-     * @return {?}
-     */
-    HttpHeaders.prototype.applyUpdate = function (update) {
-        var /** @type {?} */ key = update.name.toLowerCase();
-        switch (update.op) {
-            case 'a':
-            case 's':
-                var /** @type {?} */ value = ((update.value));
-                if (typeof value === 'string') {
-                    value = [value];
-                }
-                if (value.length === 0) {
-                    return;
-                }
-                this.maybeSetNormalizedName(update.name, key);
-                var /** @type {?} */ base = (update.op === 'a' ? this.headers.get(key) : undefined) || [];
-                base.push.apply(base, value);
-                this.headers.set(key, base);
-                break;
-            case 'd':
-                var /** @type {?} */ toDelete_1 = (update.value);
-                if (!toDelete_1) {
-                    this.headers.delete(key);
-                    this.normalizedNames.delete(key);
-                }
-                else {
-                    var /** @type {?} */ existing = this.headers.get(key);
-                    if (!existing) {
-                        return;
-                    }
-                    existing = existing.filter(function (value) { return toDelete_1.indexOf(value) === -1; });
-                    if (existing.length === 0) {
-                        this.headers.delete(key);
-                        this.normalizedNames.delete(key);
-                    }
-                    else {
-                        this.headers.set(key, existing);
-                    }
-                }
-                break;
-        }
-    };
-    /**
-     * \@internal
-     * @param {?} fn
-     * @return {?}
-     */
-    HttpHeaders.prototype.forEach = function (fn) {
-        var _this = this;
-        this.init();
-        Array.from(this.normalizedNames.keys())
-            .forEach(function (key) { return fn(/** @type {?} */ ((_this.normalizedNames.get(key))), /** @type {?} */ ((_this.headers.get(key)))); });
-    };
-    return HttpHeaders;
-}());
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Determine whether the given HTTP method may include a body.
- * @param {?} method
- * @return {?}
- */
-function mightHaveBody(method) {
-    switch (method) {
-        case 'DELETE':
-        case 'GET':
-        case 'HEAD':
-        case 'OPTIONS':
-        case 'JSONP':
-            return false;
-        default:
-            return true;
-    }
-}
-/**
- * Safely assert whether the given value is an ArrayBuffer.
- *
- * In some execution environments ArrayBuffer is not defined.
- * @param {?} value
- * @return {?}
- */
-function isArrayBuffer(value) {
-    return typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer;
-}
-/**
- * Safely assert whether the given value is a Blob.
- *
- * In some execution environments Blob is not defined.
- * @param {?} value
- * @return {?}
- */
-function isBlob(value) {
-    return typeof Blob !== 'undefined' && value instanceof Blob;
-}
-/**
- * Safely assert whether the given value is a FormData instance.
- *
- * In some execution environments FormData is not defined.
- * @param {?} value
- * @return {?}
- */
-function isFormData(value) {
-    return typeof FormData !== 'undefined' && value instanceof FormData;
-}
-/**
- * An outgoing HTTP request with an optional typed body.
- *
- * `HttpRequest` represents an outgoing request, including URL, method,
- * headers, body, and other request configuration options. Instances should be
- * assumed to be immutable. To modify a `HttpRequest`, the `clone`
- * method should be used.
- *
- * \@experimental
- */
-var HttpRequest = (function () {
-    /**
-     * @param {?} method
-     * @param {?} url
-     * @param {?=} third
-     * @param {?=} fourth
-     */
-    function HttpRequest(method, url, third, fourth) {
-        this.url = url;
-        /**
-         * The request body, or `null` if one isn't set.
-         *
-         * Bodies are not enforced to be immutable, as they can include a reference to any
-         * user-defined data type. However, interceptors should take care to preserve
-         * idempotence by treating them as such.
-         */
-        this.body = null;
-        /**
-         * Whether this request should be made in a way that exposes progress events.
-         *
-         * Progress events are expensive (change detection runs on each event) and so
-         * they should only be requested if the consumer intends to monitor them.
-         */
-        this.reportProgress = false;
-        /**
-         * Whether this request should be sent with outgoing credentials (cookies).
-         */
-        this.withCredentials = false;
-        /**
-         * The expected response type of the server.
-         *
-         * This is used to parse the response appropriately before returning it to
-         * the requestee.
-         */
-        this.responseType = 'json';
-        this.method = method.toUpperCase();
-        // Next, need to figure out which argument holds the HttpRequestInit
-        // options, if any.
-        var options;
-        // Check whether a body argument is expected. The only valid way to omit
-        // the body argument is to use a known no-body method like GET.
-        if (mightHaveBody(this.method) || !!fourth) {
-            // Body is the third argument, options are the fourth.
-            this.body = third || null;
-            options = fourth;
-        }
-        else {
-            // No body required, options are the third argument. The body stays null.
-            options = third;
-        }
-        // If options have been passed, interpret them.
-        if (options) {
-            // Normalize reportProgress and withCredentials.
-            this.reportProgress = !!options.reportProgress;
-            this.withCredentials = !!options.withCredentials;
-            // Override default response type of 'json' if one is provided.
-            if (!!options.responseType) {
-                this.responseType = options.responseType;
-            }
-            // Override headers if they're provided.
-            if (!!options.headers) {
-                this.headers = options.headers;
-            }
-            if (!!options.params) {
-                this.params = options.params;
-            }
-        }
-        // If no headers have been passed in, construct a new HttpHeaders instance.
-        if (!this.headers) {
-            this.headers = new HttpHeaders();
-        }
-        // If no parameters have been passed in, construct a new HttpUrlEncodedParams instance.
-        if (!this.params) {
-            this.params = new HttpParams();
-            this.urlWithParams = url;
-        }
-        else {
-            // Encode the parameters to a string in preparation for inclusion in the URL.
-            var params = this.params.toString();
-            if (params.length === 0) {
-                // No parameters, the visible URL is just the URL given at creation time.
-                this.urlWithParams = url;
-            }
-            else {
-                // Does the URL already have query parameters? Look for '?'.
-                var qIdx = url.indexOf('?');
-                // There are 3 cases to handle:
-                // 1) No existing parameters -> append '?' followed by params.
-                // 2) '?' exists and is followed by existing query string ->
-                //    append '&' followed by params.
-                // 3) '?' exists at the end of the url -> append params directly.
-                // This basically amounts to determining the character, if any, with
-                // which to join the URL and parameters.
-                var sep = qIdx === -1 ? '?' : (qIdx < url.length - 1 ? '&' : '');
-                this.urlWithParams = url + sep + params;
-            }
-        }
-    }
-    /**
-     * Transform the free-form body into a serialized format suitable for
-     * transmission to the server.
-     * @return {?}
-     */
-    HttpRequest.prototype.serializeBody = function () {
-        // If no body is present, no need to serialize it.
-        if (this.body === null) {
-            return null;
-        }
-        // Check whether the body is already in a serialized form. If so,
-        // it can just be returned directly.
-        if (isArrayBuffer(this.body) || isBlob(this.body) || isFormData(this.body) ||
-            typeof this.body === 'string') {
-            return this.body;
-        }
-        // Check whether the body is an instance of HttpUrlEncodedParams.
-        if (this.body instanceof HttpParams) {
-            return this.body.toString();
-        }
-        // Check whether the body is an object or array, and serialize with JSON if so.
-        if (typeof this.body === 'object' || typeof this.body === 'boolean' ||
-            Array.isArray(this.body)) {
-            return JSON.stringify(this.body);
-        }
-        // Fall back on toString() for everything else.
-        return ((this.body)).toString();
-    };
-    /**
-     * Examine the body and attempt to infer an appropriate MIME type
-     * for it.
-     *
-     * If no such type can be inferred, this method will return `null`.
-     * @return {?}
-     */
-    HttpRequest.prototype.detectContentTypeHeader = function () {
-        // An empty body has no content type.
-        if (this.body === null) {
-            return null;
-        }
-        // FormData bodies rely on the browser's content type assignment.
-        if (isFormData(this.body)) {
-            return null;
-        }
-        // Blobs usually have their own content type. If it doesn't, then
-        // no type can be inferred.
-        if (isBlob(this.body)) {
-            return this.body.type || null;
-        }
-        // Array buffers have unknown contents and thus no type can be inferred.
-        if (isArrayBuffer(this.body)) {
-            return null;
-        }
-        // Technically, strings could be a form of JSON data, but it's safe enough
-        // to assume they're plain strings.
-        if (typeof this.body === 'string') {
-            return 'text/plain';
-        }
-        // `HttpUrlEncodedParams` has its own content-type.
-        if (this.body instanceof HttpParams) {
-            return 'application/x-www-form-urlencoded;charset=UTF-8';
-        }
-        // Arrays, objects, and numbers will be encoded as JSON.
-        if (typeof this.body === 'object' || typeof this.body === 'number' ||
-            Array.isArray(this.body)) {
-            return 'application/json';
-        }
-        // No type could be inferred.
-        return null;
-    };
-    /**
-     * @param {?=} update
-     * @return {?}
-     */
-    HttpRequest.prototype.clone = function (update) {
-        if (update === void 0) { update = {}; }
-        // For method, url, and responseType, take the current value unless
-        // it is overridden in the update hash.
-        var /** @type {?} */ method = update.method || this.method;
-        var /** @type {?} */ url = update.url || this.url;
-        var /** @type {?} */ responseType = update.responseType || this.responseType;
-        // The body is somewhat special - a `null` value in update.body means
-        // whatever current body is present is being overridden with an empty
-        // body, whereas an `undefined` value in update.body implies no
-        // override.
-        var /** @type {?} */ body = (update.body !== undefined) ? update.body : this.body;
-        // Carefully handle the boolean options to differentiate between
-        // `false` and `undefined` in the update args.
-        var /** @type {?} */ withCredentials = (update.withCredentials !== undefined) ? update.withCredentials : this.withCredentials;
-        var /** @type {?} */ reportProgress = (update.reportProgress !== undefined) ? update.reportProgress : this.reportProgress;
-        // Headers and params may be appended to if `setHeaders` or
-        // `setParams` are used.
-        var /** @type {?} */ headers = update.headers || this.headers;
-        var /** @type {?} */ params = update.params || this.params;
-        // Check whether the caller has asked to add headers.
-        if (update.setHeaders !== undefined) {
-            // Set every requested header.
-            headers =
-                Object.keys(update.setHeaders)
-                    .reduce(function (headers, name) { return headers.set(name, /** @type {?} */ ((update.setHeaders))[name]); }, headers);
-        }
-        // Check whether the caller has asked to set params.
-        if (update.setParams) {
-            // Set every requested param.
-            params = Object.keys(update.setParams)
-                .reduce(function (params, param) { return params.set(param, /** @type {?} */ ((update.setParams))[param]); }, params);
-        }
-        // Finally, construct the new HttpRequest using the pieces from above.
-        return new HttpRequest(method, url, body, {
-            params: params, headers: headers, reportProgress: reportProgress, responseType: responseType, withCredentials: withCredentials,
-        });
-    };
-    return HttpRequest;
-}());
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var HttpEventType = {};
-HttpEventType.Sent = 0;
-HttpEventType.UploadProgress = 1;
-HttpEventType.ResponseHeader = 2;
-HttpEventType.DownloadProgress = 3;
-HttpEventType.Response = 4;
-HttpEventType.User = 5;
-HttpEventType[HttpEventType.Sent] = "Sent";
-HttpEventType[HttpEventType.UploadProgress] = "UploadProgress";
-HttpEventType[HttpEventType.ResponseHeader] = "ResponseHeader";
-HttpEventType[HttpEventType.DownloadProgress] = "DownloadProgress";
-HttpEventType[HttpEventType.Response] = "Response";
-HttpEventType[HttpEventType.User] = "User";
-/**
- * Base class for both `HttpResponse` and `HttpHeaderResponse`.
- *
- * \@experimental
- * @abstract
- */
-var HttpResponseBase = (function () {
-    /**
-     * Super-constructor for all responses.
-     *
-     * The single parameter accepted is an initialization hash. Any properties
-     * of the response passed there will override the default values.
-     * @param {?} init
-     * @param {?=} defaultStatus
-     * @param {?=} defaultStatusText
-     */
-    function HttpResponseBase(init, defaultStatus, defaultStatusText) {
-        if (defaultStatus === void 0) { defaultStatus = 200; }
-        if (defaultStatusText === void 0) { defaultStatusText = 'OK'; }
-        // If the hash has values passed, use them to initialize the response.
-        // Otherwise use the default values.
-        this.headers = init.headers || new HttpHeaders();
-        this.status = init.status !== undefined ? init.status : defaultStatus;
-        this.statusText = init.statusText || defaultStatusText;
-        this.url = init.url || null;
-        // Cache the ok value to avoid defining a getter.
-        this.ok = this.status >= 200 && this.status < 300;
-    }
-    return HttpResponseBase;
-}());
-/**
- * A partial HTTP response which only includes the status and header data,
- * but no response body.
- *
- * `HttpHeaderResponse` is a `HttpEvent` available on the response
- * event stream, only when progress events are requested.
- *
- * \@experimental
- */
-var HttpHeaderResponse = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpHeaderResponse, _super);
-    /**
-     * Create a new `HttpHeaderResponse` with the given parameters.
-     * @param {?=} init
-     */
-    function HttpHeaderResponse(init) {
-        if (init === void 0) { init = {}; }
-        var _this = _super.call(this, init) || this;
-        _this.type = HttpEventType.ResponseHeader;
-        return _this;
-    }
-    /**
-     * Copy this `HttpHeaderResponse`, overriding its contents with the
-     * given parameter hash.
-     * @param {?=} update
-     * @return {?}
-     */
-    HttpHeaderResponse.prototype.clone = function (update) {
-        if (update === void 0) { update = {}; }
-        // Perform a straightforward initialization of the new HttpHeaderResponse,
-        // overriding the current parameters with new ones if given.
-        return new HttpHeaderResponse({
-            headers: update.headers || this.headers,
-            status: update.status !== undefined ? update.status : this.status,
-            statusText: update.statusText || this.statusText,
-            url: update.url || this.url || undefined,
-        });
-    };
-    return HttpHeaderResponse;
-}(HttpResponseBase));
-/**
- * A full HTTP response, including a typed response body (which may be `null`
- * if one was not returned).
- *
- * `HttpResponse` is a `HttpEvent` available on the response event
- * stream.
- *
- * \@experimental
- */
-var HttpResponse = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpResponse, _super);
-    /**
-     * Construct a new `HttpResponse`.
-     * @param {?=} init
-     */
-    function HttpResponse(init) {
-        if (init === void 0) { init = {}; }
-        var _this = _super.call(this, init) || this;
-        _this.type = HttpEventType.Response;
-        _this.body = init.body || null;
-        return _this;
-    }
-    /**
-     * @param {?=} update
-     * @return {?}
-     */
-    HttpResponse.prototype.clone = function (update) {
-        if (update === void 0) { update = {}; }
-        return new HttpResponse({
-            body: (update.body !== undefined) ? update.body : this.body,
-            headers: update.headers || this.headers,
-            status: (update.status !== undefined) ? update.status : this.status,
-            statusText: update.statusText || this.statusText,
-            url: update.url || this.url || undefined,
-        });
-    };
-    return HttpResponse;
-}(HttpResponseBase));
-/**
- * A response that represents an error or failure, either from a
- * non-successful HTTP status, an error while executing the request,
- * or some other failure which occurred during the parsing of the response.
- *
- * Any error returned on the `Observable` response stream will be
- * wrapped in an `HttpErrorResponse` to provide additional context about
- * the state of the HTTP layer when the error occurred. The error property
- * will contain either a wrapped Error object or the error response returned
- * from the server.
- *
- * \@experimental
- */
-var HttpErrorResponse = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __extends */](HttpErrorResponse, _super);
-    /**
-     * @param {?} init
-     */
-    function HttpErrorResponse(init) {
-        var _this = 
-        // Initialize with a default status of 0 / Unknown Error.
-        _super.call(this, init, 0, 'Unknown Error') || this;
-        _this.name = 'HttpErrorResponse';
-        /**
-         * Errors are never okay, even when the status code is in the 2xx success range.
-         */
-        _this.ok = false;
-        // If the response was successful, then this was a parse error. Otherwise, it was
-        // a protocol-level failure of some sort. Either the request failed in transit
-        // or the server returned an unsuccessful status code.
-        if (_this.status >= 200 && _this.status < 300) {
-            _this.message = "Http failure during parsing for " + (init.url || '(unknown url)');
-        }
-        else {
-            _this.message =
-                "Http failure response for " + (init.url || '(unknown url)') + ": " + init.status + " " + init.statusText;
-        }
-        _this.error = init.error || null;
-        return _this;
-    }
-    return HttpErrorResponse;
-}(HttpResponseBase));
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Construct an instance of `HttpRequestOptions<T>` from a source `HttpMethodOptions` and
- * the given `body`. Basically, this clones the object and adds the body.
- * @template T
- * @param {?} options
- * @param {?} body
- * @return {?}
- */
-function addBody(options, body) {
-    return {
-        body: body,
-        headers: options.headers,
-        observe: options.observe,
-        params: options.params,
-        reportProgress: options.reportProgress,
-        responseType: options.responseType,
-        withCredentials: options.withCredentials,
-    };
-}
-/**
- * Perform HTTP requests.
- *
- * `HttpClient` is available as an injectable class, with methods to perform HTTP requests.
- * Each request method has multiple signatures, and the return type varies according to which
- * signature is called (mainly the values of `observe` and `responseType`).
- *
- * \@experimental
- */
-var HttpClient = (function () {
-    /**
-     * @param {?} handler
-     */
-    function HttpClient(handler) {
-        this.handler = handler;
-    }
-    /**
-     * Constructs an `Observable` for a particular HTTP request that, when subscribed,
-     * fires the request through the chain of registered interceptors and on to the
-     * server.
-     *
-     * This method can be called in one of two ways. Either an `HttpRequest`
-     * instance can be passed directly as the only parameter, or a method can be
-     * passed as the first parameter, a string URL as the second, and an
-     * options hash as the third.
-     *
-     * If a `HttpRequest` object is passed directly, an `Observable` of the
-     * raw `HttpEvent` stream will be returned.
-     *
-     * If a request is instead built by providing a URL, the options object
-     * determines the return type of `request()`. In addition to configuring
-     * request parameters such as the outgoing headers and/or the body, the options
-     * hash specifies two key pieces of information about the request: the
-     * `responseType` and what to `observe`.
-     *
-     * The `responseType` value determines how a successful response body will be
-     * parsed. If `responseType` is the default `json`, a type interface for the
-     * resulting object may be passed as a type parameter to `request()`.
-     *
-     * The `observe` value determines the return type of `request()`, based on what
-     * the consumer is interested in observing. A value of `events` will return an
-     * `Observable<HttpEvent>` representing the raw `HttpEvent` stream,
-     * including progress events by default. A value of `response` will return an
-     * `Observable<HttpResponse<T>>` where the `T` parameter of `HttpResponse`
-     * depends on the `responseType` and any optionally provided type parameter.
-     * A value of `body` will return an `Observable<T>` with the same `T` body type.
-     * @param {?} first
-     * @param {?=} url
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.request = function (first, url, options) {
-        var _this = this;
-        if (options === void 0) { options = {}; }
-        var /** @type {?} */ req;
-        // Firstly, check whether the primary argument is an instance of `HttpRequest`.
-        if (first instanceof HttpRequest) {
-            // It is. The other arguments must be undefined (per the signatures) and can be
-            // ignored.
-            req = (first);
-        }
-        else {
-            // It's a string, so it represents a URL. Construct a request based on it,
-            // and incorporate the remaining arguments (assuming GET unless a method is
-            // provided.
-            req = new HttpRequest(first, /** @type {?} */ ((url)), options.body || null, {
-                headers: options.headers,
-                params: options.params,
-                reportProgress: options.reportProgress,
-                // By default, JSON is assumed to be returned for all calls.
-                responseType: options.responseType || 'json',
-                withCredentials: options.withCredentials,
-            });
-        }
-        // Start with an Observable.of() the initial request, and run the handler (which
-        // includes all interceptors) inside a concatMap(). This way, the handler runs
-        // inside an Observable chain, which causes interceptors to be re-run on every
-        // subscription (this also makes retries re-run the handler, including interceptors).
-        var /** @type {?} */ events$ = __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatMap__["concatMap"].call(Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(req), function (req) { return _this.handler.handle(req); });
-        // If coming via the API signature which accepts a previously constructed HttpRequest,
-        // the only option is to get the event stream. Otherwise, return the event stream if
-        // that is what was requested.
-        if (first instanceof HttpRequest || options.observe === 'events') {
-            return events$;
-        }
-        // The requested stream contains either the full response or the body. In either
-        // case, the first step is to filter the event stream to extract a stream of
-        // responses(s).
-        var /** @type {?} */ res$ = __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_filter__["filter"].call(events$, function (event) { return event instanceof HttpResponse; });
-        // Decide which stream to return.
-        switch (options.observe || 'body') {
-            case 'body':
-                // The requested stream is the body. Map the response stream to the response
-                // body. This could be done more simply, but a misbehaving interceptor might
-                // transform the response body into a different format and ignore the requested
-                // responseType. Guard against this by validating that the response is of the
-                // requested type.
-                switch (req.responseType) {
-                    case 'arraybuffer':
-                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
-                            // Validate that the body is an ArrayBuffer.
-                            if (res.body !== null && !(res.body instanceof ArrayBuffer)) {
-                                throw new Error('Response is not an ArrayBuffer.');
-                            }
-                            return res.body;
-                        });
-                    case 'blob':
-                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
-                            // Validate that the body is a Blob.
-                            if (res.body !== null && !(res.body instanceof Blob)) {
-                                throw new Error('Response is not a Blob.');
-                            }
-                            return res.body;
-                        });
-                    case 'text':
-                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) {
-                            // Validate that the body is a string.
-                            if (res.body !== null && typeof res.body !== 'string') {
-                                throw new Error('Response is not a string.');
-                            }
-                            return res.body;
-                        });
-                    case 'json':
-                    default:
-                        // No validation needed for JSON responses, as they can be of any type.
-                        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(res$, function (res) { return res.body; });
-                }
-            case 'response':
-                // The response stream was requested directly, so return it.
-                return res$;
-            default:
-                // Guard against new future observe types being added.
-                throw new Error("Unreachable: unhandled observe type " + options.observe + "}");
-        }
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * DELETE request to be executed on the server. See the individual overloads for
-     * details of `delete()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.delete = function (url, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('DELETE', url, /** @type {?} */ (options));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * GET request to be executed on the server. See the individual overloads for
-     * details of `get()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.get = function (url, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('GET', url, /** @type {?} */ (options));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * HEAD request to be executed on the server. See the individual overloads for
-     * details of `head()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.head = function (url, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('HEAD', url, /** @type {?} */ (options));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause a request
-     * with the special method `JSONP` to be dispatched via the interceptor pipeline.
-     *
-     * A suitable interceptor must be installed (e.g. via the `HttpClientJsonpModule`).
-     * If no such interceptor is reached, then the `JSONP` request will likely be
-     * rejected by the configured backend.
-     * @template T
-     * @param {?} url
-     * @param {?} callbackParam
-     * @return {?}
-     */
-    HttpClient.prototype.jsonp = function (url, callbackParam) {
-        return this.request('JSONP', url, {
-            params: new HttpParams().append(callbackParam, 'JSONP_CALLBACK'),
-            observe: 'body',
-            responseType: 'json',
-        });
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * OPTIONS request to be executed on the server. See the individual overloads for
-     * details of `options()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.options = function (url, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('OPTIONS', url, /** @type {?} */ (options));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * PATCH request to be executed on the server. See the individual overloads for
-     * details of `patch()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?} body
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.patch = function (url, body, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('PATCH', url, addBody(options, body));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * POST request to be executed on the server. See the individual overloads for
-     * details of `post()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?} body
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.post = function (url, body, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('POST', url, addBody(options, body));
-    };
-    /**
-     * Constructs an `Observable` which, when subscribed, will cause the configured
-     * POST request to be executed on the server. See the individual overloads for
-     * details of `post()`'s return type based on the provided options.
-     * @param {?} url
-     * @param {?} body
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClient.prototype.put = function (url, body, options) {
-        if (options === void 0) { options = {}; }
-        return this.request('PUT', url, addBody(options, body));
-    };
-    return HttpClient;
-}());
-HttpClient.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-HttpClient.ctorParameters = function () { return [
-    { type: HttpHandler, },
-]; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * `HttpHandler` which applies an `HttpInterceptor` to an `HttpRequest`.
- *
- * \@experimental
- */
-var HttpInterceptorHandler = (function () {
-    /**
-     * @param {?} next
-     * @param {?} interceptor
-     */
-    function HttpInterceptorHandler(next, interceptor) {
-        this.next = next;
-        this.interceptor = interceptor;
-    }
-    /**
-     * @param {?} req
-     * @return {?}
-     */
-    HttpInterceptorHandler.prototype.handle = function (req) {
-        return this.interceptor.intercept(req, this.next);
-    };
-    return HttpInterceptorHandler;
-}());
-/**
- * A multi-provider token which represents the array of `HttpInterceptor`s that
- * are registered.
- *
- * \@experimental
- */
-var HTTP_INTERCEPTORS = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('HTTP_INTERCEPTORS');
-var NoopInterceptor = (function () {
-    function NoopInterceptor() {
-    }
-    /**
-     * @param {?} req
-     * @param {?} next
-     * @return {?}
-     */
-    NoopInterceptor.prototype.intercept = function (req, next) {
-        return next.handle(req);
-    };
-    return NoopInterceptor;
-}());
-NoopInterceptor.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-NoopInterceptor.ctorParameters = function () { return []; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// Every request made through JSONP needs a callback name that's unique across the
-// whole page. Each request is assigned an id and the callback name is constructed
-// from that. The next id to be assigned is tracked in a global variable here that
-// is shared among all applications on the page.
-var nextRequestId = 0;
-// Error text given when a JSONP script is injected, but doesn't invoke the callback
-// passed in its URL.
-var JSONP_ERR_NO_CALLBACK = 'JSONP injected script did not invoke callback.';
-// Error text given when a request is passed to the JsonpClientBackend that doesn't
-// have a request method JSONP.
-var JSONP_ERR_WRONG_METHOD = 'JSONP requests must use JSONP request method.';
-var JSONP_ERR_WRONG_RESPONSE_TYPE = 'JSONP requests must use Json response type.';
-/**
- * DI token/abstract type representing a map of JSONP callbacks.
- *
- * In the browser, this should always be the `window` object.
- *
- * \@experimental
- * @abstract
- */
-var JsonpCallbackContext = (function () {
-    function JsonpCallbackContext() {
-    }
-    return JsonpCallbackContext;
-}());
-/**
- * `HttpBackend` that only processes `HttpRequest` with the JSONP method,
- * by performing JSONP style requests.
- *
- * \@experimental
- */
-var JsonpClientBackend = (function () {
-    /**
-     * @param {?} callbackMap
-     * @param {?} document
-     */
-    function JsonpClientBackend(callbackMap, document) {
-        this.callbackMap = callbackMap;
-        this.document = document;
-    }
-    /**
-     * Get the name of the next callback method, by incrementing the global `nextRequestId`.
-     * @return {?}
-     */
-    JsonpClientBackend.prototype.nextCallback = function () { return "ng_jsonp_callback_" + nextRequestId++; };
-    /**
-     * Process a JSONP request and return an event stream of the results.
-     * @param {?} req
-     * @return {?}
-     */
-    JsonpClientBackend.prototype.handle = function (req) {
-        var _this = this;
-        // Firstly, check both the method and response type. If either doesn't match
-        // then the request was improperly routed here and cannot be handled.
-        if (req.method !== 'JSONP') {
-            throw new Error(JSONP_ERR_WRONG_METHOD);
-        }
-        else if (req.responseType !== 'json') {
-            throw new Error(JSONP_ERR_WRONG_RESPONSE_TYPE);
-        }
-        // Everything else happens inside the Observable boundary.
-        return new __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__["Observable"](function (observer) {
-            // The first step to make a request is to generate the callback name, and replace the
-            // callback placeholder in the URL with the name. Care has to be taken here to ensure
-            // a trailing &, if matched, gets inserted back into the URL in the correct place.
-            var /** @type {?} */ callback = _this.nextCallback();
-            var /** @type {?} */ url = req.urlWithParams.replace(/=JSONP_CALLBACK(&|$)/, "=" + callback + "$1");
-            // Construct the <script> tag and point it at the URL.
-            var /** @type {?} */ node = _this.document.createElement('script');
-            node.src = url;
-            // A JSONP request requires waiting for multiple callbacks. These variables
-            // are closed over and track state across those callbacks.
-            // The response object, if one has been received, or null otherwise.
-            var /** @type {?} */ body = null;
-            // Whether the response callback has been called.
-            var /** @type {?} */ finished = false;
-            // Whether the request has been cancelled (and thus any other callbacks)
-            // should be ignored.
-            var /** @type {?} */ cancelled = false;
-            // Set the response callback in this.callbackMap (which will be the window
-            // object in the browser. The script being loaded via the <script> tag will
-            // eventually call this callback.
-            _this.callbackMap[callback] = function (data) {
-                // Data has been received from the JSONP script. Firstly, delete this callback.
-                delete _this.callbackMap[callback];
-                // Next, make sure the request wasn't cancelled in the meantime.
-                if (cancelled) {
-                    return;
-                }
-                // Set state to indicate data was received.
-                body = data;
-                finished = true;
-            };
-            // cleanup() is a utility closure that removes the <script> from the page and
-            // the response callback from the window. This logic is used in both the
-            // success, error, and cancellation paths, so it's extracted out for convenience.
-            var /** @type {?} */ cleanup = function () {
-                // Remove the <script> tag if it's still on the page.
-                if (node.parentNode) {
-                    node.parentNode.removeChild(node);
-                }
-                // Remove the response callback from the callbackMap (window object in the
-                // browser).
-                delete _this.callbackMap[callback];
-            };
-            // onLoad() is the success callback which runs after the response callback
-            // if the JSONP script loads successfully. The event itself is unimportant.
-            // If something went wrong, onLoad() may run without the response callback
-            // having been invoked.
-            var /** @type {?} */ onLoad = function (event) {
-                // Do nothing if the request has been cancelled.
-                if (cancelled) {
-                    return;
-                }
-                // Cleanup the page.
-                cleanup();
-                // Check whether the response callback has run.
-                if (!finished) {
-                    // It hasn't, something went wrong with the request. Return an error via
-                    // the Observable error path. All JSONP errors have status 0.
-                    observer.error(new HttpErrorResponse({
-                        url: url,
-                        status: 0,
-                        statusText: 'JSONP Error',
-                        error: new Error(JSONP_ERR_NO_CALLBACK),
-                    }));
-                    return;
-                }
-                // Success. body either contains the response body or null if none was
-                // returned.
-                observer.next(new HttpResponse({
-                    body: body,
-                    status: 200,
-                    statusText: 'OK', url: url,
-                }));
-                // Complete the stream, the resposne is over.
-                observer.complete();
-            };
-            // onError() is the error callback, which runs if the script returned generates
-            // a Javascript error. It emits the error via the Observable error channel as
-            // a HttpErrorResponse.
-            var /** @type {?} */ onError = function (error) {
-                // If the request was already cancelled, no need to emit anything.
-                if (cancelled) {
-                    return;
-                }
-                cleanup();
-                // Wrap the error in a HttpErrorResponse.
-                observer.error(new HttpErrorResponse({
-                    error: error,
-                    status: 0,
-                    statusText: 'JSONP Error', url: url,
-                }));
-            };
-            // Subscribe to both the success (load) and error events on the <script> tag,
-            // and add it to the page.
-            node.addEventListener('load', onLoad);
-            node.addEventListener('error', onError);
-            _this.document.body.appendChild(node);
-            // The request has now been successfully sent.
-            observer.next({ type: HttpEventType.Sent });
-            // Cancellation handler.
-            return function () {
-                // Track the cancellation so event listeners won't do anything even if already scheduled.
-                cancelled = true;
-                // Remove the event listeners so they won't run if the events later fire.
-                node.removeEventListener('load', onLoad);
-                node.removeEventListener('error', onError);
-                // And finally, clean up the page.
-                cleanup();
-            };
-        });
-    };
-    return JsonpClientBackend;
-}());
-JsonpClientBackend.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-JsonpClientBackend.ctorParameters = function () { return [
-    { type: JsonpCallbackContext, },
-    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_6__angular_common__["DOCUMENT"],] },] },
-]; };
-/**
- * An `HttpInterceptor` which identifies requests with the method JSONP and
- * shifts them to the `JsonpClientBackend`.
- *
- * \@experimental
- */
-var JsonpInterceptor = (function () {
-    /**
-     * @param {?} jsonp
-     */
-    function JsonpInterceptor(jsonp) {
-        this.jsonp = jsonp;
-    }
-    /**
-     * @param {?} req
-     * @param {?} next
-     * @return {?}
-     */
-    JsonpInterceptor.prototype.intercept = function (req, next) {
-        if (req.method === 'JSONP') {
-            return this.jsonp.handle(/** @type {?} */ (req));
-        }
-        // Fall through for normal HTTP requests.
-        return next.handle(req);
-    };
-    return JsonpInterceptor;
-}());
-JsonpInterceptor.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-JsonpInterceptor.ctorParameters = function () { return [
-    { type: JsonpClientBackend, },
-]; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var XSSI_PREFIX = /^\)\]\}',?\n/;
-/**
- * Determine an appropriate URL for the response, by checking either
- * XMLHttpRequest.responseURL or the X-Request-URL header.
- * @param {?} xhr
- * @return {?}
- */
-function getResponseUrl(xhr) {
-    if ('responseURL' in xhr && xhr.responseURL) {
-        return xhr.responseURL;
-    }
-    if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-        return xhr.getResponseHeader('X-Request-URL');
-    }
-    return null;
-}
-/**
- * A wrapper around the `XMLHttpRequest` constructor.
- *
- * \@experimental
- * @abstract
- */
-var XhrFactory = (function () {
-    function XhrFactory() {
-    }
-    /**
-     * @abstract
-     * @return {?}
-     */
-    XhrFactory.prototype.build = function () { };
-    return XhrFactory;
-}());
-/**
- * A factory for \@{link HttpXhrBackend} that uses the `XMLHttpRequest` browser API.
- *
- * \@experimental
- */
-var BrowserXhr = (function () {
-    function BrowserXhr() {
-    }
-    /**
-     * @return {?}
-     */
-    BrowserXhr.prototype.build = function () { return ((new XMLHttpRequest())); };
-    return BrowserXhr;
-}());
-BrowserXhr.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-BrowserXhr.ctorParameters = function () { return []; };
-/**
- * An `HttpBackend` which uses the XMLHttpRequest API to send
- * requests to a backend server.
- *
- * \@experimental
- */
-var HttpXhrBackend = (function () {
-    /**
-     * @param {?} xhrFactory
-     */
-    function HttpXhrBackend(xhrFactory) {
-        this.xhrFactory = xhrFactory;
-    }
-    /**
-     * Process a request and return a stream of response events.
-     * @param {?} req
-     * @return {?}
-     */
-    HttpXhrBackend.prototype.handle = function (req) {
-        var _this = this;
-        // Quick check to give a better error message when a user attempts to use
-        // HttpClient.jsonp() without installing the JsonpClientModule
-        if (req.method === 'JSONP') {
-            throw new Error("Attempted to construct Jsonp request without JsonpClientModule installed.");
-        }
-        // Everything happens on Observable subscription.
-        return new __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__["Observable"](function (observer) {
-            // Start by setting up the XHR object with request method, URL, and withCredentials flag.
-            var /** @type {?} */ xhr = _this.xhrFactory.build();
-            xhr.open(req.method, req.urlWithParams);
-            if (!!req.withCredentials) {
-                xhr.withCredentials = true;
-            }
-            // Add all the requested headers.
-            req.headers.forEach(function (name, values) { return xhr.setRequestHeader(name, values.join(',')); });
-            // Add an Accept header if one isn't present already.
-            if (!req.headers.has('Accept')) {
-                xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
-            }
-            // Auto-detect the Content-Type header if one isn't present already.
-            if (!req.headers.has('Content-Type')) {
-                var /** @type {?} */ detectedType = req.detectContentTypeHeader();
-                // Sometimes Content-Type detection fails.
-                if (detectedType !== null) {
-                    xhr.setRequestHeader('Content-Type', detectedType);
-                }
-            }
-            // Set the responseType if one was requested.
-            if (req.responseType) {
-                xhr.responseType = (req.responseType.toLowerCase());
-            }
-            // Serialize the request body if one is present. If not, this will be set to null.
-            var /** @type {?} */ reqBody = req.serializeBody();
-            // If progress events are enabled, response headers will be delivered
-            // in two events - the HttpHeaderResponse event and the full HttpResponse
-            // event. However, since response headers don't change in between these
-            // two events, it doesn't make sense to parse them twice. So headerResponse
-            // caches the data extracted from the response whenever it's first parsed,
-            // to ensure parsing isn't duplicated.
-            var /** @type {?} */ headerResponse = null;
-            // partialFromXhr extracts the HttpHeaderResponse from the current XMLHttpRequest
-            // state, and memoizes it into headerResponse.
-            var /** @type {?} */ partialFromXhr = function () {
-                if (headerResponse !== null) {
-                    return headerResponse;
-                }
-                // Read status and normalize an IE9 bug (http://bugs.jquery.com/ticket/1450).
-                var /** @type {?} */ status = xhr.status === 1223 ? 204 : xhr.status;
-                var /** @type {?} */ statusText = xhr.statusText || 'OK';
-                // Parse headers from XMLHttpRequest - this step is lazy.
-                var /** @type {?} */ headers = new HttpHeaders(xhr.getAllResponseHeaders());
-                // Read the response URL from the XMLHttpResponse instance and fall back on the
-                // request URL.
-                var /** @type {?} */ url = getResponseUrl(xhr) || req.url;
-                // Construct the HttpHeaderResponse and memoize it.
-                headerResponse = new HttpHeaderResponse({ headers: headers, status: status, statusText: statusText, url: url });
-                return headerResponse;
-            };
-            // Next, a few closures are defined for the various events which XMLHttpRequest can
-            // emit. This allows them to be unregistered as event listeners later.
-            // First up is the load event, which represents a response being fully available.
-            var /** @type {?} */ onLoad = function () {
-                // Read response state from the memoized partial data.
-                var _a = partialFromXhr(), headers = _a.headers, status = _a.status, statusText = _a.statusText, url = _a.url;
-                // The body will be read out if present.
-                var /** @type {?} */ body = null;
-                if (status !== 204) {
-                    // Use XMLHttpRequest.response if set, responseText otherwise.
-                    body = (typeof xhr.response === 'undefined') ? xhr.responseText : xhr.response;
-                    // Strip a common XSSI prefix from string responses.
-                    // TODO: determine if this behavior should be optional and moved to an interceptor.
-                    if (typeof body === 'string') {
-                        body = body.replace(XSSI_PREFIX, '');
-                    }
-                }
-                // Normalize another potential bug (this one comes from CORS).
-                if (status === 0) {
-                    status = !!body ? 200 : 0;
-                }
-                // ok determines whether the response will be transmitted on the event or
-                // error channel. Unsuccessful status codes (not 2xx) will always be errors,
-                // but a successful status code can still result in an error if the user
-                // asked for JSON data and the body cannot be parsed as such.
-                var /** @type {?} */ ok = status >= 200 && status < 300;
-                // Check whether the body needs to be parsed as JSON (in many cases the browser
-                // will have done that already).
-                if (ok && typeof body === 'string' && req.responseType === 'json') {
-                    // Attempt the parse. If it fails, a parse error should be delivered to the user.
-                    try {
-                        body = JSON.parse(body);
-                    }
-                    catch (error) {
-                        // Even though the response status was 2xx, this is still an error.
-                        ok = false;
-                        // The parse error contains the text of the body that failed to parse.
-                        body = ({ error: error, text: body });
-                    }
-                }
-                if (ok) {
-                    // A successful response is delivered on the event stream.
-                    observer.next(new HttpResponse({
-                        body: body,
-                        headers: headers,
-                        status: status,
-                        statusText: statusText,
-                        url: url || undefined,
-                    }));
-                    // The full body has been received and delivered, no further events
-                    // are possible. This request is complete.
-                    observer.complete();
-                }
-                else {
-                    // An unsuccessful request is delivered on the error channel.
-                    observer.error(new HttpErrorResponse({
-                        // The error in this case is the response body (error from the server).
-                        error: body,
-                        headers: headers,
-                        status: status,
-                        statusText: statusText,
-                        url: url || undefined,
-                    }));
-                }
-            };
-            // The onError callback is called when something goes wrong at the network level.
-            // Connection timeout, DNS error, offline, etc. These are actual errors, and are
-            // transmitted on the error channel.
-            var /** @type {?} */ onError = function (error) {
-                var /** @type {?} */ res = new HttpErrorResponse({
-                    error: error,
-                    status: xhr.status || 0,
-                    statusText: xhr.statusText || 'Unknown Error',
-                });
-                observer.error(res);
-            };
-            // The sentHeaders flag tracks whether the HttpResponseHeaders event
-            // has been sent on the stream. This is necessary to track if progress
-            // is enabled since the event will be sent on only the first download
-            // progerss event.
-            var /** @type {?} */ sentHeaders = false;
-            // The download progress event handler, which is only registered if
-            // progress events are enabled.
-            var /** @type {?} */ onDownProgress = function (event) {
-                // Send the HttpResponseHeaders event if it hasn't been sent already.
-                if (!sentHeaders) {
-                    observer.next(partialFromXhr());
-                    sentHeaders = true;
-                }
-                // Start building the download progress event to deliver on the response
-                // event stream.
-                var /** @type {?} */ progressEvent = {
-                    type: HttpEventType.DownloadProgress,
-                    loaded: event.loaded,
-                };
-                // Set the total number of bytes in the event if it's available.
-                if (event.lengthComputable) {
-                    progressEvent.total = event.total;
-                }
-                // If the request was for text content and a partial response is
-                // available on XMLHttpRequest, include it in the progress event
-                // to allow for streaming reads.
-                if (req.responseType === 'text' && !!xhr.responseText) {
-                    progressEvent.partialText = xhr.responseText;
-                }
-                // Finally, fire the event.
-                observer.next(progressEvent);
-            };
-            // The upload progress event handler, which is only registered if
-            // progress events are enabled.
-            var /** @type {?} */ onUpProgress = function (event) {
-                // Upload progress events are simpler. Begin building the progress
-                // event.
-                var /** @type {?} */ progress = {
-                    type: HttpEventType.UploadProgress,
-                    loaded: event.loaded,
-                };
-                // If the total number of bytes being uploaded is available, include
-                // it.
-                if (event.lengthComputable) {
-                    progress.total = event.total;
-                }
-                // Send the event.
-                observer.next(progress);
-            };
-            // By default, register for load and error events.
-            xhr.addEventListener('load', onLoad);
-            xhr.addEventListener('error', onError);
-            // Progress events are only enabled if requested.
-            if (req.reportProgress) {
-                // Download progress is always enabled if requested.
-                xhr.addEventListener('progress', onDownProgress);
-                // Upload progress depends on whether there is a body to upload.
-                if (reqBody !== null && xhr.upload) {
-                    xhr.upload.addEventListener('progress', onUpProgress);
-                }
-            }
-            // Fire the request, and notify the event stream that it was fired.
-            xhr.send(reqBody);
-            observer.next({ type: HttpEventType.Sent });
-            // This is the return from the Observable function, which is the
-            // request cancellation handler.
-            return function () {
-                // On a cancellation, remove all registered event listeners.
-                xhr.removeEventListener('error', onError);
-                xhr.removeEventListener('load', onLoad);
-                if (req.reportProgress) {
-                    xhr.removeEventListener('progress', onDownProgress);
-                    if (reqBody !== null && xhr.upload) {
-                        xhr.upload.removeEventListener('progress', onUpProgress);
-                    }
-                }
-                // Finally, abort the in-flight request.
-                xhr.abort();
-            };
-        });
-    };
-    return HttpXhrBackend;
-}());
-HttpXhrBackend.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-HttpXhrBackend.ctorParameters = function () { return [
-    { type: XhrFactory, },
-]; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-var XSRF_COOKIE_NAME = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('XSRF_COOKIE_NAME');
-var XSRF_HEADER_NAME = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["InjectionToken"]('XSRF_HEADER_NAME');
-/**
- * Retrieves the current XSRF token to use with the next outgoing request.
- *
- * \@experimental
- * @abstract
- */
-var HttpXsrfTokenExtractor = (function () {
-    function HttpXsrfTokenExtractor() {
-    }
-    /**
-     * Get the XSRF token to use with an outgoing request.
-     *
-     * Will be called for every request, so the token may change between requests.
-     * @abstract
-     * @return {?}
-     */
-    HttpXsrfTokenExtractor.prototype.getToken = function () { };
-    return HttpXsrfTokenExtractor;
-}());
-/**
- * `HttpXsrfTokenExtractor` which retrieves the token from a cookie.
- */
-var HttpXsrfCookieExtractor = (function () {
-    /**
-     * @param {?} doc
-     * @param {?} platform
-     * @param {?} cookieName
-     */
-    function HttpXsrfCookieExtractor(doc, platform, cookieName) {
-        this.doc = doc;
-        this.platform = platform;
-        this.cookieName = cookieName;
-        this.lastCookieString = '';
-        this.lastToken = null;
-        /**
-         * \@internal for testing
-         */
-        this.parseCount = 0;
-    }
-    /**
-     * @return {?}
-     */
-    HttpXsrfCookieExtractor.prototype.getToken = function () {
-        if (this.platform === 'server') {
-            return null;
-        }
-        var /** @type {?} */ cookieString = this.doc.cookie || '';
-        if (cookieString !== this.lastCookieString) {
-            this.parseCount++;
-            this.lastToken = Object(__WEBPACK_IMPORTED_MODULE_6__angular_common__["ɵparseCookieValue"])(cookieString, this.cookieName);
-            this.lastCookieString = cookieString;
-        }
-        return this.lastToken;
-    };
-    return HttpXsrfCookieExtractor;
-}());
-HttpXsrfCookieExtractor.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-HttpXsrfCookieExtractor.ctorParameters = function () { return [
-    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_6__angular_common__["DOCUMENT"],] },] },
-    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [__WEBPACK_IMPORTED_MODULE_1__angular_core__["PLATFORM_ID"],] },] },
-    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [XSRF_COOKIE_NAME,] },] },
-]; };
-/**
- * `HttpInterceptor` which adds an XSRF token to eligible outgoing requests.
- */
-var HttpXsrfInterceptor = (function () {
-    /**
-     * @param {?} tokenService
-     * @param {?} headerName
-     */
-    function HttpXsrfInterceptor(tokenService, headerName) {
-        this.tokenService = tokenService;
-        this.headerName = headerName;
-    }
-    /**
-     * @param {?} req
-     * @param {?} next
-     * @return {?}
-     */
-    HttpXsrfInterceptor.prototype.intercept = function (req, next) {
-        var /** @type {?} */ lcUrl = req.url.toLowerCase();
-        // Skip both non-mutating requests and absolute URLs.
-        // Non-mutating requests don't require a token, and absolute URLs require special handling
-        // anyway as the cookie set
-        // on our origin is not the same as the token expected by another origin.
-        if (req.method === 'GET' || req.method === 'HEAD' || lcUrl.startsWith('http://') ||
-            lcUrl.startsWith('https://')) {
-            return next.handle(req);
-        }
-        var /** @type {?} */ token = this.tokenService.getToken();
-        // Be careful not to overwrite an existing header of the same name.
-        if (token !== null && !req.headers.has(this.headerName)) {
-            req = req.clone({ headers: req.headers.set(this.headerName, token) });
-        }
-        return next.handle(req);
-    };
-    return HttpXsrfInterceptor;
-}());
-HttpXsrfInterceptor.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"] },
-];
-/**
- * @nocollapse
- */
-HttpXsrfInterceptor.ctorParameters = function () { return [
-    { type: HttpXsrfTokenExtractor, },
-    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [XSRF_HEADER_NAME,] },] },
-]; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Constructs an `HttpHandler` that applies a bunch of `HttpInterceptor`s
- * to a request before passing it to the given `HttpBackend`.
- *
- * Meant to be used as a factory function within `HttpClientModule`.
- *
- * \@experimental
- * @param {?} backend
- * @param {?=} interceptors
- * @return {?}
- */
-function interceptingHandler(backend, interceptors) {
-    if (interceptors === void 0) { interceptors = []; }
-    if (!interceptors) {
-        return backend;
-    }
-    return interceptors.reduceRight(function (next, interceptor) { return new HttpInterceptorHandler(next, interceptor); }, backend);
-}
-/**
- * Factory function that determines where to store JSONP callbacks.
- *
- * Ordinarily JSONP callbacks are stored on the `window` object, but this may not exist
- * in test environments. In that case, callbacks are stored on an anonymous object instead.
- *
- * \@experimental
- * @return {?}
- */
-function jsonpCallbackContext() {
-    if (typeof window === 'object') {
-        return window;
-    }
-    return {};
-}
-/**
- * `NgModule` which adds XSRF protection support to outgoing requests.
- *
- * Provided the server supports a cookie-based XSRF protection system, this
- * module can be used directly to configure XSRF protection with the correct
- * cookie and header names.
- *
- * If no such names are provided, the default is to use `X-XSRF-TOKEN` for
- * the header name and `XSRF-TOKEN` for the cookie name.
- *
- * \@experimental
- */
-var HttpClientXsrfModule = (function () {
-    function HttpClientXsrfModule() {
-    }
-    /**
-     * Disable the default XSRF protection.
-     * @return {?}
-     */
-    HttpClientXsrfModule.disable = function () {
-        return {
-            ngModule: HttpClientXsrfModule,
-            providers: [
-                { provide: HttpXsrfInterceptor, useClass: NoopInterceptor },
-            ],
-        };
-    };
-    /**
-     * Configure XSRF protection to use the given cookie name or header name,
-     * or the default names (as described above) if not provided.
-     * @param {?=} options
-     * @return {?}
-     */
-    HttpClientXsrfModule.withOptions = function (options) {
-        if (options === void 0) { options = {}; }
-        return {
-            ngModule: HttpClientXsrfModule,
-            providers: [
-                options.cookieName ? { provide: XSRF_COOKIE_NAME, useValue: options.cookieName } : [],
-                options.headerName ? { provide: XSRF_HEADER_NAME, useValue: options.headerName } : [],
-            ],
-        };
-    };
-    return HttpClientXsrfModule;
-}());
-HttpClientXsrfModule.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
-                providers: [
-                    HttpXsrfInterceptor,
-                    { provide: HTTP_INTERCEPTORS, useExisting: HttpXsrfInterceptor, multi: true },
-                    { provide: HttpXsrfTokenExtractor, useClass: HttpXsrfCookieExtractor },
-                    { provide: XSRF_COOKIE_NAME, useValue: 'XSRF-TOKEN' },
-                    { provide: XSRF_HEADER_NAME, useValue: 'X-XSRF-TOKEN' },
-                ],
-            },] },
-];
-/**
- * @nocollapse
- */
-HttpClientXsrfModule.ctorParameters = function () { return []; };
-/**
- * `NgModule` which provides the `HttpClient` and associated services.
- *
- * Interceptors can be added to the chain behind `HttpClient` by binding them
- * to the multiprovider for `HTTP_INTERCEPTORS`.
- *
- * \@experimental
- */
-var HttpClientModule = (function () {
-    function HttpClientModule() {
-    }
-    return HttpClientModule;
-}());
-HttpClientModule.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
-                imports: [
-                    HttpClientXsrfModule.withOptions({
-                        cookieName: 'XSRF-TOKEN',
-                        headerName: 'X-XSRF-TOKEN',
-                    }),
-                ],
-                providers: [
-                    HttpClient,
-                    // HttpHandler is the backend + interceptors and is constructed
-                    // using the interceptingHandler factory function.
-                    {
-                        provide: HttpHandler,
-                        useFactory: interceptingHandler,
-                        deps: [HttpBackend, [new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Optional"](), new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"](HTTP_INTERCEPTORS)]],
-                    },
-                    HttpXhrBackend,
-                    { provide: HttpBackend, useExisting: HttpXhrBackend },
-                    BrowserXhr,
-                    { provide: XhrFactory, useExisting: BrowserXhr },
-                ],
-            },] },
-];
-/**
- * @nocollapse
- */
-HttpClientModule.ctorParameters = function () { return []; };
-/**
- * `NgModule` which enables JSONP support in `HttpClient`.
- *
- * Without this module, Jsonp requests will reach the backend
- * with method JSONP, where they'll be rejected.
- *
- * \@experimental
- */
-var HttpClientJsonpModule = (function () {
-    function HttpClientJsonpModule() {
-    }
-    return HttpClientJsonpModule;
-}());
-HttpClientJsonpModule.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{
-                providers: [
-                    JsonpClientBackend,
-                    { provide: JsonpCallbackContext, useFactory: jsonpCallbackContext },
-                    { provide: HTTP_INTERCEPTORS, useClass: JsonpInterceptor, multi: true },
-                ],
-            },] },
-];
-/**
- * @nocollapse
- */
-HttpClientJsonpModule.ctorParameters = function () { return []; };
-/**
- * @license
- * Copyright Google Inc. All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Generated bundle index. Do not edit.
- */
-
-//# sourceMappingURL=http.es5.js.map
-
-
-/***/ }),
-/* 189 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var ArrayObservable_1 = __webpack_require__(114);
+var ArrayObservable_1 = __webpack_require__(120);
 exports.of = ArrayObservable_1.ArrayObservable.of;
 //# sourceMappingURL=of.js.map
 
 /***/ }),
-/* 190 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var concatMap_1 = __webpack_require__(258);
+var concatMap_1 = __webpack_require__(264);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output
@@ -29835,12 +29847,12 @@ exports.concatMap = concatMap;
 //# sourceMappingURL=concatMap.js.map
 
 /***/ }),
-/* 191 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var filter_1 = __webpack_require__(259);
+var filter_1 = __webpack_require__(265);
 /* tslint:enable:max-line-length */
 /**
  * Filter items emitted by the source Observable by only emitting those that
@@ -29888,7 +29900,7 @@ exports.filter = filter;
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
-/* 192 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29898,8 +29910,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(35);
-var Observable_1 = __webpack_require__(8);
+var root_1 = __webpack_require__(34);
+var Observable_1 = __webpack_require__(9);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -30015,17 +30027,17 @@ function dispatchError(arg) {
 //# sourceMappingURL=PromiseObservable.js.map
 
 /***/ }),
-/* 193 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var PromiseObservable_1 = __webpack_require__(192);
+var PromiseObservable_1 = __webpack_require__(204);
 exports.fromPromise = PromiseObservable_1.PromiseObservable.create;
 //# sourceMappingURL=fromPromise.js.map
 
 /***/ }),
-/* 194 */
+/* 206 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30101,15 +30113,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵu", function() { return MIN_LENGTH_VALIDATOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵw", function() { return PATTERN_VALIDATOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵr", function() { return REQUIRED_VALIDATOR; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_forkJoin__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_forkJoin__ = __webpack_require__(293);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_forkJoin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_forkJoin__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_fromPromise__ = __webpack_require__(193);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_fromPromise__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_fromPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_fromPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_map__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_map__ = __webpack_require__(126);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__ = __webpack_require__(56);
 
 /**
  * @license Angular v4.3.0
@@ -36129,18 +36141,6 @@ ReactiveFormsModule.ctorParameters = function () { return []; };
 
 
 /***/ }),
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */,
-/* 204 */,
-/* 205 */,
-/* 206 */,
 /* 207 */,
 /* 208 */,
 /* 209 */,
@@ -36178,31 +36178,37 @@ ReactiveFormsModule.ctorParameters = function () { return []; };
 /* 241 */,
 /* 242 */,
 /* 243 */,
-/* 244 */
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(55);
-__webpack_require__(187);
-__webpack_require__(13);
 __webpack_require__(56);
-__webpack_require__(188);
-__webpack_require__(261);
-__webpack_require__(194);
-__webpack_require__(122);
+__webpack_require__(200);
+__webpack_require__(4);
+__webpack_require__(57);
+__webpack_require__(51);
+__webpack_require__(267);
+__webpack_require__(206);
+__webpack_require__(128);
 
 
 /***/ }),
-/* 245 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var Subscriber_1 = __webpack_require__(9);
-var rxSubscriber_1 = __webpack_require__(112);
-var Observer_1 = __webpack_require__(178);
+var Subscriber_1 = __webpack_require__(10);
+var rxSubscriber_1 = __webpack_require__(118);
+var Observer_1 = __webpack_require__(191);
 function toSubscriber(nextOrObserver, error, complete) {
     if (nextOrObserver) {
         if (nextOrObserver instanceof Subscriber_1.Subscriber) {
@@ -36221,12 +36227,12 @@ exports.toSubscriber = toSubscriber;
 //# sourceMappingURL=toSubscriber.js.map
 
 /***/ }),
-/* 246 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var errorObject_1 = __webpack_require__(177);
+var errorObject_1 = __webpack_require__(190);
 var tryCatchTarget;
 function tryCatcher() {
     try {
@@ -36246,7 +36252,7 @@ exports.tryCatch = tryCatch;
 //# sourceMappingURL=tryCatch.js.map
 
 /***/ }),
-/* 247 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36277,7 +36283,7 @@ exports.UnsubscriptionError = UnsubscriptionError;
 //# sourceMappingURL=UnsubscriptionError.js.map
 
 /***/ }),
-/* 248 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36288,15 +36294,15 @@ exports.noop = noop;
 //# sourceMappingURL=noop.js.map
 
 /***/ }),
-/* 249 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var Observable_1 = __webpack_require__(8);
-var ArrayObservable_1 = __webpack_require__(114);
-var isScheduler_1 = __webpack_require__(181);
-var mergeAll_1 = __webpack_require__(115);
+var Observable_1 = __webpack_require__(9);
+var ArrayObservable_1 = __webpack_require__(120);
+var isScheduler_1 = __webpack_require__(194);
+var mergeAll_1 = __webpack_require__(121);
 /* tslint:enable:max-line-length */
 /**
  * Creates an output Observable which concurrently emits all values from every
@@ -36384,7 +36390,7 @@ exports.merge = merge;
 //# sourceMappingURL=merge.js.map
 
 /***/ }),
-/* 250 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36394,7 +36400,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -36426,7 +36432,7 @@ exports.InnerSubscriber = InnerSubscriber;
 //# sourceMappingURL=InnerSubscriber.js.map
 
 /***/ }),
-/* 251 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36438,12 +36444,12 @@ exports.identity = identity;
 //# sourceMappingURL=identity.js.map
 
 /***/ }),
-/* 252 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var share_1 = __webpack_require__(253);
+var share_1 = __webpack_require__(259);
 /**
  * Returns a new Observable that multicasts (shares) the original Observable. As long as there is at least one
  * Subscriber this Observable will be subscribed and emitting data. When all subscribers have unsubscribed it will
@@ -36468,14 +36474,14 @@ exports.share = share;
 //# sourceMappingURL=share.js.map
 
 /***/ }),
-/* 253 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var multicast_1 = __webpack_require__(254);
-var refCount_1 = __webpack_require__(185);
-var Subject_1 = __webpack_require__(57);
+var multicast_1 = __webpack_require__(260);
+var refCount_1 = __webpack_require__(198);
+var Subject_1 = __webpack_require__(58);
 function shareSubjectFactory() {
     return new Subject_1.Subject();
 }
@@ -36499,12 +36505,12 @@ exports.share = share;
 //# sourceMappingURL=share.js.map
 
 /***/ }),
-/* 254 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var ConnectableObservable_1 = __webpack_require__(255);
+var ConnectableObservable_1 = __webpack_require__(261);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits the results of invoking a specified selector on items
@@ -36564,7 +36570,7 @@ exports.MulticastOperator = MulticastOperator;
 //# sourceMappingURL=multicast.js.map
 
 /***/ }),
-/* 255 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36574,11 +36580,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(57);
-var Observable_1 = __webpack_require__(8);
-var Subscriber_1 = __webpack_require__(9);
-var Subscription_1 = __webpack_require__(93);
-var refCount_1 = __webpack_require__(185);
+var Subject_1 = __webpack_require__(58);
+var Observable_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
+var Subscription_1 = __webpack_require__(94);
+var refCount_1 = __webpack_require__(198);
 /**
  * @class ConnectableObservable<T>
  */
@@ -36741,7 +36747,7 @@ var RefCountSubscriber = (function (_super) {
 //# sourceMappingURL=ConnectableObservable.js.map
 
 /***/ }),
-/* 256 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36751,7 +36757,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscription_1 = __webpack_require__(93);
+var Subscription_1 = __webpack_require__(94);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @ignore
@@ -36787,7 +36793,7 @@ exports.SubjectSubscription = SubjectSubscription;
 //# sourceMappingURL=SubjectSubscription.js.map
 
 /***/ }),
-/* 257 */
+/* 263 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37017,8 +37023,8 @@ exports.SubjectSubscription = SubjectSubscription;
 /* unused harmony export splitClasses */
 /* unused harmony export createElementCssSelector */
 /* unused harmony export removeSummaryDuplicates */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(4);
 
 /**
  * @license Angular v4.3.0
@@ -64659,12 +64665,12 @@ function _mergeArrays(parts) {
 //# sourceMappingURL=compiler.es5.js.map
 
 /***/ }),
-/* 258 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var mergeMap_1 = __webpack_require__(116);
+var mergeMap_1 = __webpack_require__(122);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output
@@ -64732,7 +64738,7 @@ exports.concatMap = concatMap;
 //# sourceMappingURL=concatMap.js.map
 
 /***/ }),
-/* 259 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64742,7 +64748,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /* tslint:enable:max-line-length */
 /**
  * Filter items emitted by the source Observable by only emitting those that
@@ -64832,7 +64838,7 @@ var FilterSubscriber = (function (_super) {
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
-/* 260 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64842,7 +64848,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /**
  * Applies a given `project` function to each value emitted by the source
  * Observable, and emits the resulting values as an Observable.
@@ -64927,7 +64933,7 @@ var MapSubscriber = (function (_super) {
 //# sourceMappingURL=map.js.map
 
 /***/ }),
-/* 261 */
+/* 267 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64987,45 +64993,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵe", function() { return setupRouter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵk", function() { return Tree; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵl", function() { return TreeNode; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_BehaviorSubject__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_BehaviorSubject__ = __webpack_require__(268);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_BehaviorSubject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_from__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_from__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_from__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_observable_of__ = __webpack_require__(189);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_observable_of__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_observable_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_concatMap__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_concatMap__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_concatMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operator_concatMap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_every__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_every__ = __webpack_require__(275);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_every___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_operator_every__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_operator_first__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_operator_first__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_operator_first___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_rxjs_operator_first__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_operator_map__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_operator_map__ = __webpack_require__(126);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_rxjs_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_operator_mergeMap__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_operator_mergeMap__ = __webpack_require__(279);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_operator_mergeMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_operator_mergeMap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_operator_reduce__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_operator_reduce__ = __webpack_require__(280);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_operator_reduce___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_rxjs_operator_reduce__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_rxjs_Observable__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_rxjs_Observable__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_rxjs_operator_catch__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_rxjs_operator_catch__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_rxjs_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_rxjs_operator_catch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_rxjs_operator_concatAll__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_rxjs_operator_concatAll__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_rxjs_operator_concatAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_rxjs_operator_concatAll__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_rxjs_util_EmptyError__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_rxjs_util_EmptyError__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_rxjs_util_EmptyError___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_rxjs_util_EmptyError__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_rxjs_observable_fromPromise__ = __webpack_require__(193);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_rxjs_observable_fromPromise__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_rxjs_observable_fromPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_rxjs_observable_fromPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_rxjs_operator_last__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_rxjs_operator_last__ = __webpack_require__(290);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_rxjs_operator_last___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_rxjs_operator_last__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_rxjs_operator_mergeAll__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_rxjs_operator_mergeAll__ = __webpack_require__(292);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_rxjs_operator_mergeAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19_rxjs_operator_mergeAll__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_rxjs_operator_filter__ = __webpack_require__(191);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_rxjs_operator_filter__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_rxjs_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_rxjs_operator_filter__);
 
 /**
@@ -71286,7 +71292,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_2__angular_core__["Version"]('4.3.0'
 
 
 /***/ }),
-/* 262 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71296,8 +71302,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subject_1 = __webpack_require__(57);
-var ObjectUnsubscribedError_1 = __webpack_require__(184);
+var Subject_1 = __webpack_require__(58);
+var ObjectUnsubscribedError_1 = __webpack_require__(197);
 /**
  * @class BehaviorSubject<T>
  */
@@ -71341,17 +71347,17 @@ exports.BehaviorSubject = BehaviorSubject;
 //# sourceMappingURL=BehaviorSubject.js.map
 
 /***/ }),
-/* 263 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var FromObservable_1 = __webpack_require__(264);
+var FromObservable_1 = __webpack_require__(270);
 exports.from = FromObservable_1.FromObservable.create;
 //# sourceMappingURL=from.js.map
 
 /***/ }),
-/* 264 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71361,17 +71367,17 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var isArray_1 = __webpack_require__(111);
-var isArrayLike_1 = __webpack_require__(182);
-var isPromise_1 = __webpack_require__(183);
-var PromiseObservable_1 = __webpack_require__(192);
-var IteratorObservable_1 = __webpack_require__(265);
-var ArrayObservable_1 = __webpack_require__(114);
-var ArrayLikeObservable_1 = __webpack_require__(266);
-var iterator_1 = __webpack_require__(118);
-var Observable_1 = __webpack_require__(8);
-var observeOn_1 = __webpack_require__(267);
-var observable_1 = __webpack_require__(113);
+var isArray_1 = __webpack_require__(117);
+var isArrayLike_1 = __webpack_require__(195);
+var isPromise_1 = __webpack_require__(196);
+var PromiseObservable_1 = __webpack_require__(204);
+var IteratorObservable_1 = __webpack_require__(271);
+var ArrayObservable_1 = __webpack_require__(120);
+var ArrayLikeObservable_1 = __webpack_require__(272);
+var iterator_1 = __webpack_require__(124);
+var Observable_1 = __webpack_require__(9);
+var observeOn_1 = __webpack_require__(273);
+var observable_1 = __webpack_require__(119);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -71479,7 +71485,7 @@ exports.FromObservable = FromObservable;
 //# sourceMappingURL=FromObservable.js.map
 
 /***/ }),
-/* 265 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71489,9 +71495,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var root_1 = __webpack_require__(35);
-var Observable_1 = __webpack_require__(8);
-var iterator_1 = __webpack_require__(118);
+var root_1 = __webpack_require__(34);
+var Observable_1 = __webpack_require__(9);
+var iterator_1 = __webpack_require__(124);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -71648,7 +71654,7 @@ function sign(value) {
 //# sourceMappingURL=IteratorObservable.js.map
 
 /***/ }),
-/* 266 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71658,9 +71664,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
-var ScalarObservable_1 = __webpack_require__(180);
-var EmptyObservable_1 = __webpack_require__(94);
+var Observable_1 = __webpack_require__(9);
+var ScalarObservable_1 = __webpack_require__(193);
+var EmptyObservable_1 = __webpack_require__(95);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -71724,7 +71730,7 @@ exports.ArrayLikeObservable = ArrayLikeObservable;
 //# sourceMappingURL=ArrayLikeObservable.js.map
 
 /***/ }),
-/* 267 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71734,8 +71740,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
-var Notification_1 = __webpack_require__(268);
+var Subscriber_1 = __webpack_require__(10);
+var Notification_1 = __webpack_require__(274);
 /**
  *
  * Re-emits all notifications from source Observable with specified scheduler.
@@ -71845,12 +71851,12 @@ exports.ObserveOnMessage = ObserveOnMessage;
 //# sourceMappingURL=observeOn.js.map
 
 /***/ }),
-/* 268 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var Observable_1 = __webpack_require__(8);
+var Observable_1 = __webpack_require__(9);
 /**
  * Represents a push-based event or value that an {@link Observable} can emit.
  * This class is particularly useful for operators that manage notifications,
@@ -71978,12 +71984,12 @@ exports.Notification = Notification;
 //# sourceMappingURL=Notification.js.map
 
 /***/ }),
-/* 269 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var every_1 = __webpack_require__(270);
+var every_1 = __webpack_require__(276);
 /**
  * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
  *
@@ -72005,7 +72011,7 @@ exports.every = every;
 //# sourceMappingURL=every.js.map
 
 /***/ }),
-/* 270 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72015,7 +72021,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /**
  * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
  *
@@ -72085,12 +72091,12 @@ var EverySubscriber = (function (_super) {
 //# sourceMappingURL=every.js.map
 
 /***/ }),
-/* 271 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var first_1 = __webpack_require__(272);
+var first_1 = __webpack_require__(278);
 /**
  * Emits only the first value (or the first value that meets some condition)
  * emitted by the source Observable.
@@ -72147,7 +72153,7 @@ exports.first = first;
 //# sourceMappingURL=first.js.map
 
 /***/ }),
-/* 272 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72157,8 +72163,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
-var EmptyError_1 = __webpack_require__(121);
+var Subscriber_1 = __webpack_require__(10);
+var EmptyError_1 = __webpack_require__(127);
 /**
  * Emits only the first value (or the first value that meets some condition)
  * emitted by the source Observable.
@@ -72305,12 +72311,12 @@ var FirstSubscriber = (function (_super) {
 //# sourceMappingURL=first.js.map
 
 /***/ }),
-/* 273 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var mergeMap_1 = __webpack_require__(116);
+var mergeMap_1 = __webpack_require__(122);
 /* tslint:enable:max-line-length */
 /**
  * Projects each source value to an Observable which is merged in the output
@@ -72378,12 +72384,12 @@ exports.mergeMap = mergeMap;
 //# sourceMappingURL=mergeMap.js.map
 
 /***/ }),
-/* 274 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var reduce_1 = __webpack_require__(275);
+var reduce_1 = __webpack_require__(281);
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the
@@ -72444,15 +72450,15 @@ exports.reduce = reduce;
 //# sourceMappingURL=reduce.js.map
 
 /***/ }),
-/* 275 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var scan_1 = __webpack_require__(276);
-var takeLast_1 = __webpack_require__(277);
-var defaultIfEmpty_1 = __webpack_require__(279);
-var pipe_1 = __webpack_require__(179);
+var scan_1 = __webpack_require__(282);
+var takeLast_1 = __webpack_require__(283);
+var defaultIfEmpty_1 = __webpack_require__(285);
+var pipe_1 = __webpack_require__(192);
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns the
@@ -72519,7 +72525,7 @@ exports.reduce = reduce;
 //# sourceMappingURL=reduce.js.map
 
 /***/ }),
-/* 276 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72529,7 +72535,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /* tslint:enable:max-line-length */
 /**
  * Applies an accumulator function over the source Observable, and returns each
@@ -72646,7 +72652,7 @@ var ScanSubscriber = (function (_super) {
 //# sourceMappingURL=scan.js.map
 
 /***/ }),
-/* 277 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72656,9 +72662,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
-var ArgumentOutOfRangeError_1 = __webpack_require__(278);
-var EmptyObservable_1 = __webpack_require__(94);
+var Subscriber_1 = __webpack_require__(10);
+var ArgumentOutOfRangeError_1 = __webpack_require__(284);
+var EmptyObservable_1 = __webpack_require__(95);
 /**
  * Emits only the last `count` values emitted by the source Observable.
  *
@@ -72761,7 +72767,7 @@ var TakeLastSubscriber = (function (_super) {
 //# sourceMappingURL=takeLast.js.map
 
 /***/ }),
-/* 278 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72795,7 +72801,7 @@ exports.ArgumentOutOfRangeError = ArgumentOutOfRangeError;
 //# sourceMappingURL=ArgumentOutOfRangeError.js.map
 
 /***/ }),
-/* 279 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72805,7 +72811,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
+var Subscriber_1 = __webpack_require__(10);
 /* tslint:enable:max-line-length */
 /**
  * Emits a given value if the source Observable completes without emitting any
@@ -72878,12 +72884,12 @@ var DefaultIfEmptySubscriber = (function (_super) {
 //# sourceMappingURL=defaultIfEmpty.js.map
 
 /***/ }),
-/* 280 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var catchError_1 = __webpack_require__(281);
+var catchError_1 = __webpack_require__(287);
 /**
  * Catches errors on the observable to be handled by returning a new observable or throwing an error.
  *
@@ -72950,7 +72956,7 @@ exports._catch = _catch;
 //# sourceMappingURL=catch.js.map
 
 /***/ }),
-/* 281 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72960,8 +72966,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var OuterSubscriber_1 = __webpack_require__(119);
-var subscribeToResult_1 = __webpack_require__(117);
+var OuterSubscriber_1 = __webpack_require__(125);
+var subscribeToResult_1 = __webpack_require__(123);
 /**
  * Catches errors on the observable to be handled by returning a new observable or throwing an error.
  *
@@ -73072,12 +73078,12 @@ var CatchSubscriber = (function (_super) {
 //# sourceMappingURL=catchError.js.map
 
 /***/ }),
-/* 282 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var concatAll_1 = __webpack_require__(283);
+var concatAll_1 = __webpack_require__(289);
 /* tslint:enable:max-line-length */
 /**
  * Converts a higher-order Observable into a first-order Observable by
@@ -73134,12 +73140,12 @@ exports.concatAll = concatAll;
 //# sourceMappingURL=concatAll.js.map
 
 /***/ }),
-/* 283 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var mergeAll_1 = __webpack_require__(115);
+var mergeAll_1 = __webpack_require__(121);
 /**
  * Converts a higher-order Observable into a first-order Observable by
  * concatenating the inner Observables in order.
@@ -73195,12 +73201,12 @@ exports.concatAll = concatAll;
 //# sourceMappingURL=concatAll.js.map
 
 /***/ }),
-/* 284 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var last_1 = __webpack_require__(285);
+var last_1 = __webpack_require__(291);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits only the last item emitted by the source Observable.
@@ -73226,7 +73232,7 @@ exports.last = last;
 //# sourceMappingURL=last.js.map
 
 /***/ }),
-/* 285 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73236,8 +73242,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Subscriber_1 = __webpack_require__(9);
-var EmptyError_1 = __webpack_require__(121);
+var Subscriber_1 = __webpack_require__(10);
+var EmptyError_1 = __webpack_require__(127);
 /* tslint:enable:max-line-length */
 /**
  * Returns an Observable that emits only the last item emitted by the source Observable.
@@ -73351,12 +73357,12 @@ var LastSubscriber = (function (_super) {
 //# sourceMappingURL=last.js.map
 
 /***/ }),
-/* 286 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var mergeAll_1 = __webpack_require__(115);
+var mergeAll_1 = __webpack_require__(121);
 /**
  * Converts a higher-order Observable into a first-order Observable which
  * concurrently delivers all values that are emitted on the inner Observables.
@@ -73409,17 +73415,17 @@ exports.mergeAll = mergeAll;
 //# sourceMappingURL=mergeAll.js.map
 
 /***/ }),
-/* 287 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var ForkJoinObservable_1 = __webpack_require__(288);
+var ForkJoinObservable_1 = __webpack_require__(294);
 exports.forkJoin = ForkJoinObservable_1.ForkJoinObservable.create;
 //# sourceMappingURL=forkJoin.js.map
 
 /***/ }),
-/* 288 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73429,11 +73435,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Observable_1 = __webpack_require__(8);
-var EmptyObservable_1 = __webpack_require__(94);
-var isArray_1 = __webpack_require__(111);
-var subscribeToResult_1 = __webpack_require__(117);
-var OuterSubscriber_1 = __webpack_require__(119);
+var Observable_1 = __webpack_require__(9);
+var EmptyObservable_1 = __webpack_require__(95);
+var isArray_1 = __webpack_require__(117);
+var subscribeToResult_1 = __webpack_require__(123);
+var OuterSubscriber_1 = __webpack_require__(125);
 /**
  * We need this JSDoc comment for affecting ESDoc.
  * @extends {Ignored}
@@ -73627,5 +73633,5 @@ var ForkJoinSubscriber = (function (_super) {
 //# sourceMappingURL=ForkJoinObservable.js.map
 
 /***/ })
-],[244]);
+],[250]);
 //# sourceMappingURL=vendor.bundle.js.map

@@ -1,21 +1,20 @@
-﻿import * as angular from "angular";
+﻿import {ProjectTrackerDetailRecordViewModel} from "./ProjectTrackerDetailRecordViewModel.service";
+import {Injectable, Inject} from "@angular/core";
 
-angular.module("ProjectTrackerApp").service("ProjectTrackerDetailViewModel", class ProjectTrackerDetailViewModel {
+@Injectable()
+export class ProjectTrackerDetailViewModel {
 
     Project: any;
     displayMode: string;
-    Record: any;
 
     readonly DISPLAY_MODE_NONE = "NONE";
     readonly DISPLAY_MODE_RECORD = "RECORD";
 
 
-    constructor(ProjectTrackerDetailRecordViewModel, EventUtility) {
+    constructor(@Inject(ProjectTrackerDetailRecordViewModel) private Record) {
 
         this.displayMode = this.DISPLAY_MODE_NONE;
         this.Project = null;
-
-        this.Record = ProjectTrackerDetailRecordViewModel;
     }
     IsInRecordMode() {
         return this.displayMode == this.DISPLAY_MODE_RECORD;
@@ -49,4 +48,4 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailViewModel", cla
             this.displayMode = this.DISPLAY_MODE_RECORD;
         }
     }
-});
+}

@@ -1,17 +1,19 @@
-﻿import ProjectModel from "../app/Models/ProjectModel";
-import {EVENT_PROJECT_DETAIL_RECORD_SAVED, EVENT_PROJECT_DETAIL_RECORD_SELECTED, EVENT_PROJECT_DETAIL_RECORD_DELETED, EVENT_PROJECT_DETAIL_RECORD_ERROR} 
-from "./ProjectTrackerDetailRecordViewModel";
-import {EVENT_PROJECT_LIST_ERROR, EVENT_PROJECT_LIST_LOADED} from "./ProjectTrackerListViewModel";
-import * as angular from "angular";
+﻿import ProjectModel from "../Models/ProjectModel";
+import {EVENT_PROJECT_DETAIL_RECORD_SAVED, EVENT_PROJECT_DETAIL_RECORD_SELECTED, 
+        EVENT_PROJECT_DETAIL_RECORD_DELETED, EVENT_PROJECT_DETAIL_RECORD_ERROR} 
+from "./ProjectTrackerDetailRecordViewModel.service";
+import {EVENT_PROJECT_LIST_ERROR, EVENT_PROJECT_LIST_LOADED, ProjectTrackerListViewModel} from "./ProjectTrackerListViewModel.service";
+import {Injectable, Inject} from "@angular/core";
+import {ProjectTrackerDetailViewModel} from "./ProjectTrackerDetailViewModel.service";
+import {EventUtility} from "../Utilities/EventUtility.service";
 
-angular.module("ProjectTrackerApp").service("ProjectTrackerAdminViewModel", class ProjectTrackerAdminViewModel {
+@Injectable()
+export class ProjectTrackerAdminViewModel {
 
     displayMode: string;
     reloadList: boolean;
     Message: string;
     ErrorMessage: string;
-    List: any;
-    Detail: any;
     canSave: boolean;
     canEdit: boolean;
 
@@ -19,7 +21,7 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerAdminViewModel", clas
     readonly DISPLAY_MODE_LIST = "LIST";
     readonly DISPLAY_MODE_DETAIL = "DETAIL";
 
-    constructor(ProjectTrackerListViewModel, ProjectTrackerDetailViewModel, ProjectsDataAccess, EventUtility, ProjectTrackerDetailRecordViewModel) {
+    constructor(@Inject(ProjectTrackerListViewModel) private List, @Inject(ProjectTrackerDetailViewModel) private Detail, @Inject(EventUtility) private EventUtility) {
         this.displayMode = this.DISPLAY_MODE_NONE;
         this.reloadList = false;
         this.Message = "Loading...";
@@ -27,15 +29,13 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerAdminViewModel", clas
         this.canSave = true;
         this.canEdit = true;
 
-        this.List = ProjectTrackerListViewModel;
-        EventUtility.Subscribe(EVENT_PROJECT_LIST_LOADED, this.ProjectList_Loaded);
-        EventUtility.Subscribe(EVENT_PROJECT_LIST_ERROR, this.ProjectList_Error);
+        this.EventUtility.Subscribe(EVENT_PROJECT_LIST_LOADED, this.ProjectList_Loaded);
+        this.EventUtility.Subscribe(EVENT_PROJECT_LIST_ERROR, this.ProjectList_Error);
 
-        this.Detail = ProjectTrackerDetailViewModel;
-        EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_SELECTED, this.ProjectDetailRecord_Selected);
-        EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_SAVED, this.ProjectDetailRecord_Saved);
-        EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_DELETED, this.ProjectDetailRecord_Deleted);
-        EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_ERROR, this.ProjectDetail_Error);
+        this.EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_SELECTED, this.ProjectDetailRecord_Selected);
+        this.EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_SAVED, this.ProjectDetailRecord_Saved);
+        this.EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_DELETED, this.ProjectDetailRecord_Deleted);
+        this.EventUtility.Subscribe(EVENT_PROJECT_DETAIL_RECORD_ERROR, this.ProjectDetail_Error);
 
     }
 
@@ -133,4 +133,4 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerAdminViewModel", clas
     CanExecuteEditCommand() {
         return this.IsInListMode() && !this.IsBusy() && this.canEdit;
     }
-});
+}

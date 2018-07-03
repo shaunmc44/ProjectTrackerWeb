@@ -1,4 +1,10 @@
-﻿export default class StatusModel {
+﻿export interface iStatusModel {
+    ProjectStatusId: number;
+    ProjectStatusName: string;
+    ProjectStatusDescription: string;
+}
+
+export default class StatusModel {
     ProjectStatusId: number;
     ProjectStatusName: string;
     ProjectStatusDescription: string;

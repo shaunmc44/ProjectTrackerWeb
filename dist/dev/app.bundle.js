@@ -1,4 +1,4 @@
-webpackJsonp([1],[
+webpackJsonp([0],[
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9,20 +9,20 @@ webpackJsonp([1],[
 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(20),
 	__webpack_require__(2),
-	__webpack_require__(124),
+	__webpack_require__(129),
 	__webpack_require__(27),
-	__webpack_require__(59),
 	__webpack_require__(60),
-	__webpack_require__(37),
-	__webpack_require__(26),
 	__webpack_require__(61),
 	__webpack_require__(36),
+	__webpack_require__(26),
 	__webpack_require__(62),
-	__webpack_require__(125),
-	__webpack_require__(10),
+	__webpack_require__(35),
+	__webpack_require__(63),
+	__webpack_require__(130),
+	__webpack_require__(11),
 	__webpack_require__(1),
 	__webpack_require__(21),
-	__webpack_require__(63),
+	__webpack_require__(64),
 	__webpack_require__(14)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( arr, document, getProto, slice, concat, push, indexOf,
 	class2type, toString, hasOwn, fnToString, ObjectFunctionString,
@@ -403,7 +403,7 @@ return jQuery;
 }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
 /* 1 */
@@ -441,14 +441,15 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(127) ], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(132) ], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
 	"use strict";
 }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Initialize a jQuery object
@@ -456,9 +457,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Initialize a 
 	__webpack_require__(0),
 	__webpack_require__(2),
 	__webpack_require__(1),
-	__webpack_require__(68),
+	__webpack_require__(69),
 
-	__webpack_require__(69)
+	__webpack_require__(70)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document, isFunction, rsingleTag ) {
 
 "use strict";
@@ -584,11 +585,11 @@ return init;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(72)
+	__webpack_require__(73)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( Data ) {
 	"use strict";
 
@@ -598,7 +599,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -613,10 +614,10 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -629,7 +630,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -708,7 +709,7 @@ return access;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -728,13 +729,12 @@ return nodeName;
 
 
 /***/ }),
-/* 13 */,
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(26),
-	__webpack_require__(61)
+	__webpack_require__(62)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( class2type, toString ) {
 
 "use strict";
@@ -763,7 +763,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(0),
 	__webpack_require__(1),
 	__webpack_require__(27),
-	__webpack_require__(44)
+	__webpack_require__(43)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, isFunction, slice ) {
 
 "use strict";
@@ -1167,14 +1167,14 @@ return jQuery;
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(37),
-	__webpack_require__(130),
-	__webpack_require__(131),
-	__webpack_require__(70),
-	__webpack_require__(12),
+	__webpack_require__(36),
+	__webpack_require__(135),
+	__webpack_require__(136),
+	__webpack_require__(71),
+	__webpack_require__(13),
 
-	__webpack_require__(4),
-	__webpack_require__(69),
+	__webpack_require__(5),
+	__webpack_require__(70),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, indexOf, dir, siblings, rneedsContext, nodeName ) {
 
@@ -1366,14 +1366,14 @@ return jQuery;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(43),
+	__webpack_require__(42),
 	__webpack_require__(1),
-	__webpack_require__(6),
+	__webpack_require__(7),
 	__webpack_require__(27),
-	__webpack_require__(5),
-	__webpack_require__(12),
+	__webpack_require__(6),
+	__webpack_require__(13),
 
-	__webpack_require__(4),
+	__webpack_require__(5),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document, documentElement, isFunction, rnothtmlwhite,
 	slice, dataPriv, nodeName ) {
@@ -2122,16 +2122,16 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(0),
 	__webpack_require__(2),
 	__webpack_require__(1),
-	__webpack_require__(6),
-	__webpack_require__(145),
+	__webpack_require__(7),
+	__webpack_require__(150),
+	__webpack_require__(85),
 	__webpack_require__(84),
-	__webpack_require__(83),
 
-	__webpack_require__(4),
-	__webpack_require__(146),
-	__webpack_require__(50),
+	__webpack_require__(5),
+	__webpack_require__(151),
+	__webpack_require__(49),
 	__webpack_require__(15),
-	__webpack_require__(85) // jQuery.param
+	__webpack_require__(86) // jQuery.param
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document, isFunction, rnothtmlwhite, location, nonce, rquery ) {
 
 "use strict";
@@ -2983,22 +2983,22 @@ return jQuery;
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(39),
-	__webpack_require__(11),
+	__webpack_require__(38),
+	__webpack_require__(12),
 	__webpack_require__(22),
 	__webpack_require__(2),
-	__webpack_require__(38),
+	__webpack_require__(37),
+	__webpack_require__(39),
 	__webpack_require__(40),
-	__webpack_require__(41),
-	__webpack_require__(64),
-	__webpack_require__(58),
 	__webpack_require__(65),
+	__webpack_require__(59),
 	__webpack_require__(66),
 	__webpack_require__(67),
-	__webpack_require__(42),
+	__webpack_require__(68),
+	__webpack_require__(41),
 
-	__webpack_require__(4),
-	__webpack_require__(71),
+	__webpack_require__(5),
+	__webpack_require__(72),
 	__webpack_require__(3) // contains
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, pnum, access, camelCase, document, rcssNum, rnumnonpx, cssExpand,
 	getStyles, swap, curCSS, adjustCSS, addGetHookIf, support ) {
@@ -3558,26 +3558,26 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(59),
-	__webpack_require__(1),
 	__webpack_require__(60),
-	__webpack_require__(11),
-	__webpack_require__(81),
-	__webpack_require__(76),
+	__webpack_require__(1),
+	__webpack_require__(61),
+	__webpack_require__(12),
+	__webpack_require__(82),
 	__webpack_require__(77),
 	__webpack_require__(78),
 	__webpack_require__(79),
 	__webpack_require__(80),
-	__webpack_require__(75),
-	__webpack_require__(136),
+	__webpack_require__(81),
+	__webpack_require__(76),
+	__webpack_require__(141),
+
+	__webpack_require__(6),
+	__webpack_require__(74),
+	__webpack_require__(44),
+	__webpack_require__(64),
+	__webpack_require__(13),
 
 	__webpack_require__(5),
-	__webpack_require__(73),
-	__webpack_require__(45),
-	__webpack_require__(63),
-	__webpack_require__(12),
-
-	__webpack_require__(4),
 	__webpack_require__(16),
 	__webpack_require__(3),
 	__webpack_require__(17)
@@ -4049,43 +4049,42 @@ return jQuery;
 /* 29 */,
 /* 30 */,
 /* 31 */,
-/* 32 */,
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(3),
 	__webpack_require__(16),
-	__webpack_require__(44),
+	__webpack_require__(43),
 	__webpack_require__(15),
-	__webpack_require__(132),
-	__webpack_require__(71),
-	__webpack_require__(133),
-	__webpack_require__(46),
-	__webpack_require__(134),
+	__webpack_require__(137),
+	__webpack_require__(72),
 	__webpack_require__(138),
+	__webpack_require__(45),
+	__webpack_require__(139),
+	__webpack_require__(143),
 	__webpack_require__(17),
-	__webpack_require__(142),
-	__webpack_require__(28),
-	__webpack_require__(144),
 	__webpack_require__(147),
-	__webpack_require__(19),
-	__webpack_require__(148),
-	__webpack_require__(85),
-	__webpack_require__(18),
+	__webpack_require__(28),
 	__webpack_require__(149),
-	__webpack_require__(150),
-	__webpack_require__(151),
 	__webpack_require__(152),
+	__webpack_require__(19),
+	__webpack_require__(153),
+	__webpack_require__(86),
+	__webpack_require__(18),
+	__webpack_require__(154),
 	__webpack_require__(155),
-	__webpack_require__(47),
 	__webpack_require__(156),
 	__webpack_require__(157),
-	__webpack_require__(158),
-	__webpack_require__(159),
+	__webpack_require__(160),
+	__webpack_require__(46),
 	__webpack_require__(161),
-	__webpack_require__(162)
+	__webpack_require__(162),
+	__webpack_require__(163),
+	__webpack_require__(164),
+	__webpack_require__(166),
+	__webpack_require__(167)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery ) {
 
 "use strict";
@@ -4097,9 +4096,9 @@ return jQuery;
 
 
 /***/ }),
+/* 33 */,
 /* 34 */,
-/* 35 */,
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -4113,7 +4112,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -4127,11 +4126,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(39)
+	__webpack_require__(38)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( pnum ) {
 
 "use strict";
@@ -4143,7 +4142,7 @@ return new RegExp( "^(?:([+-])=|)(" + pnum + ")([a-z%]*)$", "i" );
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -4155,11 +4154,11 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(39)
+	__webpack_require__(38)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( pnum ) {
 	"use strict";
 
@@ -4169,7 +4168,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -4181,14 +4180,14 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(43),
-	__webpack_require__(10)
+	__webpack_require__(42),
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document, documentElement, support ) {
 
 "use strict";
@@ -4290,7 +4289,7 @@ return support;
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -4304,14 +4303,14 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(14),
 	__webpack_require__(1),
-	__webpack_require__(6)
+	__webpack_require__(7)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, toType, isFunction, rnothtmlwhite ) {
 
 "use strict";
@@ -4547,7 +4546,7 @@ return jQuery;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -4573,14 +4572,14 @@ return function( owner ) {
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(5),
+	__webpack_require__(6),
 	__webpack_require__(15),
-	__webpack_require__(44)
+	__webpack_require__(43)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, dataPriv ) {
 
 "use strict";
@@ -4725,7 +4724,7 @@ return jQuery;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -4733,22 +4732,22 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(22),
 	__webpack_require__(2),
 	__webpack_require__(1),
-	__webpack_require__(38),
+	__webpack_require__(37),
+	__webpack_require__(7),
+	__webpack_require__(40),
+	__webpack_require__(75),
+	__webpack_require__(59),
+	__webpack_require__(67),
 	__webpack_require__(6),
-	__webpack_require__(41),
-	__webpack_require__(74),
-	__webpack_require__(58),
-	__webpack_require__(66),
-	__webpack_require__(5),
-	__webpack_require__(135),
+	__webpack_require__(140),
 
-	__webpack_require__(4),
-	__webpack_require__(46),
+	__webpack_require__(5),
+	__webpack_require__(45),
 	__webpack_require__(15),
 	__webpack_require__(16),
 	__webpack_require__(28),
 	__webpack_require__(19),
-	__webpack_require__(137)
+	__webpack_require__(142)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, camelCase, document, isFunction, rcssNum, rnothtmlwhite, cssExpand,
 	isHiddenWithinTree, swap, adjustCSS, dataPriv, showHide ) {
 
@@ -5434,12 +5433,12 @@ return jQuery;
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(2),
-	__webpack_require__(10)
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( document, support ) {
 
 "use strict";
@@ -5474,11 +5473,11 @@ return support;
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(6)
+	__webpack_require__(7)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( rnothtmlwhite ) {
 	"use strict";
 
@@ -5495,15 +5494,15 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(5),
-	__webpack_require__(45),
-	__webpack_require__(36),
+	__webpack_require__(6),
+	__webpack_require__(44),
+	__webpack_require__(35),
 	__webpack_require__(1),
 	__webpack_require__(21),
 	__webpack_require__(17)
@@ -5701,14 +5700,63 @@ return jQuery;
 
 
 /***/ }),
+/* 50 */,
 /* 51 */,
-/* 52 */,
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(4);
+var EventUtility = /** @class */ (function () {
+    function EventUtility() {
+        this.allSubscribers = {};
+    }
+    EventUtility.prototype.Subscribe = function (EventName, CallBack) {
+        if (!this.allSubscribers[EventName]) {
+            this.allSubscribers[EventName] = [];
+        }
+        this.allSubscribers[EventName].push(CallBack);
+    };
+    EventUtility.prototype.RaiseEvent = function (EventName, p1, p2, p3, p4, p5) {
+        if (this.allSubscribers[EventName]) {
+            var subscribers = this.allSubscribers[EventName];
+            var i = 0;
+            var n = subscribers.length;
+            while (i < n) {
+                var callBack = subscribers[i];
+                callBack(p1, p2, p3, p4, p5);
+                i++;
+            }
+        }
+    };
+    EventUtility = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [])
+    ], EventUtility);
+    return EventUtility;
+}());
+exports.EventUtility = EventUtility;
+
+
+/***/ }),
 /* 53 */,
 /* 54 */,
 /* 55 */,
 /* 56 */,
 /* 57 */,
-/* 58 */
+/* 58 */,
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -5741,7 +5789,7 @@ return function( elem, options, callback, args ) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5755,7 +5803,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5769,7 +5817,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5783,11 +5831,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(36)
+	__webpack_require__(35)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( hasOwn ) {
 	"use strict";
 
@@ -5797,7 +5845,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -5834,7 +5882,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -5858,15 +5906,15 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(126),
-	__webpack_require__(40),
-	__webpack_require__(64),
-	__webpack_require__(42),
+	__webpack_require__(131),
+	__webpack_require__(39),
+	__webpack_require__(65),
+	__webpack_require__(41),
 	__webpack_require__(3) // Get jQuery.contains
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, rboxStyle, rnumnonpx, getStyles, support ) {
 
@@ -5930,12 +5978,12 @@ return curCSS;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(38)
+	__webpack_require__(37)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, rcssNum ) {
 
 "use strict";
@@ -6010,7 +6058,7 @@ return adjustCSS;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6043,7 +6091,7 @@ return addGetHookIf;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6056,14 +6104,14 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(37),
+	__webpack_require__(36),
 	__webpack_require__(1),
-	__webpack_require__(70),
+	__webpack_require__(71),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, indexOf, isFunction, rneedsContext ) {
 
@@ -6160,7 +6208,7 @@ jQuery.fn.extend( {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -6175,13 +6223,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(129),
+	__webpack_require__(134),
 	__webpack_require__(15)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document ) {
 
@@ -6268,14 +6316,14 @@ if ( document.readyState === "complete" ||
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(22),
-	__webpack_require__(6),
-	__webpack_require__(45)
+	__webpack_require__(7),
+	__webpack_require__(44)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, camelCase, rnothtmlwhite, acceptData ) {
 
 "use strict";
@@ -6437,11 +6485,11 @@ return Data;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(72)
+	__webpack_require__(73)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( Data ) {
 	"use strict";
 
@@ -6451,7 +6499,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -6492,17 +6540,17 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(14),
-	__webpack_require__(76),
 	__webpack_require__(77),
 	__webpack_require__(78),
 	__webpack_require__(79),
-	__webpack_require__(80)
+	__webpack_require__(80),
+	__webpack_require__(81)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, toType, rtagName, rscriptType, wrapMap, getAll, setGlobalEval ) {
 
 "use strict";
@@ -6604,7 +6652,7 @@ return buildFragment;
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6616,7 +6664,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6628,7 +6676,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6664,12 +6712,12 @@ return wrapMap;
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12)
+	__webpack_require__(13)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, nodeName ) {
 
 "use strict";
@@ -6703,11 +6751,11 @@ return getAll;
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(5)
+	__webpack_require__(6)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( dataPriv ) {
 
 "use strict";
@@ -6732,7 +6780,7 @@ return setGlobalEval;
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6744,13 +6792,13 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(11),
-	__webpack_require__(48),
+	__webpack_require__(12),
+	__webpack_require__(47),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, access, support ) {
 
@@ -6894,7 +6942,7 @@ jQuery.each( [
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6906,7 +6954,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -6918,17 +6966,17 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(14),
-	__webpack_require__(81),
+	__webpack_require__(82),
 	__webpack_require__(1),
-	__webpack_require__(4),
+	__webpack_require__(5),
 	__webpack_require__(16), // filter
-	__webpack_require__(82)
+	__webpack_require__(83)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, toType, rcheckableType, isFunction ) {
 
 "use strict";
@@ -7057,7 +7105,6 @@ return jQuery;
 
 
 /***/ }),
-/* 86 */,
 /* 87 */,
 /* 88 */,
 /* 89 */,
@@ -7067,12 +7114,562 @@ return jQuery;
 /* 93 */,
 /* 94 */,
 /* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+Object.defineProperty(exports, "__esModule", { value: true });
+var DateUtility = /** @class */ (function () {
+    function DateUtility() {
+    }
+    DateUtility.prototype.ToJavaScriptDate = function (value) {
+        if (!value)
+            return null;
+        var x;
+        if ($.type(value) === "date") {
+            x = value;
+        }
+        else {
+            var pattern = /Date\(([^)]+)\)/;
+            var results = pattern.exec(value);
+            if (results) {
+                x = new Date(parseFloat(results[1]));
+            }
+            else {
+                x = new Date(value.toString());
+            }
+        }
+        return x;
+    };
+    DateUtility.prototype.ToShortDateTimeString = function (value) {
+        if (!value)
+            return null;
+        var date_format = '12'; /* FORMAT CAN BE 12 hour (12) OR 24 hour (24)*/
+        var hour = value.getHours(); /* Returns the hour (from 0-23) */
+        var minutes = value.getMinutes(); /* Returns the minutes (from 0-59) */
+        var result = hour;
+        var ext = '';
+        if (date_format == '12') {
+            if (hour > 12) {
+                ext = 'PM';
+                hour = (hour - 12);
+                if (hour < 10) {
+                    result = "0" + hour;
+                }
+                else if (hour == 12) {
+                    hour = "00";
+                    ext = 'AM';
+                }
+            }
+            else if (hour < 12) {
+                result = ((hour < 10) ? "0" + hour : hour);
+                ext = 'AM';
+            }
+            else if (hour == 12) {
+                ext = 'PM';
+            }
+        }
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        result = result + ":" + minutes + ' ' + ext;
+        return (value.getMonth() + 1) + "/" + value.getDate() + "/" + value.getFullYear() + " " + result;
+    };
+    DateUtility.prototype.ToShortDateString = function (value) {
+        if (!value)
+            return null;
+        return (value.getMonth() + 1) + "/" + value.getDate() + "/" + value.getFullYear();
+    };
+    DateUtility.prototype.ToJsonDateString = function (value) {
+        if (!value)
+            return null;
+        var x = this.ToJavaScriptDate(value);
+        var response = x.toISOString();
+        return response;
+    };
+    return DateUtility;
+}());
+exports.DateUtility = DateUtility;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DateUtility_1 = __webpack_require__(96);
+var ProjectModel = /** @class */ (function () {
+    function ProjectModel(Project) {
+        this.DateUtility = new DateUtility_1.DateUtility();
+        if (Project !== null) {
+            this.ProjectId = Project.ProjectId;
+            this.ProjectName = Project.ProjectName;
+            this.ProjectTypeId = Project.ProjectTypeId;
+            this.ProjectStatusId = Project.ProjectStatusId;
+            this.IsInternalIT = Project.IsInternalIT;
+            this.ProjectOwner = Project.ProjectOwner;
+            this.ProjectManager = Project.ProjectManager;
+            this.StartDate = new Date(Project.StartDate);
+            this.ProjectPhaseId = Project.ProjectPhaseId;
+            this.PhasePercentComplete = Project.PhasePercentComplete;
+            this.PhaseEndDate = new Date(Project.PhaseEndDate);
+            this.OverallPercentComplete = Project.OverallPercentComplete;
+            this.ProjectEndDate = new Date(Project.ProjectEndDate);
+            this.IsWaiting = Project.IsWaiting;
+            this.Comments = Project.Comments;
+            this.ProjectPhaseName = Project.ProjectPhase.ProjectPhaseName;
+            this.ProjectTypeName = Project.ProjectType.ProjectTypeName;
+            this.ProjectStatusName = Project.ProjectStatus.ProjectStatusName;
+        }
+        else {
+            this.ProjectId = 0;
+            this.ProjectName = null;
+            this.ProjectTypeId = 1;
+            this.ProjectStatusId = 1;
+            this.IsInternalIT = null;
+            this.ProjectOwner = null;
+            this.ProjectManager = null;
+            this.StartDate = null;
+            this.ProjectPhaseId = 1;
+            this.PhasePercentComplete = 0;
+            this.PhaseEndDate = null;
+            this.OverallPercentComplete = 0;
+            this.ProjectEndDate = null;
+            this.IsWaiting = null;
+            this.Comments = null;
+        }
+    }
+    ProjectModel.prototype.FormattedStartDate = function () { this.StartDate !== null && this.StartDate.toISOString().substring(0, 10); };
+    ProjectModel.prototype.FormattedEndDate = function () { this.ProjectEndDate !== null && this.ProjectEndDate.toISOString().substring(0, 10); };
+    ProjectModel.prototype.FormattedPhaseEndDate = function () { this.PhaseEndDate !== null && this.PhaseEndDate.toISOString().substring(0, 10); };
+    ProjectModel.prototype.Reload = function (NewProject) {
+        this.ProjectId = NewProject.ProjectId;
+        this.ProjectName = NewProject.ProjectName;
+        this.ProjectTypeId = NewProject.ProjectTypeId;
+        this.ProjectStatusId = NewProject.ProjectStatusId;
+        this.IsInternalIT = NewProject.IsInternalIT;
+        this.ProjectOwner = NewProject.ProjectOwner;
+        this.ProjectManager = NewProject.ProjectManager;
+        this.StartDate = new Date(NewProject.StartDate);
+        this.ProjectPhaseId = NewProject.ProjectPhaseId;
+        this.PhasePercentComplete = NewProject.PhasePercentComplete;
+        this.PhaseEndDate = new Date(NewProject.PhaseEndDate);
+        this.OverallPercentComplete = NewProject.OverallPercentComplete;
+        this.ProjectEndDate = new Date(NewProject.ProjectEndDate);
+        this.IsWaiting = NewProject.IsWaiting;
+        this.Comments = NewProject.Comments;
+    };
+    ProjectModel.prototype.Clear = function () {
+        this.ProjectName = null;
+        this.ProjectTypeId = null;
+        this.ProjectStatusId = null;
+        this.IsInternalIT = null;
+        this.ProjectOwner = null;
+        this.ProjectManager = null;
+        this.StartDate = null;
+        this.ProjectPhaseId = null;
+        this.PhasePercentComplete = null;
+        this.PhaseEndDate = null;
+        this.OverallPercentComplete = null;
+        this.ProjectEndDate = null;
+        this.IsWaiting = null;
+        this.Comments = null;
+    };
+    ProjectModel.prototype.ToObject = function () {
+        return {
+            ProjectId: this.ProjectId,
+            ProjectName: this.ProjectName,
+            ProjectTypeId: this.ProjectTypeId,
+            ProjectStatusId: this.ProjectStatusId,
+            IsInternalIT: this.IsInternalIT === true ? true : false,
+            ProjectOwner: this.ProjectOwner,
+            ProjectManager: this.ProjectManager,
+            StartDate: this.StartDate,
+            ProjectPhaseId: this.ProjectPhaseId,
+            PhasePercentComplete: this.PhasePercentComplete,
+            PhaseEndDate: this.PhaseEndDate,
+            OverallPercentComplete: this.OverallPercentComplete,
+            ProjectEndDate: this.ProjectEndDate,
+            IsWaiting: this.IsWaiting === true ? true : false,
+            Comments: this.Comments
+        };
+    };
+    return ProjectModel;
+}());
+exports.default = ProjectModel;
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ProjectModel_1 = __webpack_require__(97);
+var EventUtility_service_1 = __webpack_require__(52);
+var core_1 = __webpack_require__(4);
+var ProjectsDataAccess_service_1 = __webpack_require__(99);
+exports.EVENT_PROJECT_LIST_LOADED = "ProjectList_Loaded";
+exports.EVENT_PROJECT_LIST_ERROR = "ProjectList_Error";
+var ProjectTrackerListViewModel = /** @class */ (function () {
+    function ProjectTrackerListViewModel(ProjectsDataAccess, EventUtility) {
+        this.ProjectsDataAccess = ProjectsDataAccess;
+        this.EventUtility = EventUtility;
+        this.AllProjects = [];
+        this.LoadItems(null);
+    }
+    ProjectTrackerListViewModel.prototype.RaiseItemsLoaded = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_LIST_LOADED, Message, this.AllProjects);
+    };
+    ProjectTrackerListViewModel.prototype.RaiseError = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_LIST_ERROR, Message);
+    };
+    ProjectTrackerListViewModel.prototype.IsBusy = function () {
+        return this.isBusy;
+    };
+    ProjectTrackerListViewModel.prototype.LoadItems = function (PassThroughMessage) {
+        var _this = this;
+        this.AllProjects.length = 0;
+        this.isBusy = true;
+        this.ProjectsDataAccess.SelectAll()
+            .subscribe(function (result) {
+            for (var i = 0; i < result.value.length; i++) {
+                _this.AllProjects.push(new ProjectModel_1.default(result.value[i]));
+            }
+            if (PassThroughMessage) {
+                _this.RaiseItemsLoaded(PassThroughMessage);
+            }
+            else {
+                _this.RaiseItemsLoaded("Projects were retrieved successfully");
+            }
+        }, function (error) {
+            _this.RaiseError(error.Message);
+        });
+        this.isBusy = false;
+    };
+    ProjectTrackerListViewModel.prototype.CanExecuteReloadCommand = function () {
+        return !this.isBusy;
+    };
+    ProjectTrackerListViewModel.prototype.ReloadCommand = function (PassThroughMessage) {
+        if (this.CanExecuteReloadCommand()) {
+            this.LoadItems(PassThroughMessage);
+        }
+    };
+    ProjectTrackerListViewModel = __decorate([
+        core_1.Injectable(),
+        __param(0, core_1.Inject(ProjectsDataAccess_service_1.ProjectsDataAccess)), __param(1, core_1.Inject(EventUtility_service_1.EventUtility)),
+        __metadata("design:paramtypes", [Object, Object])
+    ], ProjectTrackerListViewModel);
+    return ProjectTrackerListViewModel;
+}());
+exports.ProjectTrackerListViewModel = ProjectTrackerListViewModel;
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var baseUrl_1 = __webpack_require__(100);
+var http_1 = __webpack_require__(51);
+var core_1 = __webpack_require__(4);
+var ProjectsDataAccess = /** @class */ (function () {
+    function ProjectsDataAccess(http) {
+        this.http = http;
+        var rootUrl = baseUrl_1.default();
+        this.odataUrl = rootUrl + "odata/Projects";
+    }
+    ProjectsDataAccess.prototype.SelectAll = function () {
+        return this.http.get(this.odataUrl + "?$expand=ProjectPhase,ProjectType,ProjectStatus&$orderby=ProjectName");
+    };
+    ProjectsDataAccess.prototype.Select = function (projectId) {
+        var url = this.odataUrl + "(" + projectId + ")";
+        return this.http.get(url);
+    };
+    ProjectsDataAccess.prototype.Update = function (project) {
+        return this.http.put(this.odataUrl + "(" + project.ProjectId + ")", project);
+    };
+    ProjectsDataAccess.prototype.Save = function (project) {
+        return this.http.post(this.odataUrl + "(" + project.ProjectId, project);
+    };
+    ProjectsDataAccess.prototype.Delete = function (projectId) {
+        return this.http.delete(this.odataUrl + "(" + projectId + ")");
+    };
+    ProjectsDataAccess = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.HttpClient])
+    ], ProjectsDataAccess);
+    return ProjectsDataAccess;
+}());
+exports.ProjectsDataAccess = ProjectsDataAccess;
+
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getBaseUrl() {
+    var inDevelopment = window.location.hostname === 'localhost';
+    return inDevelopment ? 'http://localhost:50873/' : '/';
+}
+exports.default = getBaseUrl;
+
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var TypeModel_1 = __webpack_require__(170);
+var StatusModel_1 = __webpack_require__(169);
+var PhaseModel_1 = __webpack_require__(168);
+var EventUtility_service_1 = __webpack_require__(52);
+var ProjectsDataAccess_service_1 = __webpack_require__(99);
+var ProjectStatusesDataAccess_service_1 = __webpack_require__(173);
+var ProjectTypesDataAccess_service_1 = __webpack_require__(174);
+var ProjectPhasesDataAccess_service_1 = __webpack_require__(175);
+var ProjectModel_1 = __webpack_require__(97);
+exports.EVENT_PROJECT_DETAIL_RECORD_SELECTED = "ProjectDetailRecord_Selected";
+exports.EVENT_PROJECT_DETAIL_RECORD_SAVED = "ProjectDetailRecord_Saved";
+exports.EVENT_PROJECT_DETAIL_RECORD_DELETED = "ProjectDetailRecord_Deleted";
+exports.EVENT_PROJECT_DETAIL_RECORD_ERROR = "ProjectDetailRecord_Error";
+var core_1 = __webpack_require__(4);
+var ProjectTrackerDetailRecordViewModel = /** @class */ (function () {
+    function ProjectTrackerDetailRecordViewModel(ProjectsDataAccess, ProjectStatusesDataAccess, ProjectPhasesDataAccess, ProjectTypesDataAccess, EventUtility) {
+        this.ProjectsDataAccess = ProjectsDataAccess;
+        this.ProjectStatusesDataAccess = ProjectStatusesDataAccess;
+        this.ProjectPhasesDataAccess = ProjectPhasesDataAccess;
+        this.ProjectTypesDataAccess = ProjectTypesDataAccess;
+        this.EventUtility = EventUtility;
+        this.DISPLAY_MODE_LIST = "LIST";
+        this.DISPLAY_MODE_NONE = "";
+        this.DISPLAY_MODE_INSERT = "INSERT";
+        this.DISPLAY_MODE_UPDATE = "UPDATE";
+        this.CanExecuteSaveCommand = function () {
+            return this.Project != null && this.IsInInsertMode() && !this.isBusy && this.canSave;
+        };
+        this.displayMode = this.DISPLAY_MODE_NONE;
+        this.isNew = false;
+        this.Project = null;
+        this.AllPhases = [];
+        this.AllTypes = [];
+        this.AllStatuses = [];
+        this.isBusy = false;
+        this.canSave = true;
+        this.canEdit = true;
+        this.Project = new ProjectModel_1.default(null);
+        this.LoadPhases();
+        this.LoadTypes();
+        this.LoadStatuses();
+    }
+    ProjectTrackerDetailRecordViewModel.prototype.RaiseSelected = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_DETAIL_RECORD_SELECTED, Message);
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.RaiseSaved = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_DETAIL_RECORD_SAVED, Message);
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.RaiseDeleted = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_DETAIL_RECORD_DELETED, Message);
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.RaiseError = function (Message) {
+        this.EventUtility.RaiseEvent(exports.EVENT_PROJECT_DETAIL_RECORD_ERROR, Message);
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.IsInInsertMode = function () {
+        return this.displayMode === this.DISPLAY_MODE_INSERT;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.IsInUpdateMode = function () {
+        return this.displayMode === this.DISPLAY_MODE_UPDATE;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.SetProject = function (Project) {
+        var _this = this;
+        if (Project.ProjectId != 0) {
+            this.ProjectsDataAccess.Select(Project.ProjectId)
+                .subscribe(function (Result) {
+                Project.Reload(Result);
+                _this.Project = Project;
+                _this.displayMode = _this.DISPLAY_MODE_UPDATE;
+                _this.RaiseSelected("'" + Result.ProjectName + "' was loaded successfully");
+            }, function (error) {
+                _this.RaiseError(error.Message);
+            });
+        }
+        else {
+            this.Project = Project;
+            this.displayMode = this.DISPLAY_MODE_INSERT;
+        }
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.ClearProject = function () {
+        var _this = this;
+        if (this.IsInUpdateMode()) {
+            this.ProjectsDataAccess.Select(this.Project.ProjectId)
+                .subscribe(function (Result) {
+                _this.Project.Reload(Result);
+                _this.Project = null;
+            });
+        }
+        else {
+            this.Project = null;
+        }
+        this.displayMode = this.DISPLAY_MODE_NONE;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.IsBusy = function () {
+        return this.isBusy;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.CanExecuteEditCommand = function () {
+        return this.Project != null && this.IsInUpdateMode() && !this.isBusy && this.canEdit;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.SaveCommand = function (form) {
+        if ((this.CanExecuteSaveCommand() || this.CanExecuteEditCommand()) && form.form.valid)
+            this.save();
+    };
+    //TODO: this will change
+    ProjectTrackerDetailRecordViewModel.prototype.save = function () {
+        var _this = this;
+        this.isBusy = true;
+        if (this.isNew) {
+            this.ProjectsDataAccess.Save(this.Project.ToObject())
+                .subscribe(function (Result) {
+                _this.isBusy = false;
+                _this.isNew = false;
+                _this.RaiseSaved("Project saved successfully");
+                _this.displayMode = _this.DISPLAY_MODE_LIST;
+            }, function (Error) {
+                _this.isBusy = false;
+                _this.RaiseError("an error occurred");
+            });
+        }
+        else {
+            this.ProjectsDataAccess.Update(this.Project.ToObject())
+                .subscribe(function (Result) {
+                _this.isBusy = false;
+                _this.RaiseSaved("Project saved successfully");
+                _this.displayMode = _this.DISPLAY_MODE_LIST;
+            }, function (Error) {
+                _this.isBusy = false;
+                _this.RaiseError("an error occurred");
+            });
+        }
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.CanExecuteResetCommand = function () {
+        return this.Project != null && (this.IsInInsertMode() || this.IsInUpdateMode()) && !this.isBusy;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.ResetCommand = function () {
+        var _this = this;
+        if (this.CanExecuteResetCommand()) {
+            if (this.IsInUpdateMode()) {
+                this.isBusy = true;
+                this.ProjectsDataAccess.Select(this.Project.ProjectId)
+                    .subscribe(function (Result) {
+                    _this.isBusy = false;
+                    _this.Project.Reload(Result);
+                    _this.RaiseSelected("Project reloaded.");
+                }, function (error) {
+                    _this.RaiseError(error.Message);
+                });
+            }
+            else if (this.IsInInsertMode()) {
+                this.Project.Clear();
+            }
+        }
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.LoadPhases = function () {
+        var _this = this;
+        this.AllPhases.length = 0;
+        this.isBusy = true;
+        this.ProjectPhasesDataAccess.SelectAll()
+            .subscribe(function (result) {
+            for (var i = 0; i < result.value.length; i++) {
+                _this.AllPhases.push(new PhaseModel_1.default(result.value[i]));
+            }
+        }, function (error) {
+            _this.RaiseError(error.Message);
+        });
+        this.isBusy = false;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.LoadTypes = function () {
+        var _this = this;
+        this.AllTypes.length = 0;
+        this.isBusy = true;
+        this.ProjectTypesDataAccess.SelectAll()
+            .subscribe(function (result) {
+            for (var i = 0; i < result.value.length; i++) {
+                _this.AllTypes.push(new TypeModel_1.default(result.value[i]));
+            }
+        }, function (error) {
+            _this.RaiseError(error.Message);
+        });
+        this.isBusy = false;
+    };
+    ProjectTrackerDetailRecordViewModel.prototype.LoadStatuses = function () {
+        var _this = this;
+        this.AllTypes.length = 0;
+        this.isBusy = true;
+        this.ProjectStatusesDataAccess.SelectAll()
+            .subscribe(function (result) {
+            for (var i = 0; i < result.value.length; i++) {
+                _this.AllStatuses.push(new StatusModel_1.default(result.value[i]));
+            }
+        }, function (error) {
+            _this.RaiseError(error.Message);
+        });
+        this.isBusy = false;
+    };
+    ProjectTrackerDetailRecordViewModel = __decorate([
+        core_1.Injectable(),
+        __param(0, core_1.Inject(ProjectsDataAccess_service_1.ProjectsDataAccess)), __param(1, core_1.Inject(ProjectStatusesDataAccess_service_1.ProjectStatusesDataAccess)), __param(2, core_1.Inject(ProjectPhasesDataAccess_service_1.ProjectPhasesDataAccess)), __param(3, core_1.Inject(ProjectTypesDataAccess_service_1.ProjectTypesDataAccess)), __param(4, core_1.Inject(EventUtility_service_1.EventUtility)),
+        __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    ], ProjectTrackerDetailRecordViewModel);
+    return ProjectTrackerDetailRecordViewModel;
+}());
+exports.ProjectTrackerDetailRecordViewModel = ProjectTrackerDetailRecordViewModel;
+
+
+/***/ }),
 /* 102 */,
 /* 103 */,
 /* 104 */,
@@ -7095,7 +7692,12 @@ return jQuery;
 /* 121 */,
 /* 122 */,
 /* 123 */,
-/* 124 */
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -7107,11 +7709,11 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 125 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(62)
+	__webpack_require__(63)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( fnToString ) {
 	"use strict";
 
@@ -7121,11 +7723,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 126 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(41)
+	__webpack_require__(40)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( cssExpand ) {
 	"use strict";
 
@@ -7135,12 +7737,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 127 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(128)
+	__webpack_require__(133)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, Sizzle ) {
 
 "use strict";
@@ -7161,7 +7763,7 @@ jQuery.escapeSelector = Sizzle.escape;
 
 
 /***/ }),
-/* 128 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -9440,7 +10042,7 @@ if ( true ) {
 
 
 /***/ }),
-/* 129 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -9460,7 +10062,7 @@ jQuery.readyException = function( error ) {
 
 
 /***/ }),
-/* 130 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -9489,7 +10091,7 @@ return function( elem, dir, until ) {
 
 
 /***/ }),
-/* 131 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -9513,7 +10115,7 @@ return function( n, elem ) {
 
 
 /***/ }),
-/* 132 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -9541,15 +10143,15 @@ jQuery.Deferred.exceptionHook = function( error, stack ) {
 
 
 /***/ }),
-/* 133 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(11),
+	__webpack_require__(12),
 	__webpack_require__(22),
-	__webpack_require__(5),
-	__webpack_require__(73)
+	__webpack_require__(6),
+	__webpack_require__(74)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, access, camelCase, dataPriv, dataUser ) {
 
 "use strict";
@@ -9728,13 +10330,13 @@ return jQuery;
 
 
 /***/ }),
-/* 134 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(46),
-	__webpack_require__(47) // Delay is optional because of this dependency
+	__webpack_require__(45),
+	__webpack_require__(46) // Delay is optional because of this dependency
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery ) {
 
 "use strict";
@@ -9759,13 +10361,13 @@ return jQuery.fn.delay;
 
 
 /***/ }),
-/* 135 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(5),
-	__webpack_require__(74)
+	__webpack_require__(6),
+	__webpack_require__(75)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, dataPriv, isHiddenWithinTree ) {
 
 "use strict";
@@ -9871,12 +10473,12 @@ return showHide;
 
 
 /***/ }),
-/* 136 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(2),
-	__webpack_require__(10)
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( document, support ) {
 
 "use strict";
@@ -9913,7 +10515,7 @@ return support;
 
 
 /***/ }),
-/* 137 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -10043,15 +10645,15 @@ jQuery.fx.step = {};
 
 
 /***/ }),
-/* 138 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(139),
-	__webpack_require__(82),
-	__webpack_require__(140),
-	__webpack_require__(141)
+	__webpack_require__(144),
+	__webpack_require__(83),
+	__webpack_require__(145),
+	__webpack_require__(146)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery ) {
 
 "use strict";
@@ -10063,15 +10665,15 @@ return jQuery;
 
 
 /***/ }),
-/* 139 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(11),
 	__webpack_require__(12),
-	__webpack_require__(48),
-	__webpack_require__(6),
+	__webpack_require__(13),
+	__webpack_require__(47),
+	__webpack_require__(7),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, access, nodeName, support, rnothtmlwhite ) {
 
@@ -10211,16 +10813,16 @@ jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) 
 
 
 /***/ }),
-/* 140 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(49),
+	__webpack_require__(48),
 	__webpack_require__(1),
+	__webpack_require__(7),
 	__webpack_require__(6),
-	__webpack_require__(5),
-	__webpack_require__(4)
+	__webpack_require__(5)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, stripAndCollapse, isFunction, rnothtmlwhite, dataPriv ) {
 
 "use strict";
@@ -10404,17 +11006,17 @@ jQuery.fn.extend( {
 
 
 /***/ }),
-/* 141 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(49),
 	__webpack_require__(48),
-	__webpack_require__(12),
+	__webpack_require__(47),
+	__webpack_require__(13),
 	__webpack_require__(1),
 
-	__webpack_require__(4)
+	__webpack_require__(5)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, stripAndCollapse, support, nodeName, isFunction ) {
 
 "use strict";
@@ -10602,16 +11204,16 @@ jQuery.each( [ "radio", "checkbox" ], function() {
 
 
 /***/ }),
-/* 142 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(5),
-	__webpack_require__(143),
+	__webpack_require__(6),
+	__webpack_require__(148),
 
 	__webpack_require__(17),
-	__webpack_require__(50)
+	__webpack_require__(49)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, dataPriv, support ) {
 
 "use strict";
@@ -10664,11 +11266,11 @@ return jQuery;
 
 
 /***/ }),
-/* 143 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(10)
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( support ) {
 
 "use strict";
@@ -10682,7 +11284,7 @@ return support;
 
 
 /***/ }),
-/* 144 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -10712,7 +11314,7 @@ return jQuery._evalUrl;
 
 
 /***/ }),
-/* 145 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
@@ -10724,7 +11326,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 
 
 /***/ }),
-/* 146 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -10761,13 +11363,13 @@ return jQuery.parseXML;
 
 
 /***/ }),
-/* 147 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(1),
-	__webpack_require__(4),
+	__webpack_require__(5),
 	__webpack_require__(28), // clone
 	__webpack_require__(16) // parent, contents
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, isFunction ) {
@@ -10846,7 +11448,7 @@ return jQuery;
 
 
 /***/ }),
-/* 148 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -10868,12 +11470,12 @@ jQuery.expr.pseudos.visible = function( elem ) {
 
 
 /***/ }),
-/* 149 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(10),
+	__webpack_require__(11),
 	__webpack_require__(18)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, support ) {
 
@@ -11045,7 +11647,7 @@ jQuery.ajaxTransport( function( options ) {
 
 
 /***/ }),
-/* 150 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -11129,14 +11731,14 @@ jQuery.ajaxTransport( "script", function( s ) {
 
 
 /***/ }),
-/* 151 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(1),
+	__webpack_require__(85),
 	__webpack_require__(84),
-	__webpack_require__(83),
 	__webpack_require__(18)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, isFunction, nonce, rquery ) {
 
@@ -11239,14 +11841,14 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 
 /***/ }),
-/* 152 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(49),
+	__webpack_require__(48),
 	__webpack_require__(1),
-	__webpack_require__(153),
+	__webpack_require__(158),
 	__webpack_require__(18),
 	__webpack_require__(16),
 	__webpack_require__(28),
@@ -11323,17 +11925,17 @@ jQuery.fn.load = function( url, params, callback ) {
 
 
 /***/ }),
-/* 153 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(68),
-	__webpack_require__(75),
+	__webpack_require__(69),
+	__webpack_require__(76),
 
 	// This is the only module that needs core/support
-	__webpack_require__(154)
+	__webpack_require__(159)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, document, rsingleTag, buildFragment, support ) {
 
 "use strict";
@@ -11395,12 +11997,12 @@ return jQuery.parseHTML;
 
 
 /***/ }),
-/* 154 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(2),
-	__webpack_require__(10)
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( document, support ) {
 
 "use strict";
@@ -11422,7 +12024,7 @@ return support;
 
 
 /***/ }),
-/* 155 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -11451,13 +12053,13 @@ jQuery.each( [
 
 
 /***/ }),
-/* 156 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(3),
-	__webpack_require__(47)
+	__webpack_require__(46)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery ) {
 
 "use strict";
@@ -11473,21 +12075,21 @@ jQuery.expr.pseudos.animated = function( elem ) {
 
 
 /***/ }),
-/* 157 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(11),
+	__webpack_require__(12),
 	__webpack_require__(2),
-	__webpack_require__(43),
-	__webpack_require__(1),
-	__webpack_require__(40),
-	__webpack_require__(65),
-	__webpack_require__(67),
 	__webpack_require__(42),
+	__webpack_require__(1),
+	__webpack_require__(39),
+	__webpack_require__(66),
+	__webpack_require__(68),
+	__webpack_require__(41),
 	__webpack_require__(21),
-	__webpack_require__(4),
+	__webpack_require__(5),
 	__webpack_require__(19),
 	__webpack_require__(3) // contains
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, access, document, documentElement, isFunction, rnumnonpx,
@@ -11713,12 +12315,12 @@ return jQuery;
 
 
 /***/ }),
-/* 158 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(11),
+	__webpack_require__(12),
 	__webpack_require__(21),
 	__webpack_require__(19)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, access, isWindow ) {
@@ -11777,19 +12379,19 @@ return jQuery;
 
 
 /***/ }),
-/* 159 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12),
+	__webpack_require__(13),
 	__webpack_require__(22),
 	__webpack_require__(14),
 	__webpack_require__(1),
 	__webpack_require__(21),
 	__webpack_require__(27),
 
-	__webpack_require__(160)
+	__webpack_require__(165)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery, nodeName, camelCase, toType, isFunction, isWindow, slice ) {
 
 "use strict";
@@ -11882,14 +12484,14 @@ jQuery.isNumeric = function( obj ) {
 
 
 /***/ }),
-/* 160 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 
 	__webpack_require__(17),
-	__webpack_require__(50)
+	__webpack_require__(49)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = function( jQuery ) {
 
 "use strict";
@@ -11918,7 +12520,7 @@ jQuery.fn.extend( {
 
 
 /***/ }),
-/* 161 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -11952,7 +12554,7 @@ if ( true ) {
 
 
 /***/ }),
-/* 162 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -11991,101 +12593,70 @@ if ( !noGlobal ) {
 }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
-/* 163 */,
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */,
-/* 176 */,
-/* 177 */,
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__(13);
-var EventUtility = /** @class */ (function () {
-    function EventUtility() {
-        this.allSubscribers = {};
+var PhaseModel = /** @class */ (function () {
+    function PhaseModel(Phase) {
+        this.ProjectPhaseId = Phase.ProjectPhaseId;
+        this.ProjectPhaseName = Phase.ProjectPhaseName;
+        this.ProjectPhaseDescription = Phase.ProjectPhaseDescription;
     }
-    EventUtility.prototype.Subscribe = function (EventName, CallBack) {
-        if (!this.allSubscribers[EventName]) {
-            this.allSubscribers[EventName] = [];
-        }
-        this.allSubscribers[EventName].push(CallBack);
-    };
-    EventUtility.prototype.RaiseEvent = function (EventName, p1, p2, p3, p4, p5) {
-        if (this.allSubscribers[EventName]) {
-            var subscribers = this.allSubscribers[EventName];
-            var i = 0;
-            var n = subscribers.length;
-            while (i < n) {
-                var callBack = subscribers[i];
-                callBack(p1, p2, p3, p4, p5);
-                i++;
-            }
-        }
-    };
-    EventUtility = __decorate([
-        core_1.Injectable(),
-        __metadata("design:paramtypes", [])
-    ], EventUtility);
-    return EventUtility;
+    return PhaseModel;
 }());
-exports.EventUtility = EventUtility;
+exports.default = PhaseModel;
 
 
 /***/ }),
-/* 201 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__(13);
+var StatusModel = /** @class */ (function () {
+    function StatusModel(Status) {
+        this.ProjectStatusId = Status.ProjectStatusId;
+        this.ProjectStatusName = Status.ProjectStatusName;
+        this.ProjectStatusDescription = Status.ProjectStatusDescription;
+    }
+    return StatusModel;
+}());
+exports.default = StatusModel;
+
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TypeModel = /** @class */ (function () {
+    function TypeModel(Type) {
+        this.ProjectTypeId = Type.ProjectTypeId;
+        this.ProjectTypeName = Type.ProjectTypeName;
+        this.ProjectTypeDescription = Type.ProjectTypeDescription;
+    }
+    return TypeModel;
+}());
+exports.default = TypeModel;
+
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(4);
 core_1.Injectable();
 var GridUtility = /** @class */ (function () {
     function GridUtility() {
@@ -12231,13 +12802,13 @@ exports.GridUtility = GridUtility;
 
 
 /***/ }),
-/* 202 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__(13);
+var core_1 = __webpack_require__(4);
 core_1.Injectable();
 var PageQuantityUtility = /** @class */ (function () {
     function PageQuantityUtility() {
@@ -12256,12 +12827,437 @@ exports.PageQuantityUtility = PageQuantityUtility;
 
 
 /***/ }),
+/* 173 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var baseUrl_1 = __webpack_require__(100);
+var http_1 = __webpack_require__(51);
+var core_1 = __webpack_require__(4);
+var ProjectStatusesDataAccess = /** @class */ (function () {
+    function ProjectStatusesDataAccess(http) {
+        this.http = http;
+        var rootUrl = baseUrl_1.default();
+        this.odataUrl = rootUrl + "odata/ProjectStatuses";
+    }
+    ProjectStatusesDataAccess.prototype.SelectAll = function () {
+        return this.http.get(this.odataUrl);
+    };
+    ProjectStatusesDataAccess.prototype.Select = function (key) {
+        return this.http.get(this.odataUrl + '(' + key + ')');
+    };
+    ProjectStatusesDataAccess = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.HttpClient])
+    ], ProjectStatusesDataAccess);
+    return ProjectStatusesDataAccess;
+}());
+exports.ProjectStatusesDataAccess = ProjectStatusesDataAccess;
+
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var baseUrl_1 = __webpack_require__(100);
+var core_1 = __webpack_require__(4);
+var http_1 = __webpack_require__(51);
+var ProjectTypesDataAccess = /** @class */ (function () {
+    function ProjectTypesDataAccess(http) {
+        this.http = http;
+        var rootUrl = baseUrl_1.default();
+        this.odataUrl = rootUrl + "odata/ProjectTypes";
+    }
+    ProjectTypesDataAccess.prototype.SelectAll = function () {
+        return this.http.get(this.odataUrl);
+    };
+    ProjectTypesDataAccess.prototype.Select = function (key) {
+        return this.http.get(this.odataUrl + '(' + key + ')');
+    };
+    ProjectTypesDataAccess = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.HttpClient])
+    ], ProjectTypesDataAccess);
+    return ProjectTypesDataAccess;
+}());
+exports.ProjectTypesDataAccess = ProjectTypesDataAccess;
+
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var baseUrl_1 = __webpack_require__(100);
+var http_1 = __webpack_require__(51);
+var core_1 = __webpack_require__(4);
+var ProjectPhasesDataAccess = /** @class */ (function () {
+    function ProjectPhasesDataAccess(http) {
+        this.http = http;
+        var rootUrl = baseUrl_1.default();
+        this.odataUrl = rootUrl + "odata/ProjectPhases";
+    }
+    ProjectPhasesDataAccess.prototype.SelectAll = function () {
+        return this.http.get(this.odataUrl);
+    };
+    ProjectPhasesDataAccess.prototype.Select = function (key) {
+        return this.http.get(this.odataUrl + '(' + key + ')');
+    };
+    ProjectPhasesDataAccess = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.HttpClient])
+    ], ProjectPhasesDataAccess);
+    return ProjectPhasesDataAccess;
+}());
+exports.ProjectPhasesDataAccess = ProjectPhasesDataAccess;
+
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ProjectTrackerDetailRecordViewModel_service_1 = __webpack_require__(101);
+var core_1 = __webpack_require__(4);
+var ProjectTrackerDetailViewModel = /** @class */ (function () {
+    function ProjectTrackerDetailViewModel(Record) {
+        this.Record = Record;
+        this.DISPLAY_MODE_NONE = "NONE";
+        this.DISPLAY_MODE_RECORD = "RECORD";
+        this.displayMode = this.DISPLAY_MODE_NONE;
+        this.Project = null;
+    }
+    ProjectTrackerDetailViewModel.prototype.IsInRecordMode = function () {
+        return this.displayMode == this.DISPLAY_MODE_RECORD;
+    };
+    ProjectTrackerDetailViewModel.prototype.IsBusy = function () {
+        return this.Record.IsBusy();
+    };
+    ProjectTrackerDetailViewModel.prototype.SetProject = function (Project) {
+        this.Project = Project;
+        this.Record.SetProject(Project);
+        this.displayMode = this.DISPLAY_MODE_RECORD;
+    };
+    ProjectTrackerDetailViewModel.prototype.ClearProject = function () {
+        this.Project = null;
+        this.Record.ClearProject();
+        this.displayMode = this.DISPLAY_MODE_RECORD;
+    };
+    ProjectTrackerDetailViewModel.prototype.CanExecuteRecordCommand = function () {
+        return this.Project != null && !this.IsInRecordMode() && !this.IsBusy();
+    };
+    ProjectTrackerDetailViewModel.prototype.RecordCommand = function () {
+        if (this.CanExecuteRecordCommand()) {
+            this.Record.SetProject(this.Project);
+            this.displayMode = this.DISPLAY_MODE_RECORD;
+        }
+    };
+    ProjectTrackerDetailViewModel = __decorate([
+        core_1.Injectable(),
+        __param(0, core_1.Inject(ProjectTrackerDetailRecordViewModel_service_1.ProjectTrackerDetailRecordViewModel)),
+        __metadata("design:paramtypes", [Object])
+    ], ProjectTrackerDetailViewModel);
+    return ProjectTrackerDetailViewModel;
+}());
+exports.ProjectTrackerDetailViewModel = ProjectTrackerDetailViewModel;
+
+
+/***/ }),
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
 /* 203 */,
 /* 204 */,
 /* 205 */,
 /* 206 */,
-/* 207 */,
-/* 208 */,
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__(4);
+var ProjectTrackerListViewModel_service_1 = __webpack_require__(98);
+var EventUtility_service_1 = __webpack_require__(52);
+var GridUtility_service_1 = __webpack_require__(171);
+var PageQuantityUtility_service_1 = __webpack_require__(172);
+var ProjectTrackerAdminViewModel_service_1 = __webpack_require__(208);
+var ProjectTrackerListViewModel_service_2 = __webpack_require__(98);
+var ProjectTrackerDetailViewModel_service_1 = __webpack_require__(176);
+var ProjectTrackerDetailRecordViewModel_service_1 = __webpack_require__(101);
+var ProjectsDataAccess_service_1 = __webpack_require__(99);
+var ProjectStatusesDataAccess_service_1 = __webpack_require__(173);
+var ProjectTypesDataAccess_service_1 = __webpack_require__(174);
+var ProjectPhasesDataAccess_service_1 = __webpack_require__(175);
+var ProjectTrackerComponent = /** @class */ (function () {
+    function ProjectTrackerComponent(viewModel, EventUtility, projectGrid, projectPageQuantity) {
+        var _this = this;
+        this.viewModel = viewModel;
+        this.EventUtility = EventUtility;
+        this.projectGrid = projectGrid;
+        this.projectPageQuantity = projectPageQuantity;
+        this.isHidden = this.viewModel.Message === '';
+        this.isErrorHidden = this.viewModel.ErrorMessage === '';
+        this.projectGrid.ItemsPerPage = this.projectPageQuantity.GetDefaultPageQuantity(50).toString();
+        EventUtility.Subscribe(ProjectTrackerListViewModel_service_1.EVENT_PROJECT_LIST_LOADED, function (Message, AllProjects) {
+            _this.projectGrid.SetNumberOfItems(AllProjects.length);
+        });
+        // this.$watch('filteredProjects', function (filteredProjects) {
+        //     if (filteredProjects != undefined && this.projectGridFilter !== undefined) {
+        //         if (this.projectGridFilter !== "") {
+        //             this.projectGrid.SetNumberOfItems(this.filteredProjects.length);
+        //             this.viewModel.Message = this.filteredProjects.length + " project(s) were found.";
+        //         }
+        //         else {
+        //             this.projectGrid.SetNumberOfItems(this.viewModel.List.AllProjects.length);
+        //             this.viewModel.Message = this.viewModel.List.AllProjects.length + " project(s) were found.";
+        //         }
+        //     }
+        // }, true);
+    }
+    ProjectTrackerComponent.prototype.IsFormValid = function (isValid) {
+        if (!isValid)
+            return "radioInvalid";
+        else
+            return "";
+    };
+    ProjectTrackerComponent = __decorate([
+        core_1.Component({
+            selector: 'project-tracker',
+            template: __webpack_require__(300),
+            providers: [
+                ProjectTrackerAdminViewModel_service_1.ProjectTrackerAdminViewModel,
+                ProjectTrackerListViewModel_service_2.ProjectTrackerListViewModel,
+                ProjectTrackerDetailViewModel_service_1.ProjectTrackerDetailViewModel,
+                ProjectTrackerDetailRecordViewModel_service_1.ProjectTrackerDetailRecordViewModel,
+                ProjectsDataAccess_service_1.ProjectsDataAccess,
+                ProjectStatusesDataAccess_service_1.ProjectStatusesDataAccess,
+                ProjectTypesDataAccess_service_1.ProjectTypesDataAccess,
+                ProjectPhasesDataAccess_service_1.ProjectPhasesDataAccess
+            ]
+        }),
+        __param(0, core_1.Inject(ProjectTrackerAdminViewModel_service_1.ProjectTrackerAdminViewModel)), __param(1, core_1.Inject(EventUtility_service_1.EventUtility)), __param(2, core_1.Inject(GridUtility_service_1.GridUtility)), __param(3, core_1.Inject(PageQuantityUtility_service_1.PageQuantityUtility)),
+        __metadata("design:paramtypes", [Object, Object, Object, Object])
+    ], ProjectTrackerComponent);
+    return ProjectTrackerComponent;
+}());
+exports.ProjectTrackerComponent = ProjectTrackerComponent;
+
+
+/***/ }),
+/* 208 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ProjectModel_1 = __webpack_require__(97);
+var ProjectTrackerDetailRecordViewModel_service_1 = __webpack_require__(101);
+var ProjectTrackerListViewModel_service_1 = __webpack_require__(98);
+var core_1 = __webpack_require__(4);
+var ProjectTrackerDetailViewModel_service_1 = __webpack_require__(176);
+var EventUtility_service_1 = __webpack_require__(52);
+var ProjectTrackerAdminViewModel = /** @class */ (function () {
+    function ProjectTrackerAdminViewModel(List, Detail, EventUtility) {
+        var _this = this;
+        this.List = List;
+        this.Detail = Detail;
+        this.EventUtility = EventUtility;
+        this.DISPLAY_MODE_NONE = "";
+        this.DISPLAY_MODE_LIST = "LIST";
+        this.DISPLAY_MODE_DETAIL = "DETAIL";
+        this.ProjectList_Loaded = function (Message) {
+            _this.SetMessage(Message);
+            if (_this.displayMode == _this.DISPLAY_MODE_NONE) {
+                _this.displayMode = _this.DISPLAY_MODE_LIST;
+            }
+        };
+        this.ProjectList_Error = function (Message) {
+            _this.SetErrorMessage(Message);
+        };
+        this.ProjectDetailRecord_Selected = function (Message) {
+            _this.SetMessage(Message);
+        };
+        this.ProjectDetailRecord_Saved = function (Message) {
+            _this.SetMessage(Message);
+            _this.reloadList = true;
+            _this.Detail.ClearProject();
+            _this.displayMode = _this.DISPLAY_MODE_LIST;
+        };
+        this.ProjectDetailRecord_Deleted = function (Message) {
+            _this.reloadList = true;
+            _this.CloseCommand(Message);
+        };
+        this.ProjectDetail_Error = function (Message) {
+            _this.SetErrorMessage(Message);
+        };
+        this.displayMode = this.DISPLAY_MODE_NONE;
+        this.reloadList = false;
+        this.Message = "Loading...";
+        this.ErrorMessage = "";
+        this.canSave = true;
+        this.canEdit = true;
+        this.EventUtility.Subscribe(ProjectTrackerListViewModel_service_1.EVENT_PROJECT_LIST_LOADED, this.ProjectList_Loaded);
+        this.EventUtility.Subscribe(ProjectTrackerListViewModel_service_1.EVENT_PROJECT_LIST_ERROR, this.ProjectList_Error);
+        this.EventUtility.Subscribe(ProjectTrackerDetailRecordViewModel_service_1.EVENT_PROJECT_DETAIL_RECORD_SELECTED, this.ProjectDetailRecord_Selected);
+        this.EventUtility.Subscribe(ProjectTrackerDetailRecordViewModel_service_1.EVENT_PROJECT_DETAIL_RECORD_SAVED, this.ProjectDetailRecord_Saved);
+        this.EventUtility.Subscribe(ProjectTrackerDetailRecordViewModel_service_1.EVENT_PROJECT_DETAIL_RECORD_DELETED, this.ProjectDetailRecord_Deleted);
+        this.EventUtility.Subscribe(ProjectTrackerDetailRecordViewModel_service_1.EVENT_PROJECT_DETAIL_RECORD_ERROR, this.ProjectDetail_Error);
+    }
+    ProjectTrackerAdminViewModel.prototype.IsInListMode = function () { return this.displayMode === this.DISPLAY_MODE_LIST; };
+    ProjectTrackerAdminViewModel.prototype.IsInDetailMode = function () { return this.displayMode === this.DISPLAY_MODE_DETAIL; };
+    ProjectTrackerAdminViewModel.prototype.SetMessage = function (Message) {
+        this.Message = Message;
+        this.ErrorMessage = "";
+    };
+    ProjectTrackerAdminViewModel.prototype.SetErrorMessage = function (Message) {
+        this.Message = "";
+        this.ErrorMessage = Message;
+    };
+    ProjectTrackerAdminViewModel.prototype.IsBusy = function () {
+        return this.Detail.IsBusy() || this.List.IsBusy();
+    };
+    ProjectTrackerAdminViewModel.prototype.SelectProject = function (Project) {
+        this.Detail.SetProject(Project);
+        this.displayMode = this.DISPLAY_MODE_DETAIL;
+        this.reloadList = false;
+    };
+    ProjectTrackerAdminViewModel.prototype.CanExecuteCloseCommand = function () {
+        return this.IsInDetailMode() && !this.IsBusy();
+    };
+    ProjectTrackerAdminViewModel.prototype.CloseCommand = function (Message) {
+        if (this.CanExecuteCloseCommand()) {
+            this.Detail.ClearProject();
+            this.displayMode = this.DISPLAY_MODE_LIST;
+            if (this.reloadList) {
+                this.List.ReloadCommand(Message);
+                this.reloadList = false;
+            }
+            this.Detail.Record.isNew = false;
+            this.SetMessage(Message);
+        }
+    };
+    ProjectTrackerAdminViewModel.prototype.CanExecuteNewCommand = function () {
+        return this.IsInListMode() && !this.IsBusy() && this.canSave;
+    };
+    ;
+    ProjectTrackerAdminViewModel.prototype.NewCommand = function () {
+        if (this.CanExecuteNewCommand()) {
+            this.Detail.SetProject(new ProjectModel_1.default(null));
+            this.displayMode = this.DISPLAY_MODE_DETAIL;
+            this.SetMessage("A new project was created successfully.");
+            this.Detail.Record.isNew = true;
+        }
+    };
+    ProjectTrackerAdminViewModel.prototype.CanExecuteEditCommand = function () {
+        return this.IsInListMode() && !this.IsBusy() && this.canEdit;
+    };
+    ProjectTrackerAdminViewModel = __decorate([
+        core_1.Injectable(),
+        __param(0, core_1.Inject(ProjectTrackerListViewModel_service_1.ProjectTrackerListViewModel)), __param(1, core_1.Inject(ProjectTrackerDetailViewModel_service_1.ProjectTrackerDetailViewModel)), __param(2, core_1.Inject(EventUtility_service_1.EventUtility)),
+        __metadata("design:paramtypes", [Object, Object, Object])
+    ], ProjectTrackerAdminViewModel);
+    return ProjectTrackerAdminViewModel;
+}());
+exports.ProjectTrackerAdminViewModel = ProjectTrackerAdminViewModel;
+
+
+/***/ }),
 /* 209 */,
 /* 210 */,
 /* 211 */,
@@ -12350,37 +13346,54 @@ exports.PageQuantityUtility = PageQuantityUtility;
 /* 294 */,
 /* 295 */,
 /* 296 */,
-/* 297 */,
-/* 298 */,
-/* 299 */,
-/* 300 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 Object.defineProperty(exports, "__esModule", { value: true });
-var platform_browser_dynamic_1 = __webpack_require__(187);
-var static_1 = __webpack_require__(122);
-var app_module_1 = __webpack_require__(301);
-var EventUtility_service_1 = __webpack_require__(200);
-var GridUtility_service_1 = __webpack_require__(201);
-var PageQuantityUtility_service_1 = __webpack_require__(202);
+var platform_browser_dynamic_1 = __webpack_require__(200);
+var static_1 = __webpack_require__(128);
+var AppModule_1 = __webpack_require__(298);
+var EventUtility_service_1 = __webpack_require__(52);
+var GridUtility_service_1 = __webpack_require__(171);
+var PageQuantityUtility_service_1 = __webpack_require__(172);
+var ProjectTrackerAdminViewModel_service_1 = __webpack_require__(208);
+var ProjectTrackerDetailRecordViewModel_service_1 = __webpack_require__(101);
+var ProjectTrackerDetailViewModel_service_1 = __webpack_require__(176);
+var ProjectTrackerListViewModel_service_1 = __webpack_require__(98);
+var ProjectsDataAccess_service_1 = __webpack_require__(99);
+var ProjectTypesDataAccess_service_1 = __webpack_require__(174);
+var ProjectStatusesDataAccess_service_1 = __webpack_require__(173);
+var ProjectPhasesDataAccess_service_1 = __webpack_require__(175);
+var ProjectTracker_component_1 = __webpack_require__(207);
 var $element = $("#ProjectTrackerApp");
 var element = $element.get(0);
-platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule).then(function (platformRef) {
+platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(AppModule_1.AppModule).then(function (platformRef) {
     angular.module('ProjectTrackerApp')
         .factory('EventUtility', static_1.downgradeInjectable(EventUtility_service_1.EventUtility))
         .factory('GridUtility', static_1.downgradeInjectable(GridUtility_service_1.GridUtility))
-        .factory('PageQuantityUtility', static_1.downgradeInjectable(PageQuantityUtility_service_1.PageQuantityUtility));
+        .factory('PageQuantityUtility', static_1.downgradeInjectable(PageQuantityUtility_service_1.PageQuantityUtility))
+        .factory('ProjectTrackerAdminViewModel', static_1.downgradeInjectable(ProjectTrackerAdminViewModel_service_1.ProjectTrackerAdminViewModel))
+        .factory('ProjectTrackerDetailRecordViewModel', static_1.downgradeInjectable(ProjectTrackerDetailRecordViewModel_service_1.ProjectTrackerDetailRecordViewModel))
+        .factory('ProjectTrackerDetailViewModel', static_1.downgradeInjectable(ProjectTrackerDetailViewModel_service_1.ProjectTrackerDetailViewModel))
+        .factory('ProjectTrackerListViewModel', static_1.downgradeInjectable(ProjectTrackerListViewModel_service_1.ProjectTrackerListViewModel))
+        .factory('ProjectsDataAccess', static_1.downgradeInjectable(ProjectsDataAccess_service_1.ProjectsDataAccess))
+        .factory('ProjectStatusesDataAccess', static_1.downgradeInjectable(ProjectStatusesDataAccess_service_1.ProjectStatusesDataAccess))
+        .factory('ProjectTypesDataAccess', static_1.downgradeInjectable(ProjectTypesDataAccess_service_1.ProjectTypesDataAccess))
+        .factory('ProjectPhasesDataAccess', static_1.downgradeInjectable(ProjectPhasesDataAccess_service_1.ProjectPhasesDataAccess))
+        .directive('projectTracker', static_1.downgradeComponent({
+        component: ProjectTracker_component_1.ProjectTrackerComponent
+    }));
     var upgrade = platformRef.injector.get(static_1.UpgradeModule);
     upgrade.bootstrap(element, ['ProjectTrackerApp']);
     console.log('hybrid app bootstrapped');
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
-/* 301 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12392,15 +13405,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__(13);
-var static_1 = __webpack_require__(122);
-var platform_browser_1 = __webpack_require__(55);
-var forms_1 = __webpack_require__(194);
-var http_1 = __webpack_require__(188);
-var app_component_1 = __webpack_require__(302);
-var EventUtility_service_1 = __webpack_require__(200);
-var GridUtility_service_1 = __webpack_require__(201);
-var PageQuantityUtility_service_1 = __webpack_require__(202);
+var core_1 = __webpack_require__(4);
+var static_1 = __webpack_require__(128);
+var platform_browser_1 = __webpack_require__(56);
+var forms_1 = __webpack_require__(206);
+var http_1 = __webpack_require__(51);
+var app_component_1 = __webpack_require__(299);
+var EventUtility_service_1 = __webpack_require__(52);
+var GridUtility_service_1 = __webpack_require__(171);
+var PageQuantityUtility_service_1 = __webpack_require__(172);
+var ProjectTracker_component_1 = __webpack_require__(207);
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -12413,7 +13427,8 @@ var AppModule = /** @class */ (function () {
                 static_1.UpgradeModule
             ],
             declarations: [
-                app_component_1.AppComponent
+                app_component_1.AppComponent,
+                ProjectTracker_component_1.ProjectTrackerComponent
             ],
             providers: [
                 EventUtility_service_1.EventUtility,
@@ -12423,7 +13438,9 @@ var AppModule = /** @class */ (function () {
             bootstrap: [
                 app_component_1.AppComponent
             ],
-            entryComponents: []
+            entryComponents: [
+                ProjectTracker_component_1.ProjectTrackerComponent
+            ]
         })
     ], AppModule);
     return AppModule;
@@ -12432,7 +13449,7 @@ exports.AppModule = AppModule;
 
 
 /***/ }),
-/* 302 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12444,7 +13461,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__(13);
+var core_1 = __webpack_require__(4);
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
     }
@@ -12459,6 +13476,12 @@ var AppComponent = /** @class */ (function () {
 exports.AppComponent = AppComponent;
 
 
+/***/ }),
+/* 300 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"box-header no-border\" style=\"height: 30px; margin-top: 15px;\">\r\n    <h3 id=\"pagemessage\" class=\"box-title\">Project Tracker</h3>\r\n    <div class=\"alert alert-success pull-right text-black\" [hidden]=\"isHidden\" style=\"margin-left: 5px; margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.Message }}</span>\r\n    </div>\r\n    <div class=\"alert alert-danger pull-right\" [hidden]=\"isErrorHidden\" style=\"margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.ErrorMessage }}</span>\r\n    </div>\r\n</div>\r\n<div class=\"box-body\" *ngIf=\"viewModel.IsInListMode()\">\r\n    <div class=\"col-xs-12\">\r\n        <button id=\"addnew\" event-focus=\"click\" event-focus-id=\"ProjectId\" (click)=\"viewModel.NewCommand()\" *ngIf=\"viewModel.CanExecuteNewCommand()\" class=\"btn btn-primary pull-left\" title=\"Add New Project\">+ Add New Project</button>\r\n        <label class=\"pull-right\" style=\"padding-top: 12px !important;\">\r\n            Items Per Page\r\n            <select id=\"quantity\" (ngModel)=\"projectGrid.ItemsPerPage\" (ngModelChange)=\"projectGrid.FirstCommand()\">\r\n                <option>5</option>\r\n                <option>10</option>\r\n                <option>20</option>\r\n                <option>50</option>\r\n                <option>100</option>\r\n                <option>200</option>\r\n            </select>\r\n        </label>\r\n        <a *ngIf=\"projectGrid.ItemsPerPage > 20\" href=\"#bottom\" target=\"_self\" title=\"Jump to Bottom\" class=\"btn btn-primary\"><span class=\"fa fa-level-down\" style=\"margin: 0px 3px 0px 1px !important; padding: 3px !important;\"></span></a><a name=\"top\"></a>\r\n    </div>\r\n    <table id=\"projects\" class=\"table table-striped table-hover table-responsive no-border\">\r\n        <thead>\r\n            <tr id=\"sortrow\" class=\"bg-info DNABorderBottom\">\r\n                <th class=\"col-xs-3\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectName')\">\r\n                        Project Name\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('StartDate')\">\r\n                        Start Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'StartDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.StartDate\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectEndDate')\">\r\n                        End Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectEndDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectEndDate\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectOwner')\">\r\n                        Project Owner\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectOwner'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectOwner\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectManager')\">\r\n                        Project Manager\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectManager'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectManager\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectPhaseName')\">\r\n                        Project Phase\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectPhaseName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectPhaseName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectStatusName')\">\r\n                        Project Status\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectStatusName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectStatusName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr *ngFor=\"let project of viewModel.List.AllProjects\">\r\n                <td>\r\n                    <a href=\"#\" title=\"View/Edit\" event-focus=\"click\" event-focus-id=\"ProjectName\" (click)=\"viewModel.SelectProject(project)\"><strong>{{ project.ProjectName }}</strong></a>\r\n                </td>\r\n                <td>{{ project.FormattedStartDate() }}</td>\r\n                <td>{{ project.FormattedEndDate() }}</td>\r\n                <td>{{ project.ProjectOwner }}</td>\r\n                <td>{{ project.ProjectManager }}</td>\r\n                <td>{{ project.ProjectPhaseName }}</td>\r\n                <td>{{ project.ProjectStatusName }}</td>\r\n            </tr>\r\n        </tbody>\r\n        <tfoot>\r\n            <tr class=\"bg-info\">\r\n                <th>Project Name</th>\r\n                <th>Start Date</th>\r\n                <th>End Date</th>\r\n                <th>Project Owner</th>\r\n                <th>Project Manager</th>\r\n                <th>Project Phase</th>\r\n                <th>Project Status</th>\r\n            </tr>\r\n        </tfoot>\r\n    </table>\r\n\r\n<!-- \r\n    <div id=\"pagination\" class=\"btn-group pull-right\" style=\"margin-top: 5px !important;\">\r\n        <button (click)=\"projectGrid.FirstCommand()\" [disabled]=\"!projectGrid.CanExecuteFirstCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-fast-backward\"></span> First</button>\r\n        <button (click)=\"projectGrid.PrevCommand()\" [disabled]=\"!projectGrid.CanExecutePrevCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-step-backward\"></span> Prev</button>\r\n        <button (click)=\"projectGrid.LeftEllipseCommand()\" *ngIf=\"projectGrid.CanExecuteLeftEllipseCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-option-horizontal\"></span></button>\r\n        <button *ngFor=\"let n of projectGrid.PageNumbers()\" (click)=\"projectGrid.PageCommand(n)\" [disabled]=\"!projectGrid.CanExecutePageCommand(n)\" (innerHtml)=\"n+1\" class=\"btn btn-default\"></button>\r\n        <button (click)=\"projectGrid.RightEllipseCommand()\" *ngIf=\"projectGrid.CanExecuteRightEllipseCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-option-horizontal\"></span></button>\r\n        <button (click)=\"projectGrid.NextCommand()\" [disabled]=\"!projectGrid.CanExecuteNextCommand()\" class=\"btn btn-default\">Next <span class=\"glyphicon glyphicon-step-forward\"></span></button>\r\n        <button (click)=\"projectGrid.LastCommand()\" [disabled])=\"!projectGrid.CanExecuteLastCommand()\" class=\"btn btn-default\">Last <span class=\"glyphicon glyphicon-fast-forward\"></span></button>\r\n    </div>\r\n-->\r\n</div>\r\n<div *ngIf=\"viewModel.IsInDetailMode()\">\r\n    <div class=\"box-body\">\r\n        <br />\r\n        <div class=\"nav-tabs-custom\">\r\n            <ul class=\"nav nav-tabs\">\r\n                <li id=\"tab1\" [ngClass]=\"viewModel.Detail.IsInRecordMode() ? 'active' : 'bg-gray-light'\"><a href=\"#\" (click)=\"viewModel.Detail.RecordCommand()\" title=\"Project\" [class.disabled]=\"!viewModel.Detail.CanExecuteRecordCommand()\"><strong>Project: </strong>{{viewModel.Detail.Project.ProjectName}}</a></li>\r\n            </ul>\r\n            <div class=\"tab-content\">\r\n                <div class=\"margin\" *ngIf=\"viewModel.Detail.IsInRecordMode()\" id=\"recordform\">\r\n                    <div class=\"col-lg-1\"></div>\r\n                    <div class=\"col-lg-12\" style=\"margin-top: 25px;\">\r\n                        <form #projectForm=\"ngForm\">\r\n                            <div class=\"form-group\">\r\n                                <label>Project Name</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.ProjectName\" type=\"text\" class=\"form-control\" placeholder=\"...\" [disabled]=\"viewModel.Detail.Record.IsInUpdateMode() ? 'disabled' : ''\" id=\"ProjectName\" maxlength=\"50\" required=\"required\" name=\"projectname\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Owner</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectOwner\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"ProjectOwner\" maxlength=\"50\" name=\"ProjectOwner\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Manager</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectManager\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"projectmanager\" maxlength=\"50\" name=\"projectmanager\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Type</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectTypeId\" class=\"form-control\" name=\"projecttype\" id=\"projecttype\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllTypes\" [value]=\"item.ProjectTypeId\">{{ item.ProjectTypeName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Start Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.StartDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectstartdate\" name=\"projectstartdate\" value=\"{{ viewModel.Detail.Record.Project.FormattedStartDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project End Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.ProjectEndDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectenddate\" name=\"projectenddate\" value=\"{{ viewModel.Detail.Record.Project.FormattedEndDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Overall Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.OverallPercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"overallpercentcomplete\" maxlength=\"3\" name=\"percentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Project Phase</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectPhaseId\" class=\"form-control\" name=\"projectphase\" id=\"projectphase\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllPhases\" [value]=\"item.ProjectPhaseId\">{{ item.ProjectPhaseName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Estimated End Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.PhaseEndDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"phaseenddate\" name=\"phaseenddate\" value=\"{{ viewModel.Detail.Record.Project.FormattedPhaseEndDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.PhasePercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"phasepercentcomplete\" maxlength=\"3\" name=\"phasepercentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Status</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectStatusId\"  class=\"form-control\" name=\"projectstatus\" id=\"projectstatus\" required=\"required\" >\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllStatuses\" [value]=\"item.ProjectStatusId\">{{ item.ProjectStatusName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Internal IT Project?</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalyes\" \r\n                                        name=\"internalyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\"\r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalno\" \r\n                                        name=\"internalno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Waiting on Others? (Add Details In Comments)</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingyes\"\r\n                                        name=\"waitingyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingno\" \r\n                                        name=\"waitingno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Comments</label>\r\n                                <textarea [(ngModel)]=\"viewModel.Detail.Record.Project.Comments\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"comments\" maxlength=\"500\" required=\"required\" name=\"comments\"></textarea>\r\n                            </div>\r\n                            <div class=\"form-group\" id=\"formbuttons\">\r\n                                <button id=\"save\" (click)=\"viewModel.Detail.Record.SaveCommand(projectForm)\" *ngIf=\"(viewModel.Detail.Record.CanExecuteSaveCommand() || viewModel.Detail.Record.CanExecuteEditCommand() && projectForm.form.valid)\" type=\"submit\" class=\"btn btn-danger\">Save</button>\r\n                                <button id=\"cancel\" type=\"button\" class=\"btn btn-primary\" (click)=\"viewModel.CloseCommand('Modifications to the project have been cancelled')\" title=\"Close\" [disabled]=\"!viewModel.CanExecuteCloseCommand()\">Cancel</button>\r\n                            </div>\r\n\r\n                        </form>\r\n                    </div>\r\n                    <div class=\"col-lg-1\"></div>\r\n\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
+
 /***/ })
-],[300]);
+],[297]);
 //# sourceMappingURL=app.bundle.js.map

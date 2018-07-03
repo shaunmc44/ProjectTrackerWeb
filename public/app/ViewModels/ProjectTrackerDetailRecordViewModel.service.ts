@@ -1,23 +1,26 @@
-﻿import TypeModel from "../app/Models/TypeModel";
-import StatusModel from "../app/Models/StatusModel";
-import PhaseModel from "../app/Models/PhaseModel";
-import * as angular from "angular";
-
+﻿import TypeModel from "../Models/TypeModel";
+import StatusModel from "../Models/StatusModel";
+import PhaseModel from "../Models/PhaseModel";
+import {EventUtility} from "../Utilities/EventUtility.service";
+import {ProjectsDataAccess} from "../DataAccess/ProjectsDataAccess.service";
+import {ProjectStatusesDataAccess} from "../DataAccess/ProjectStatusesDataAccess.service";
+import {ProjectTypesDataAccess} from "../DataAccess/ProjectTypesDataAccess.service";
+import {ProjectPhasesDataAccess} from "../DataAccess/ProjectPhasesDataAccess.service";
+import ProjectModel, { iProjectModel } from '../Models/ProjectModel';
+import {iPhaseModel} from '../Models/PhaseModel';
+import {iStatusModel} from '../Models/StatusModel';
+import {iTypeModel} from '../Models/TypeModel';
 export var EVENT_PROJECT_DETAIL_RECORD_SELECTED = "ProjectDetailRecord_Selected";
 export var EVENT_PROJECT_DETAIL_RECORD_SAVED = "ProjectDetailRecord_Saved";
 export var EVENT_PROJECT_DETAIL_RECORD_DELETED = "ProjectDetailRecord_Deleted";
 export var EVENT_PROJECT_DETAIL_RECORD_ERROR = "ProjectDetailRecord_Error";
 
-angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel", class ProjectTrackerDetailRecordViewModel {
+import {Injectable, Inject} from "@angular/core";
 
-    ProjectsDataAccess: any;
-    ProjectStatusesDataAccess: any;
-    ProjectPhasesDataAccess: any;
-    ProjectTypesDataAccess: any;
-    EventUtility: any;
-    ProjectTrackerLIstViewModel: any;
+@Injectable()
+export class ProjectTrackerDetailRecordViewModel {
+
     displayMode: string;
-    List: any;
     isNew: boolean;
     Project: any;
     AllPhases: any;
@@ -32,14 +35,9 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
     readonly DISPLAY_MODE_INSERT = "INSERT";
     readonly DISPLAY_MODE_UPDATE = "UPDATE";
 
-    constructor(ProjectsDataAccess, ProjectStatusesDataAccess, ProjectPhasesDataAccess, ProjectTypesDataAccess, EventUtility, ProjectTrackerListViewModel) {
-        this.ProjectsDataAccess = ProjectsDataAccess;
-        this.ProjectStatusesDataAccess = ProjectStatusesDataAccess;
-        this.ProjectPhasesDataAccess = ProjectPhasesDataAccess;
-        this.ProjectTypesDataAccess = ProjectTypesDataAccess;
-        this.EventUtility = EventUtility;
+    constructor(@Inject(ProjectsDataAccess) private ProjectsDataAccess, @Inject(ProjectStatusesDataAccess) private ProjectStatusesDataAccess, @Inject(ProjectPhasesDataAccess) private ProjectPhasesDataAccess, @Inject(ProjectTypesDataAccess) private ProjectTypesDataAccess, @Inject(EventUtility) private EventUtility) {
+        
         this.displayMode = this.DISPLAY_MODE_NONE;
-        this.List = ProjectTrackerListViewModel;
         this.isNew = false;
         this.Project = null;
         this.AllPhases = [];
@@ -48,6 +46,7 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
         this.isBusy = false;
         this.canSave = true;
         this.canEdit = true;
+        this.Project = new ProjectModel(null);
 
 
         this.LoadPhases();
@@ -83,8 +82,9 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
 
     SetProject(Project) {
         if (Project.ProjectId != 0) {
-            this.ProjectsDataAccess.Select({ key: Project.ProjectId }).$promise.then(
-                (Result) => {
+            this.ProjectsDataAccess.Select(Project.ProjectId)
+            .subscribe(
+                (Result: iProjectModel) => {
                     Project.Reload(Result);
                     this.Project = Project;
                     this.displayMode = this.DISPLAY_MODE_UPDATE;
@@ -102,11 +102,10 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
 
     ClearProject() {
         if (this.IsInUpdateMode()) {
-            this.ProjectsDataAccess.Select({ key: this.Project.ProjectId }).$promise.then(
-                (Result) => {
-                    if (Result.Success) {
-                        this.Project.Reload(Result.Data);
-                    }
+            this.ProjectsDataAccess.Select(this.Project.ProjectId)
+            .subscribe(
+                (Result: iProjectModel) => {
+                    this.Project.Reload(Result);
                     this.Project = null;
                 });
         } else {
@@ -129,7 +128,7 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
     }
 
     SaveCommand(form) {
-        if ((this.CanExecuteSaveCommand() || this.CanExecuteEditCommand()) && form.$valid)
+        if ((this.CanExecuteSaveCommand() || this.CanExecuteEditCommand()) && form.form.valid)
             this.save();
     }
 
@@ -139,13 +138,13 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
         this.isBusy = true;
 
         if (this.isNew) {
-            this.ProjectsDataAccess.Save(this.Project.ToObject()).$promise.then(
-                (Result) => {
+            this.ProjectsDataAccess.Save(this.Project.ToObject())
+            .subscribe(
+                (Result: iProjectModel) => {
                     this.isBusy = false;
                     this.isNew = false;
                     this.RaiseSaved("Project saved successfully");
                     this.displayMode = this.DISPLAY_MODE_LIST;
-                    this.List.ReloadCommand("Project saved successfully");
                 },
                 (Error) => {
                     this.isBusy = false;
@@ -153,12 +152,12 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
                 });
         }
         else {
-            this.ProjectsDataAccess.Update(this.Project.ProjectId, this.Project.ToObject()).$promise.then(
-                (Result) => {
+            this.ProjectsDataAccess.Update(this.Project.ToObject())
+            .subscribe(
+                (Result: iProjectModel) => {
                     this.isBusy = false;
                     this.RaiseSaved("Project saved successfully");
                     this.displayMode = this.DISPLAY_MODE_LIST;
-                    this.List.ReloadCommand("Project saved successfully");
                 },
                 (Error) => {
                     this.isBusy = false;
@@ -176,12 +175,13 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
             if (this.IsInUpdateMode()) {
                 this.isBusy = true;
 
-                this.ProjectsDataAccess.Select(this.Project.ProjectId).$promise.then(
-                    (Result) => {
+                this.ProjectsDataAccess.Select(this.Project.ProjectId)
+                .subscribe(
+                    (Result : iProjectModel) => {
                         this.isBusy = false;
 
-                        this.Project.Reload(Result.Data);
-                        this.RaiseSelected(Result.Message);
+                        this.Project.Reload(Result);
+                        this.RaiseSelected("Project reloaded.");
                     }, (error) => {
                         this.RaiseError(error.Message);
                     });
@@ -196,14 +196,11 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
         this.AllPhases.length = 0;
         this.isBusy = true;
 
-        this.ProjectPhasesDataAccess.SelectAll().$promise.then(
-            (result) => {
-                var i = 0;
-                var n = result.value.length;
-
-                while (i < n) {
-                    this.AllPhases.push(new PhaseModel(result.value[i]));
-                    i++;
+        this.ProjectPhasesDataAccess.SelectAll()
+        .subscribe(
+            (result : iPhaseModel[]) => {
+                for(var i = 0;i < (result as any).value.length; i++) {
+                    this.AllPhases.push(new PhaseModel((result as any).value[i]));
                 }
             }, (error) => {
                 this.RaiseError(error.Message);
@@ -216,14 +213,11 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
         this.AllTypes.length = 0;
         this.isBusy = true;
 
-        this.ProjectTypesDataAccess.SelectAll().$promise.then(
-            (result) => {
-                var i = 0;
-                var n = result.value.length;
-
-                while (i < n) {
-                    this.AllTypes.push(new TypeModel(result.value[i]));
-                    i++;
+        this.ProjectTypesDataAccess.SelectAll()
+        .subscribe(
+            (result : iTypeModel[]) => {
+                for(var i = 0;i < (result as any).value.length; i++) {
+                    this.AllTypes.push(new TypeModel((result as any).value[i]));
                 }
             }, (error) => {
                 this.RaiseError(error.Message);
@@ -236,14 +230,11 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
         this.AllTypes.length = 0;
         this.isBusy = true;
 
-        this.ProjectStatusesDataAccess.SelectAll().$promise.then(
-            (result) => {
-                var i = 0;
-                var n = result.value.length;
-
-                while (i < n) {
-                    this.AllStatuses.push(new StatusModel(result.value[i]));
-                    i++;
+        this.ProjectStatusesDataAccess.SelectAll()
+        .subscribe(
+            (result : iStatusModel[]) => {
+                for(var i = 0;i < (result as any).value.length; i++) {
+                    this.AllStatuses.push(new StatusModel((result as any).value[i]));
                 }
             }, (error) => {
                 this.RaiseError(error.Message);
@@ -251,4 +242,4 @@ angular.module("ProjectTrackerApp").service("ProjectTrackerDetailRecordViewModel
 
         this.isBusy = false;
     }
-});
+}

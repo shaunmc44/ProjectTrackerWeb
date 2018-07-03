@@ -1,4 +1,5 @@
 ﻿import { Component } from "@angular/core";
+import { ProjectTrackerAdminViewModel } from "./ViewModels/ProjectTrackerAdminViewModel.service";
 
 @Component({
     selector: 'project-tracker',

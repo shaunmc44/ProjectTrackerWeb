@@ -1,5 +1,23 @@
 ﻿import {DateUtility} from "../Utilities/DateUtility";
 
+export interface iProjectModel {
+    ProjectId: number;
+    ProjectName: string;
+    ProjectTypeId: number;
+    ProjectStatusId: number;
+    IsInternalIT: boolean;
+    ProjectOwner: string;
+    ProjectManager: string;
+    StartDate: Date;
+    ProjectPhaseId: number;
+    PhasePercentComplete: number;
+    PhaseEndDate: Date;
+    OverallPercentComplete: number;
+    ProjectEndDate: Date;
+    IsWaiting: boolean;
+    Comments: string;
+}
+
 export default class ProjectModel {
     ProjectId: number;
     ProjectName: string;
@@ -62,6 +80,9 @@ export default class ProjectModel {
             this.Comments = null;
         }
     }
+    FormattedStartDate(){ this.StartDate !== null && this.StartDate.toISOString().substring(0,10); }
+    FormattedEndDate(){ this.ProjectEndDate !== null && this.ProjectEndDate.toISOString().substring(0,10); }
+    FormattedPhaseEndDate(){ this.PhaseEndDate !== null && this.PhaseEndDate.toISOString().substring(0,10); }
 
     Reload(NewProject) {
         this.ProjectId = NewProject.ProjectId;

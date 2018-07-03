@@ -1,4 +1,10 @@
-﻿export default class TypeModel {
+﻿export interface iTypeModel {
+    ProjectTypeId: number;
+    ProjectTypeName: string;
+    ProjectTypeDescription: string;
+}
+
+export default class TypeModel {
     ProjectTypeId: number;
     ProjectTypeName: string;
     ProjectTypeDescription: string;

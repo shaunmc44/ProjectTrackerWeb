@@ -7105,7 +7105,112 @@ return jQuery;
 
 
 /***/ }),
-/* 87 */,
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DateUtility_1 = __webpack_require__(97);
+var ProjectModel = /** @class */ (function () {
+    function ProjectModel(Project) {
+        this.DateUtility = new DateUtility_1.DateUtility();
+        if (Project !== null) {
+            this.ProjectId = Project.ProjectId;
+            this.ProjectName = Project.ProjectName;
+            this.ProjectTypeId = Project.ProjectTypeId;
+            this.ProjectStatusId = Project.ProjectStatusId;
+            this.IsInternalIT = Project.IsInternalIT;
+            this.ProjectOwner = Project.ProjectOwner;
+            this.ProjectManager = Project.ProjectManager;
+            this.StartDate = Project.StartDate !== null ? new Date(Project.StartDate) : null;
+            this.ProjectPhaseId = Project.ProjectPhaseId;
+            this.PhasePercentComplete = Project.PhasePercentComplete;
+            this.PhaseEndDate = Project.PhaseEndDate !== null ? new Date(Project.PhaseEndDate) : null;
+            this.OverallPercentComplete = Project.OverallPercentComplete;
+            this.ProjectEndDate = Project.ProjectEndDate !== null ? new Date(Project.ProjectEndDate) : null;
+            this.IsWaiting = Project.IsWaiting;
+            this.Comments = Project.Comments;
+            this.ProjectPhaseName = Project.ProjectPhase.ProjectPhaseName;
+            this.ProjectTypeName = Project.ProjectType.ProjectTypeName;
+            this.ProjectStatusName = Project.ProjectStatus.ProjectStatusName;
+        }
+        else {
+            this.ProjectId = 0;
+            this.ProjectName = null;
+            this.ProjectTypeId = 1;
+            this.ProjectStatusId = 1;
+            this.IsInternalIT = null;
+            this.ProjectOwner = null;
+            this.ProjectManager = null;
+            this.StartDate = null;
+            this.ProjectPhaseId = 1;
+            this.PhasePercentComplete = 0;
+            this.PhaseEndDate = null;
+            this.OverallPercentComplete = 0;
+            this.ProjectEndDate = null;
+            this.IsWaiting = null;
+            this.Comments = null;
+        }
+    }
+    ProjectModel.prototype.Reload = function (NewProject) {
+        this.ProjectId = NewProject.ProjectId;
+        this.ProjectName = NewProject.ProjectName;
+        this.ProjectTypeId = NewProject.ProjectTypeId;
+        this.ProjectStatusId = NewProject.ProjectStatusId;
+        this.IsInternalIT = NewProject.IsInternalIT;
+        this.ProjectOwner = NewProject.ProjectOwner;
+        this.ProjectManager = NewProject.ProjectManager;
+        this.StartDate = NewProject.StartDate !== null ? new Date(NewProject.StartDate) : null;
+        this.ProjectPhaseId = NewProject.ProjectPhaseId;
+        this.PhasePercentComplete = NewProject.PhasePercentComplete;
+        this.PhaseEndDate = NewProject.PhaseEndDate !== null ? new Date(NewProject.PhaseEndDate) : null;
+        this.OverallPercentComplete = NewProject.OverallPercentComplete;
+        this.ProjectEndDate = NewProject.ProjectEndDate !== null ? new Date(NewProject.ProjectEndDate) : null;
+        this.IsWaiting = NewProject.IsWaiting;
+        this.Comments = NewProject.Comments;
+    };
+    ProjectModel.prototype.Clear = function () {
+        this.ProjectName = null;
+        this.ProjectTypeId = null;
+        this.ProjectStatusId = null;
+        this.IsInternalIT = null;
+        this.ProjectOwner = null;
+        this.ProjectManager = null;
+        this.StartDate = null;
+        this.ProjectPhaseId = null;
+        this.PhasePercentComplete = null;
+        this.PhaseEndDate = null;
+        this.OverallPercentComplete = null;
+        this.ProjectEndDate = null;
+        this.IsWaiting = null;
+        this.Comments = null;
+    };
+    ProjectModel.prototype.ToObject = function () {
+        return {
+            ProjectId: this.ProjectId,
+            ProjectName: this.ProjectName,
+            ProjectTypeId: this.ProjectTypeId,
+            ProjectStatusId: this.ProjectStatusId,
+            IsInternalIT: this.IsInternalIT === true ? true : false,
+            ProjectOwner: this.ProjectOwner,
+            ProjectManager: this.ProjectManager,
+            StartDate: this.StartDate,
+            ProjectPhaseId: this.ProjectPhaseId,
+            PhasePercentComplete: this.PhasePercentComplete,
+            PhaseEndDate: this.PhaseEndDate,
+            OverallPercentComplete: this.OverallPercentComplete,
+            ProjectEndDate: this.ProjectEndDate,
+            IsWaiting: this.IsWaiting === true ? true : false,
+            Comments: this.Comments
+        };
+    };
+    return ProjectModel;
+}());
+exports.default = ProjectModel;
+
+
+/***/ }),
 /* 88 */,
 /* 89 */,
 /* 90 */,
@@ -7114,7 +7219,8 @@ return jQuery;
 /* 93 */,
 /* 94 */,
 /* 95 */,
-/* 96 */
+/* 96 */,
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7195,115 +7301,6 @@ exports.DateUtility = DateUtility;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var DateUtility_1 = __webpack_require__(96);
-var ProjectModel = /** @class */ (function () {
-    function ProjectModel(Project) {
-        this.DateUtility = new DateUtility_1.DateUtility();
-        if (Project !== null) {
-            this.ProjectId = Project.ProjectId;
-            this.ProjectName = Project.ProjectName;
-            this.ProjectTypeId = Project.ProjectTypeId;
-            this.ProjectStatusId = Project.ProjectStatusId;
-            this.IsInternalIT = Project.IsInternalIT;
-            this.ProjectOwner = Project.ProjectOwner;
-            this.ProjectManager = Project.ProjectManager;
-            this.StartDate = new Date(Project.StartDate);
-            this.ProjectPhaseId = Project.ProjectPhaseId;
-            this.PhasePercentComplete = Project.PhasePercentComplete;
-            this.PhaseEndDate = new Date(Project.PhaseEndDate);
-            this.OverallPercentComplete = Project.OverallPercentComplete;
-            this.ProjectEndDate = new Date(Project.ProjectEndDate);
-            this.IsWaiting = Project.IsWaiting;
-            this.Comments = Project.Comments;
-            this.ProjectPhaseName = Project.ProjectPhase.ProjectPhaseName;
-            this.ProjectTypeName = Project.ProjectType.ProjectTypeName;
-            this.ProjectStatusName = Project.ProjectStatus.ProjectStatusName;
-        }
-        else {
-            this.ProjectId = 0;
-            this.ProjectName = null;
-            this.ProjectTypeId = 1;
-            this.ProjectStatusId = 1;
-            this.IsInternalIT = null;
-            this.ProjectOwner = null;
-            this.ProjectManager = null;
-            this.StartDate = null;
-            this.ProjectPhaseId = 1;
-            this.PhasePercentComplete = 0;
-            this.PhaseEndDate = null;
-            this.OverallPercentComplete = 0;
-            this.ProjectEndDate = null;
-            this.IsWaiting = null;
-            this.Comments = null;
-        }
-    }
-    ProjectModel.prototype.FormattedStartDate = function () { this.StartDate !== null && this.StartDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.FormattedEndDate = function () { this.ProjectEndDate !== null && this.ProjectEndDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.FormattedPhaseEndDate = function () { this.PhaseEndDate !== null && this.PhaseEndDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.Reload = function (NewProject) {
-        this.ProjectId = NewProject.ProjectId;
-        this.ProjectName = NewProject.ProjectName;
-        this.ProjectTypeId = NewProject.ProjectTypeId;
-        this.ProjectStatusId = NewProject.ProjectStatusId;
-        this.IsInternalIT = NewProject.IsInternalIT;
-        this.ProjectOwner = NewProject.ProjectOwner;
-        this.ProjectManager = NewProject.ProjectManager;
-        this.StartDate = new Date(NewProject.StartDate);
-        this.ProjectPhaseId = NewProject.ProjectPhaseId;
-        this.PhasePercentComplete = NewProject.PhasePercentComplete;
-        this.PhaseEndDate = new Date(NewProject.PhaseEndDate);
-        this.OverallPercentComplete = NewProject.OverallPercentComplete;
-        this.ProjectEndDate = new Date(NewProject.ProjectEndDate);
-        this.IsWaiting = NewProject.IsWaiting;
-        this.Comments = NewProject.Comments;
-    };
-    ProjectModel.prototype.Clear = function () {
-        this.ProjectName = null;
-        this.ProjectTypeId = null;
-        this.ProjectStatusId = null;
-        this.IsInternalIT = null;
-        this.ProjectOwner = null;
-        this.ProjectManager = null;
-        this.StartDate = null;
-        this.ProjectPhaseId = null;
-        this.PhasePercentComplete = null;
-        this.PhaseEndDate = null;
-        this.OverallPercentComplete = null;
-        this.ProjectEndDate = null;
-        this.IsWaiting = null;
-        this.Comments = null;
-    };
-    ProjectModel.prototype.ToObject = function () {
-        return {
-            ProjectId: this.ProjectId,
-            ProjectName: this.ProjectName,
-            ProjectTypeId: this.ProjectTypeId,
-            ProjectStatusId: this.ProjectStatusId,
-            IsInternalIT: this.IsInternalIT === true ? true : false,
-            ProjectOwner: this.ProjectOwner,
-            ProjectManager: this.ProjectManager,
-            StartDate: this.StartDate,
-            ProjectPhaseId: this.ProjectPhaseId,
-            PhasePercentComplete: this.PhasePercentComplete,
-            PhaseEndDate: this.PhaseEndDate,
-            OverallPercentComplete: this.OverallPercentComplete,
-            ProjectEndDate: this.ProjectEndDate,
-            IsWaiting: this.IsWaiting === true ? true : false,
-            Comments: this.Comments
-        };
-    };
-    return ProjectModel;
-}());
-exports.default = ProjectModel;
-
-
-/***/ }),
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7322,7 +7319,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ProjectModel_1 = __webpack_require__(97);
+var ProjectModel_1 = __webpack_require__(87);
 var EventUtility_service_1 = __webpack_require__(52);
 var core_1 = __webpack_require__(4);
 var ProjectsDataAccess_service_1 = __webpack_require__(99);
@@ -7473,7 +7470,7 @@ var ProjectsDataAccess_service_1 = __webpack_require__(99);
 var ProjectStatusesDataAccess_service_1 = __webpack_require__(173);
 var ProjectTypesDataAccess_service_1 = __webpack_require__(174);
 var ProjectPhasesDataAccess_service_1 = __webpack_require__(175);
-var ProjectModel_1 = __webpack_require__(97);
+var ProjectModel_1 = __webpack_require__(87);
 exports.EVENT_PROJECT_DETAIL_RECORD_SELECTED = "ProjectDetailRecord_Selected";
 exports.EVENT_PROJECT_DETAIL_RECORD_SAVED = "ProjectDetailRecord_Saved";
 exports.EVENT_PROJECT_DETAIL_RECORD_DELETED = "ProjectDetailRecord_Deleted";
@@ -7491,7 +7488,7 @@ var ProjectTrackerDetailRecordViewModel = /** @class */ (function () {
         this.DISPLAY_MODE_INSERT = "INSERT";
         this.DISPLAY_MODE_UPDATE = "UPDATE";
         this.CanExecuteSaveCommand = function () {
-            return this.Project != null && this.IsInInsertMode() && !this.isBusy && this.canSave;
+            return this.Project.ProjectId != null && this.IsInInsertMode() && !this.isBusy && this.canSave;
         };
         this.displayMode = this.DISPLAY_MODE_NONE;
         this.isNew = false;
@@ -7549,11 +7546,11 @@ var ProjectTrackerDetailRecordViewModel = /** @class */ (function () {
             this.ProjectsDataAccess.Select(this.Project.ProjectId)
                 .subscribe(function (Result) {
                 _this.Project.Reload(Result);
-                _this.Project = null;
+                _this.Project = new ProjectModel_1.default(null);
             });
         }
         else {
-            this.Project = null;
+            this.Project = new ProjectModel_1.default(null);
         }
         this.displayMode = this.DISPLAY_MODE_NONE;
     };
@@ -7561,7 +7558,7 @@ var ProjectTrackerDetailRecordViewModel = /** @class */ (function () {
         return this.isBusy;
     };
     ProjectTrackerDetailRecordViewModel.prototype.CanExecuteEditCommand = function () {
-        return this.Project != null && this.IsInUpdateMode() && !this.isBusy && this.canEdit;
+        return this.Project.ProjectId != null && this.IsInUpdateMode() && !this.isBusy && this.canEdit;
     };
     ProjectTrackerDetailRecordViewModel.prototype.SaveCommand = function (form) {
         if ((this.CanExecuteSaveCommand() || this.CanExecuteEditCommand()) && form.form.valid)
@@ -7596,7 +7593,7 @@ var ProjectTrackerDetailRecordViewModel = /** @class */ (function () {
         }
     };
     ProjectTrackerDetailRecordViewModel.prototype.CanExecuteResetCommand = function () {
-        return this.Project != null && (this.IsInInsertMode() || this.IsInUpdateMode()) && !this.isBusy;
+        return this.Project.ProjectId != null && (this.IsInInsertMode() || this.IsInUpdateMode()) && !this.isBusy;
     };
     ProjectTrackerDetailRecordViewModel.prototype.ResetCommand = function () {
         var _this = this;
@@ -13073,12 +13070,15 @@ var ProjectStatusesDataAccess_service_1 = __webpack_require__(173);
 var ProjectTypesDataAccess_service_1 = __webpack_require__(174);
 var ProjectPhasesDataAccess_service_1 = __webpack_require__(175);
 var ProjectTrackerComponent = /** @class */ (function () {
-    function ProjectTrackerComponent(viewModel, EventUtility, projectGrid, projectPageQuantity) {
+    function ProjectTrackerComponent(viewModel, EventUtility, projectGrid, projectPageQuantity, pagerService) {
         var _this = this;
         this.viewModel = viewModel;
         this.EventUtility = EventUtility;
         this.projectGrid = projectGrid;
         this.projectPageQuantity = projectPageQuantity;
+        this.pagerService = pagerService;
+        // pager object
+        this.pager = {};
         this.isHidden = this.viewModel.Message === '';
         this.isErrorHidden = this.viewModel.ErrorMessage === '';
         this.projectGrid.ItemsPerPage = this.projectPageQuantity.GetDefaultPageQuantity(50).toString();
@@ -13104,6 +13104,12 @@ var ProjectTrackerComponent = /** @class */ (function () {
         else
             return "";
     };
+    ProjectTrackerComponent.prototype.setPage = function (page) {
+        // get pager object from service
+        this.pager = this.pagerService.getPager(this.viewModel.AllProjects.length, page);
+        // get current page of items
+        this.pagedItems = this.viewModel.AllProjects.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    };
     ProjectTrackerComponent = __decorate([
         core_1.Component({
             selector: 'project-tracker',
@@ -13120,7 +13126,7 @@ var ProjectTrackerComponent = /** @class */ (function () {
             ]
         }),
         __param(0, core_1.Inject(ProjectTrackerAdminViewModel_service_1.ProjectTrackerAdminViewModel)), __param(1, core_1.Inject(EventUtility_service_1.EventUtility)), __param(2, core_1.Inject(GridUtility_service_1.GridUtility)), __param(3, core_1.Inject(PageQuantityUtility_service_1.PageQuantityUtility)),
-        __metadata("design:paramtypes", [Object, Object, Object, Object])
+        __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
     ], ProjectTrackerComponent);
     return ProjectTrackerComponent;
 }());
@@ -13146,7 +13152,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ProjectModel_1 = __webpack_require__(97);
+var ProjectModel_1 = __webpack_require__(87);
 var ProjectTrackerDetailRecordViewModel_service_1 = __webpack_require__(101);
 var ProjectTrackerListViewModel_service_1 = __webpack_require__(98);
 var core_1 = __webpack_require__(4);
@@ -13480,7 +13486,7 @@ exports.AppComponent = AppComponent;
 /* 300 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"box-header no-border\" style=\"height: 30px; margin-top: 15px;\">\r\n    <h3 id=\"pagemessage\" class=\"box-title\">Project Tracker</h3>\r\n    <div class=\"alert alert-success pull-right text-black\" [hidden]=\"isHidden\" style=\"margin-left: 5px; margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.Message }}</span>\r\n    </div>\r\n    <div class=\"alert alert-danger pull-right\" [hidden]=\"isErrorHidden\" style=\"margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.ErrorMessage }}</span>\r\n    </div>\r\n</div>\r\n<div class=\"box-body\" *ngIf=\"viewModel.IsInListMode()\">\r\n    <div class=\"col-xs-12\">\r\n        <button id=\"addnew\" event-focus=\"click\" event-focus-id=\"ProjectId\" (click)=\"viewModel.NewCommand()\" *ngIf=\"viewModel.CanExecuteNewCommand()\" class=\"btn btn-primary pull-left\" title=\"Add New Project\">+ Add New Project</button>\r\n        <label class=\"pull-right\" style=\"padding-top: 12px !important;\">\r\n            Items Per Page\r\n            <select id=\"quantity\" (ngModel)=\"projectGrid.ItemsPerPage\" (ngModelChange)=\"projectGrid.FirstCommand()\">\r\n                <option>5</option>\r\n                <option>10</option>\r\n                <option>20</option>\r\n                <option>50</option>\r\n                <option>100</option>\r\n                <option>200</option>\r\n            </select>\r\n        </label>\r\n        <a *ngIf=\"projectGrid.ItemsPerPage > 20\" href=\"#bottom\" target=\"_self\" title=\"Jump to Bottom\" class=\"btn btn-primary\"><span class=\"fa fa-level-down\" style=\"margin: 0px 3px 0px 1px !important; padding: 3px !important;\"></span></a><a name=\"top\"></a>\r\n    </div>\r\n    <table id=\"projects\" class=\"table table-striped table-hover table-responsive no-border\">\r\n        <thead>\r\n            <tr id=\"sortrow\" class=\"bg-info DNABorderBottom\">\r\n                <th class=\"col-xs-3\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectName')\">\r\n                        Project Name\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('StartDate')\">\r\n                        Start Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'StartDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.StartDate\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectEndDate')\">\r\n                        End Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectEndDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectEndDate\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectOwner')\">\r\n                        Project Owner\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectOwner'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectOwner\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectManager')\">\r\n                        Project Manager\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectManager'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectManager\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectPhaseName')\">\r\n                        Project Phase\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectPhaseName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectPhaseName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectStatusName')\">\r\n                        Project Status\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectStatusName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input (ngModel)=\"projectGridFilter.ProjectStatusName\" type=\"search\" (ngModelChange)=\"projectGrid.FirstCommand()\" style=\"width: 100% !important;\" />\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr *ngFor=\"let project of viewModel.List.AllProjects\">\r\n                <td>\r\n                    <a href=\"#\" title=\"View/Edit\" event-focus=\"click\" event-focus-id=\"ProjectName\" (click)=\"viewModel.SelectProject(project)\"><strong>{{ project.ProjectName }}</strong></a>\r\n                </td>\r\n                <td>{{ project.FormattedStartDate() }}</td>\r\n                <td>{{ project.FormattedEndDate() }}</td>\r\n                <td>{{ project.ProjectOwner }}</td>\r\n                <td>{{ project.ProjectManager }}</td>\r\n                <td>{{ project.ProjectPhaseName }}</td>\r\n                <td>{{ project.ProjectStatusName }}</td>\r\n            </tr>\r\n        </tbody>\r\n        <tfoot>\r\n            <tr class=\"bg-info\">\r\n                <th>Project Name</th>\r\n                <th>Start Date</th>\r\n                <th>End Date</th>\r\n                <th>Project Owner</th>\r\n                <th>Project Manager</th>\r\n                <th>Project Phase</th>\r\n                <th>Project Status</th>\r\n            </tr>\r\n        </tfoot>\r\n    </table>\r\n\r\n<!-- \r\n    <div id=\"pagination\" class=\"btn-group pull-right\" style=\"margin-top: 5px !important;\">\r\n        <button (click)=\"projectGrid.FirstCommand()\" [disabled]=\"!projectGrid.CanExecuteFirstCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-fast-backward\"></span> First</button>\r\n        <button (click)=\"projectGrid.PrevCommand()\" [disabled]=\"!projectGrid.CanExecutePrevCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-step-backward\"></span> Prev</button>\r\n        <button (click)=\"projectGrid.LeftEllipseCommand()\" *ngIf=\"projectGrid.CanExecuteLeftEllipseCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-option-horizontal\"></span></button>\r\n        <button *ngFor=\"let n of projectGrid.PageNumbers()\" (click)=\"projectGrid.PageCommand(n)\" [disabled]=\"!projectGrid.CanExecutePageCommand(n)\" (innerHtml)=\"n+1\" class=\"btn btn-default\"></button>\r\n        <button (click)=\"projectGrid.RightEllipseCommand()\" *ngIf=\"projectGrid.CanExecuteRightEllipseCommand()\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-option-horizontal\"></span></button>\r\n        <button (click)=\"projectGrid.NextCommand()\" [disabled]=\"!projectGrid.CanExecuteNextCommand()\" class=\"btn btn-default\">Next <span class=\"glyphicon glyphicon-step-forward\"></span></button>\r\n        <button (click)=\"projectGrid.LastCommand()\" [disabled])=\"!projectGrid.CanExecuteLastCommand()\" class=\"btn btn-default\">Last <span class=\"glyphicon glyphicon-fast-forward\"></span></button>\r\n    </div>\r\n-->\r\n</div>\r\n<div *ngIf=\"viewModel.IsInDetailMode()\">\r\n    <div class=\"box-body\">\r\n        <br />\r\n        <div class=\"nav-tabs-custom\">\r\n            <ul class=\"nav nav-tabs\">\r\n                <li id=\"tab1\" [ngClass]=\"viewModel.Detail.IsInRecordMode() ? 'active' : 'bg-gray-light'\"><a href=\"#\" (click)=\"viewModel.Detail.RecordCommand()\" title=\"Project\" [class.disabled]=\"!viewModel.Detail.CanExecuteRecordCommand()\"><strong>Project: </strong>{{viewModel.Detail.Project.ProjectName}}</a></li>\r\n            </ul>\r\n            <div class=\"tab-content\">\r\n                <div class=\"margin\" *ngIf=\"viewModel.Detail.IsInRecordMode()\" id=\"recordform\">\r\n                    <div class=\"col-lg-1\"></div>\r\n                    <div class=\"col-lg-12\" style=\"margin-top: 25px;\">\r\n                        <form #projectForm=\"ngForm\">\r\n                            <div class=\"form-group\">\r\n                                <label>Project Name</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.ProjectName\" type=\"text\" class=\"form-control\" placeholder=\"...\" [disabled]=\"viewModel.Detail.Record.IsInUpdateMode() ? 'disabled' : ''\" id=\"ProjectName\" maxlength=\"50\" required=\"required\" name=\"projectname\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Owner</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectOwner\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"ProjectOwner\" maxlength=\"50\" name=\"ProjectOwner\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Manager</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectManager\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"projectmanager\" maxlength=\"50\" name=\"projectmanager\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Type</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectTypeId\" class=\"form-control\" name=\"projecttype\" id=\"projecttype\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllTypes\" [value]=\"item.ProjectTypeId\">{{ item.ProjectTypeName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Start Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.StartDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectstartdate\" name=\"projectstartdate\" value=\"{{ viewModel.Detail.Record.Project.FormattedStartDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project End Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.ProjectEndDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectenddate\" name=\"projectenddate\" value=\"{{ viewModel.Detail.Record.Project.FormattedEndDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Overall Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.OverallPercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"overallpercentcomplete\" maxlength=\"3\" name=\"percentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Project Phase</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectPhaseId\" class=\"form-control\" name=\"projectphase\" id=\"projectphase\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllPhases\" [value]=\"item.ProjectPhaseId\">{{ item.ProjectPhaseName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Estimated End Date</label>\r\n                                <input (ngModel)=\"viewModel.Detail.Record.Project.PhaseEndDate\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"phaseenddate\" name=\"phaseenddate\" value=\"{{ viewModel.Detail.Record.Project.FormattedPhaseEndDate() }}\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.PhasePercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"phasepercentcomplete\" maxlength=\"3\" name=\"phasepercentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Status</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectStatusId\"  class=\"form-control\" name=\"projectstatus\" id=\"projectstatus\" required=\"required\" >\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllStatuses\" [value]=\"item.ProjectStatusId\">{{ item.ProjectStatusName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Internal IT Project?</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalyes\" \r\n                                        name=\"internalyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\"\r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalno\" \r\n                                        name=\"internalno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Waiting on Others? (Add Details In Comments)</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingyes\"\r\n                                        name=\"waitingyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingno\" \r\n                                        name=\"waitingno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Comments</label>\r\n                                <textarea [(ngModel)]=\"viewModel.Detail.Record.Project.Comments\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"comments\" maxlength=\"500\" required=\"required\" name=\"comments\"></textarea>\r\n                            </div>\r\n                            <div class=\"form-group\" id=\"formbuttons\">\r\n                                <button id=\"save\" (click)=\"viewModel.Detail.Record.SaveCommand(projectForm)\" *ngIf=\"(viewModel.Detail.Record.CanExecuteSaveCommand() || viewModel.Detail.Record.CanExecuteEditCommand() && projectForm.form.valid)\" type=\"submit\" class=\"btn btn-danger\">Save</button>\r\n                                <button id=\"cancel\" type=\"button\" class=\"btn btn-primary\" (click)=\"viewModel.CloseCommand('Modifications to the project have been cancelled')\" title=\"Close\" [disabled]=\"!viewModel.CanExecuteCloseCommand()\">Cancel</button>\r\n                            </div>\r\n\r\n                        </form>\r\n                    </div>\r\n                    <div class=\"col-lg-1\"></div>\r\n\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
+module.exports = "<div class=\"box-header no-border\" style=\"height: 30px; margin-top: 15px;\">\r\n    <h3 id=\"pagemessage\" class=\"box-title\">Project Tracker</h3>\r\n    <div class=\"alert alert-success pull-right text-black\" [hidden]=\"isHidden\" style=\"margin-left: 5px; margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.Message }}</span>\r\n    </div>\r\n    <div class=\"alert alert-danger pull-right\" [hidden]=\"isErrorHidden\" style=\"margin-bottom: 0 !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 3px !important;  padding-top: 3px !important;\">\r\n        <span>{{ viewModel.ErrorMessage }}</span>\r\n    </div>\r\n</div>\r\n<div class=\"box-body\" *ngIf=\"viewModel.IsInListMode()\">\r\n    <div class=\"col-xs-12\">\r\n        <button id=\"addnew\" event-focus=\"click\" event-focus-id=\"ProjectId\" (click)=\"viewModel.NewCommand()\" *ngIf=\"viewModel.CanExecuteNewCommand()\" class=\"btn btn-primary pull-left\" title=\"Add New Project\">+ Add New Project</button>\r\n        <label class=\"pull-right\" style=\"padding-top: 12px !important;\">\r\n            Items Per Page\r\n            <select id=\"quantity\" (ngModel)=\"projectGrid.ItemsPerPage\" (ngModelChange)=\"projectGrid.FirstCommand()\">\r\n                <option>5</option>\r\n                <option>10</option>\r\n                <option>20</option>\r\n                <option>50</option>\r\n                <option>100</option>\r\n                <option>200</option>\r\n            </select>\r\n        </label>\r\n        <a *ngIf=\"projectGrid.ItemsPerPage > 20\" href=\"#bottom\" target=\"_self\" title=\"Jump to Bottom\" class=\"btn btn-primary\"><span class=\"fa fa-level-down\" style=\"margin: 0px 3px 0px 1px !important; padding: 3px !important;\"></span></a><a name=\"top\"></a>\r\n    </div>\r\n    <table id=\"projects\" class=\"table table-striped table-hover table-responsive no-border\">\r\n        <thead>\r\n            <tr id=\"sortrow\" class=\"bg-info DNABorderBottom\">\r\n                <th class=\"col-xs-3\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectName')\">\r\n                        Project Name\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectName\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('StartDate')\">\r\n                        Start Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'StartDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.StartDate\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectEndDate')\">\r\n                        End Date\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectEndDate'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectEndDate\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectOwner')\">\r\n                        Project Owner\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectOwner'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectOwner\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectManager')\">\r\n                        Project Manager\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectManager'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectManager\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-2\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectPhaseName')\">\r\n                        Project Phase\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectPhaseName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectPhaseName\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n                <th class=\"col-xs-1\">\r\n                    <a href=\"#\" (click)=\"projectGrid.SortCommand('ProjectStatusName')\">\r\n                        Project Status\r\n                        <span *ngIf=\"projectGrid.Sort == 'ProjectStatusName'\" class=\"glyphicon glyphicon-sort pull-right\"></span>\r\n                    </a><br />\r\n                    <input [(ngModel)]=\"projectGridFilter.ProjectStatusName\" type=\"search\" style=\"width: 100% !important;\" />\r\n                </th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr *ngFor=\"let project of viewModel.List.AllProjects | paginate: { itemsPerPage: 5, currentPage: p };\">\r\n                <td>\r\n                    <a href=\"#\" title=\"View/Edit\" event-focus=\"click\" event-focus-id=\"ProjectName\" (click)=\"viewModel.SelectProject(project)\"><strong>{{ project.ProjectName }}</strong></a>\r\n                </td>\r\n                <td>{{ project.StartDate | date: 'MM/dd/yyyy'}}</td>\r\n                <td>{{ project.ProjectEndDate | date: 'MM/dd/yyyy'}}</td>\r\n                <td>{{ project.ProjectOwner }}</td>\r\n                <td>{{ project.ProjectManager }}</td>\r\n                <td>{{ project.ProjectPhaseName }}</td>\r\n                <td>{{ project.ProjectStatusName }}</td>\r\n            </tr>\r\n        </tbody>\r\n        <tfoot>\r\n            <tr class=\"bg-info\">\r\n                <th>Project Name</th>\r\n                <th>Start Date</th>\r\n                <th>End Date</th>\r\n                <th>Project Owner</th>\r\n                <th>Project Manager</th>\r\n                <th>Project Phase</th>\r\n                <th>Project Status</th>\r\n            </tr>\r\n        </tfoot>\r\n    </table>\r\n    <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\r\n</div>\r\n<div *ngIf=\"viewModel.IsInDetailMode()\">\r\n    <div class=\"box-body\">\r\n        <br />\r\n        <div class=\"nav-tabs-custom\">\r\n            <ul class=\"nav nav-tabs\">\r\n                <li id=\"tab1\" [ngClass]=\"viewModel.Detail.IsInRecordMode() ? 'active' : 'bg-gray-light'\"><a href=\"#\" (click)=\"viewModel.Detail.RecordCommand()\" title=\"Project\" [class.disabled]=\"!viewModel.Detail.CanExecuteRecordCommand()\"><strong>Project: </strong>{{viewModel.Detail.Project.ProjectName}}</a></li>\r\n            </ul>\r\n            <div class=\"tab-content\">\r\n                <div class=\"margin\" *ngIf=\"viewModel.Detail.IsInRecordMode()\" id=\"recordform\">\r\n                    <div class=\"col-lg-1\"></div>\r\n                    <div class=\"col-lg-12\" style=\"margin-top: 25px;\">\r\n                        <form #projectForm=\"ngForm\">\r\n                            <div class=\"form-group\">\r\n                                <label>Project Name</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.ProjectName\" type=\"text\" class=\"form-control\" placeholder=\"...\" [disabled]=\"viewModel.Detail.Record.IsInUpdateMode() ? 'disabled' : ''\" id=\"ProjectName\" maxlength=\"50\" required=\"required\" name=\"projectname\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Owner</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectOwner\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"ProjectOwner\" maxlength=\"50\" name=\"ProjectOwner\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Manager</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectManager\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"projectmanager\" maxlength=\"50\" name=\"projectmanager\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Type</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectTypeId\" class=\"form-control\" name=\"projecttype\" id=\"projecttype\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllTypes\" [value]=\"item.ProjectTypeId\">{{ item.ProjectTypeName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Start Date</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.StartDate | date: 'yyyy-MM-dd'\" (ngModelChange)=\"viewModel.Detail.Record.Project.StartDate = $event\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectstartdate\" name=\"projectstartdate\">\r\n                            </div>          \r\n                            <div class=\"form-group\">\r\n                                <label>Project End Date</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.ProjectEndDate | date: 'yyyy-MM-dd'\" (ngModelChange)=\"viewModel.Detail.Record.Project.ProjectEndDate = $event\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"projectenddate\" name=\"projectenddate\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Overall Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.OverallPercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"overallpercentcomplete\" maxlength=\"3\" name=\"percentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Project Phase</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectPhaseId\" class=\"form-control\" name=\"projectphase\" id=\"projectphase\" required=\"required\">\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllPhases\" [value]=\"item.ProjectPhaseId\">{{ item.ProjectPhaseName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Estimated End Date</label>\r\n                                <input [ngModel]=\"viewModel.Detail.Record.Project.PhaseEndDate | date: 'yyyy-MM-dd'\" (ngModelChange)=\"viewModel.Detail.Record.Project.PhaseEndDate = $event\" type=\"date\" class=\"form-control\" placeholder=\"...\" id=\"phaseenddate\" name=\"phaseenddate\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Current Phase Percent Complete</label>\r\n                                <input [(ngModel)]=\"viewModel.Detail.Record.Project.PhasePercentComplete\" type=\"number\" class=\"form-control\" placeholder=\"...\" id=\"phasepercentcomplete\" maxlength=\"3\" name=\"phasepercentcomplete\">\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Project Status</label>\r\n                                <select [(ngModel)]=\"viewModel.Detail.Record.Project.ProjectStatusId\"  class=\"form-control\" name=\"projectstatus\" id=\"projectstatus\" required=\"required\" >\r\n                                    <option *ngFor=\"let item of viewModel.Detail.Record.AllStatuses\" [value]=\"item.ProjectStatusId\">{{ item.ProjectStatusName }}</option>\r\n                                    <option value=\"\"></option>\r\n                                </select>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Internal IT Project?</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalyes\" \r\n                                        name=\"internalyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\"\r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"isinternal\" \r\n                                        id=\"internalno\" \r\n                                        name=\"internalno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsInternalIT\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Waiting on Others? (Add Details In Comments)</label>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingyes\"\r\n                                        name=\"waitingyes\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"true\" [required]=\"true\">\r\n                                        Yes\r\n                                    </label>\r\n                                </div>\r\n                                <div class=\"radio\">\r\n                                    <label>\r\n                                        <input type=\"radio\" \r\n                                        name=\"iswaiting\" \r\n                                        id=\"waitingno\" \r\n                                        name=\"waitingno\" \r\n                                        [(ngModel)]=\"viewModel.Detail.Record.Project.IsWaiting\" \r\n                                        [value]=\"false\" [required]=\"true\">\r\n                                        No\r\n                                    </label>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group\">\r\n                                <label>Comments</label>\r\n                                <textarea [(ngModel)]=\"viewModel.Detail.Record.Project.Comments\" type=\"text\" class=\"form-control\" placeholder=\"...\" id=\"comments\" maxlength=\"500\" required=\"required\" name=\"comments\"></textarea>\r\n                            </div>\r\n                            <div class=\"form-group\" id=\"formbuttons\">\r\n                                <button id=\"save\" (click)=\"viewModel.Detail.Record.SaveCommand(projectForm)\" *ngIf=\"(viewModel.Detail.Record.CanExecuteSaveCommand() || viewModel.Detail.Record.CanExecuteEditCommand() && projectForm.form.valid)\" type=\"submit\" class=\"btn btn-danger\">Save</button>\r\n                                <button id=\"cancel\" type=\"button\" class=\"btn btn-primary\" (click)=\"viewModel.CloseCommand('Modifications to the project have been cancelled')\" title=\"Close\" [disabled]=\"!viewModel.CanExecuteCloseCommand()\">Cancel</button>\r\n                            </div>\r\n\r\n                        </form>\r\n                    </div>\r\n                    <div class=\"col-lg-1\"></div>\r\n\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
 
 /***/ })
 ],[297]);

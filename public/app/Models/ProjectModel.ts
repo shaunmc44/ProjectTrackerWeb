@@ -49,12 +49,12 @@ export default class ProjectModel {
             this.IsInternalIT = Project.IsInternalIT;
             this.ProjectOwner = Project.ProjectOwner;
             this.ProjectManager = Project.ProjectManager;
-            this.StartDate = new Date(Project.StartDate);
+            this.StartDate = Project.StartDate !== null ? new Date(Project.StartDate) : null;
             this.ProjectPhaseId = Project.ProjectPhaseId;
             this.PhasePercentComplete = Project.PhasePercentComplete;
-            this.PhaseEndDate = new Date(Project.PhaseEndDate);
+            this.PhaseEndDate = Project.PhaseEndDate !== null ? new Date(Project.PhaseEndDate) : null;
             this.OverallPercentComplete = Project.OverallPercentComplete;
-            this.ProjectEndDate = new Date(Project.ProjectEndDate);
+            this.ProjectEndDate = Project.ProjectEndDate !== null ? new Date(Project.ProjectEndDate) : null;
             this.IsWaiting = Project.IsWaiting;
             this.Comments = Project.Comments;
 
@@ -80,9 +80,6 @@ export default class ProjectModel {
             this.Comments = null;
         }
     }
-    FormattedStartDate(){ this.StartDate !== null && this.StartDate.toISOString().substring(0,10); }
-    FormattedEndDate(){ this.ProjectEndDate !== null && this.ProjectEndDate.toISOString().substring(0,10); }
-    FormattedPhaseEndDate(){ this.PhaseEndDate !== null && this.PhaseEndDate.toISOString().substring(0,10); }
 
     Reload(NewProject) {
         this.ProjectId = NewProject.ProjectId;
@@ -92,12 +89,12 @@ export default class ProjectModel {
         this.IsInternalIT = NewProject.IsInternalIT;
         this.ProjectOwner = NewProject.ProjectOwner;
         this.ProjectManager = NewProject.ProjectManager;
-        this.StartDate = new Date(NewProject.StartDate);
+        this.StartDate = NewProject.StartDate !== null ? new Date(NewProject.StartDate) : null;
         this.ProjectPhaseId = NewProject.ProjectPhaseId;
         this.PhasePercentComplete = NewProject.PhasePercentComplete;
-        this.PhaseEndDate = new Date(NewProject.PhaseEndDate);
+        this.PhaseEndDate = NewProject.PhaseEndDate !== null ? new Date(NewProject.PhaseEndDate) : null;
         this.OverallPercentComplete = NewProject.OverallPercentComplete;
-        this.ProjectEndDate = new Date(NewProject.ProjectEndDate);
+        this.ProjectEndDate = NewProject.ProjectEndDate !== null ? new Date(NewProject.ProjectEndDate) : null;
         this.IsWaiting = NewProject.IsWaiting;
         this.Comments = NewProject.Comments;
     }

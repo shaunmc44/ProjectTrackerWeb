@@ -31,59 +31,59 @@
                         Project Name
                         <span *ngIf="projectGrid.Sort == 'ProjectName'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectName" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectName" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-1">
                     <a href="#" (click)="projectGrid.SortCommand('StartDate')">
                         Start Date
                         <span *ngIf="projectGrid.Sort == 'StartDate'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.StartDate" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.StartDate" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-1">
                     <a href="#" (click)="projectGrid.SortCommand('ProjectEndDate')">
                         End Date
                         <span *ngIf="projectGrid.Sort == 'ProjectEndDate'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectEndDate" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectEndDate" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-2">
                     <a href="#" (click)="projectGrid.SortCommand('ProjectOwner')">
                         Project Owner
                         <span *ngIf="projectGrid.Sort == 'ProjectOwner'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectOwner" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectOwner" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-2">
                     <a href="#" (click)="projectGrid.SortCommand('ProjectManager')">
                         Project Manager
                         <span *ngIf="projectGrid.Sort == 'ProjectManager'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectManager" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectManager" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-2">
                     <a href="#" (click)="projectGrid.SortCommand('ProjectPhaseName')">
                         Project Phase
                         <span *ngIf="projectGrid.Sort == 'ProjectPhaseName'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectPhaseName" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectPhaseName" type="search" style="width: 100% !important;" />
                 </th>
                 <th class="col-xs-1">
                     <a href="#" (click)="projectGrid.SortCommand('ProjectStatusName')">
                         Project Status
                         <span *ngIf="projectGrid.Sort == 'ProjectStatusName'" class="glyphicon glyphicon-sort pull-right"></span>
                     </a><br />
-                    <input (ngModel)="projectGridFilter.ProjectStatusName" type="search" (ngModelChange)="projectGrid.FirstCommand()" style="width: 100% !important;" />
+                    <input [(ngModel)]="projectGridFilter.ProjectStatusName" type="search" style="width: 100% !important;" />
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let project of viewModel.List.AllProjects">
+            <tr *ngFor="let project of viewModel.List.AllProjects | paginate: { itemsPerPage: 5, currentPage: p };">
                 <td>
                     <a href="#" title="View/Edit" event-focus="click" event-focus-id="ProjectName" (click)="viewModel.SelectProject(project)"><strong>{{ project.ProjectName }}</strong></a>
                 </td>
-                <td>{{ project.FormattedStartDate() }}</td>
-                <td>{{ project.FormattedEndDate() }}</td>
+                <td>{{ project.StartDate | date: 'MM/dd/yyyy'}}</td>
+                <td>{{ project.ProjectEndDate | date: 'MM/dd/yyyy'}}</td>
                 <td>{{ project.ProjectOwner }}</td>
                 <td>{{ project.ProjectManager }}</td>
                 <td>{{ project.ProjectPhaseName }}</td>
@@ -102,18 +102,7 @@
             </tr>
         </tfoot>
     </table>
-
-<!-- 
-    <div id="pagination" class="btn-group pull-right" style="margin-top: 5px !important;">
-        <button (click)="projectGrid.FirstCommand()" [disabled]="!projectGrid.CanExecuteFirstCommand()" class="btn btn-default"><span class="glyphicon glyphicon-fast-backward"></span> First</button>
-        <button (click)="projectGrid.PrevCommand()" [disabled]="!projectGrid.CanExecutePrevCommand()" class="btn btn-default"><span class="glyphicon glyphicon-step-backward"></span> Prev</button>
-        <button (click)="projectGrid.LeftEllipseCommand()" *ngIf="projectGrid.CanExecuteLeftEllipseCommand()" class="btn btn-default"><span class="glyphicon glyphicon-option-horizontal"></span></button>
-        <button *ngFor="let n of projectGrid.PageNumbers()" (click)="projectGrid.PageCommand(n)" [disabled]="!projectGrid.CanExecutePageCommand(n)" (innerHtml)="n+1" class="btn btn-default"></button>
-        <button (click)="projectGrid.RightEllipseCommand()" *ngIf="projectGrid.CanExecuteRightEllipseCommand()" class="btn btn-default"><span class="glyphicon glyphicon-option-horizontal"></span></button>
-        <button (click)="projectGrid.NextCommand()" [disabled]="!projectGrid.CanExecuteNextCommand()" class="btn btn-default">Next <span class="glyphicon glyphicon-step-forward"></span></button>
-        <button (click)="projectGrid.LastCommand()" [disabled])="!projectGrid.CanExecuteLastCommand()" class="btn btn-default">Last <span class="glyphicon glyphicon-fast-forward"></span></button>
-    </div>
--->
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
 <div *ngIf="viewModel.IsInDetailMode()">
     <div class="box-body">
@@ -148,11 +137,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Project Start Date</label>
-                                <input (ngModel)="viewModel.Detail.Record.Project.StartDate" type="date" class="form-control" placeholder="..." id="projectstartdate" name="projectstartdate" value="{{ viewModel.Detail.Record.Project.FormattedStartDate() }}">
-                            </div>
+                                <input [ngModel]="viewModel.Detail.Record.Project.StartDate | date: 'yyyy-MM-dd'" (ngModelChange)="viewModel.Detail.Record.Project.StartDate = $event" type="date" class="form-control" placeholder="..." id="projectstartdate" name="projectstartdate">
+                            </div>          
                             <div class="form-group">
                                 <label>Project End Date</label>
-                                <input (ngModel)="viewModel.Detail.Record.Project.ProjectEndDate" type="date" class="form-control" placeholder="..." id="projectenddate" name="projectenddate" value="{{ viewModel.Detail.Record.Project.FormattedEndDate() }}">
+                                <input [ngModel]="viewModel.Detail.Record.Project.ProjectEndDate | date: 'yyyy-MM-dd'" (ngModelChange)="viewModel.Detail.Record.Project.ProjectEndDate = $event" type="date" class="form-control" placeholder="..." id="projectenddate" name="projectenddate">
                             </div>
                             <div class="form-group">
                                 <label>Overall Percent Complete</label>
@@ -167,7 +156,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Current Phase Estimated End Date</label>
-                                <input (ngModel)="viewModel.Detail.Record.Project.PhaseEndDate" type="date" class="form-control" placeholder="..." id="phaseenddate" name="phaseenddate" value="{{ viewModel.Detail.Record.Project.FormattedPhaseEndDate() }}">
+                                <input [ngModel]="viewModel.Detail.Record.Project.PhaseEndDate | date: 'yyyy-MM-dd'" (ngModelChange)="viewModel.Detail.Record.Project.PhaseEndDate = $event" type="date" class="form-control" placeholder="..." id="phaseenddate" name="phaseenddate">
                             </div>
                             <div class="form-group">
                                 <label>Current Phase Percent Complete</label>

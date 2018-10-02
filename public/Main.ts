@@ -3,6 +3,7 @@ import { UpgradeModule, downgradeInjectable, downgradeComponent } from '@angular
 import { AppModule } from "./app/AppModule";
 import {EventUtility} from "./app/Utilities/EventUtility.service";
 import {GridUtility} from "./app/Utilities/GridUtility.service";
+import {PagerUtility} from "./app/Utilities/PagerUtility.service";
 import {PageQuantityUtility} from "./app/Utilities/PageQuantityUtility.service";
 import { ProjectTrackerAdminViewModel } from './app/ViewModels/ProjectTrackerAdminViewModel.service';
 import { ProjectTrackerDetailRecordViewModel } from './app/ViewModels/ProjectTrackerDetailRecordViewModel.service';

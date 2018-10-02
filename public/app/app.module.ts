@@ -16,13 +16,15 @@ import { ProjectsDataAccess } from './DataAccess/ProjectsDataAccess.service';
 import { ProjectStatusesDataAccess } from './DataAccess/ProjectStatusesDataAccess.service';
 import { ProjectTypesDataAccess } from './DataAccess/ProjectTypesDataAccess.service';
 import { ProjectPhasesDataAccess } from './DataAccess/ProjectPhasesDataAccess.service';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpClientModule,
-        UpgradeModule
+        UpgradeModule,
+        NgxPaginationModule
     ],
     declarations: [
         AppComponent,
@@ -46,7 +48,9 @@ import { ProjectPhasesDataAccess } from './DataAccess/ProjectPhasesDataAccess.se
     ],
     entryComponents: [
         ProjectTrackerComponent
+    ],
+    exports: [
+        NgxPaginationModule
     ]
-
 })
 export class AppModule { }

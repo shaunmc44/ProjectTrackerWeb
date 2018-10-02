@@ -11,6 +11,7 @@ import {ProjectsDataAccess} from "./DataAccess/ProjectsDataAccess.service";
 import {ProjectStatusesDataAccess} from "./DataAccess/ProjectStatusesDataAccess.service";
 import {ProjectTypesDataAccess} from "./DataAccess/ProjectTypesDataAccess.service";
 import {ProjectPhasesDataAccess} from "./DataAccess/ProjectPhasesDataAccess.service";
+import { PagerUtility } from './Utilities/PagerUtility.service';
 
 @Component({
     selector: 'project-tracker',
@@ -31,9 +32,13 @@ export class ProjectTrackerComponent {
     isHidden: boolean;
     isErrorHidden: boolean;
     filteredProjects: any;
-
-    constructor(@Inject(ProjectTrackerAdminViewModel) private viewModel, @Inject(EventUtility) private EventUtility, @Inject(GridUtility) private projectGrid, @Inject(PageQuantityUtility) private projectPageQuantity) {
-
+    pager: any;
+    pagedItems: any[];
+    
+    constructor(@Inject(ProjectTrackerAdminViewModel) private viewModel, @Inject(EventUtility) private EventUtility, @Inject(GridUtility) private projectGrid, @Inject(PageQuantityUtility) private projectPageQuantity, private pagerService: PagerService) {
+        // pager object
+        this.pager = {};
+                
         this.isHidden = this.viewModel.Message === '';
         this.isErrorHidden = this.viewModel.ErrorMessage === '';
 
@@ -62,6 +67,14 @@ export class ProjectTrackerComponent {
             return "radioInvalid";
         else
             return "";
+    }
+
+    setPage(page: number) {
+        // get pager object from service
+        this.pager = this.pagerService.getPager(this.viewModel.AllProjects.length, page);
+ 
+        // get current page of items
+        this.pagedItems = this.viewModel.AllProjects.slice(this.pager.startIndex, this.pager.endIndex + 1);
     }
 }
 

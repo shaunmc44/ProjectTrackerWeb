@@ -7058,7 +7058,112 @@ return jQuery;
 
 
 /***/ }),
-/* 87 */,
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DateUtility_1 = __webpack_require__(97);
+var ProjectModel = /** @class */ (function () {
+    function ProjectModel(Project) {
+        this.DateUtility = new DateUtility_1.DateUtility();
+        if (Project !== null) {
+            this.ProjectId = Project.ProjectId;
+            this.ProjectName = Project.ProjectName;
+            this.ProjectTypeId = Project.ProjectTypeId;
+            this.ProjectStatusId = Project.ProjectStatusId;
+            this.IsInternalIT = Project.IsInternalIT;
+            this.ProjectOwner = Project.ProjectOwner;
+            this.ProjectManager = Project.ProjectManager;
+            this.StartDate = Project.StartDate !== null ? new Date(Project.StartDate) : null;
+            this.ProjectPhaseId = Project.ProjectPhaseId;
+            this.PhasePercentComplete = Project.PhasePercentComplete;
+            this.PhaseEndDate = Project.PhaseEndDate !== null ? new Date(Project.PhaseEndDate) : null;
+            this.OverallPercentComplete = Project.OverallPercentComplete;
+            this.ProjectEndDate = Project.ProjectEndDate !== null ? new Date(Project.ProjectEndDate) : null;
+            this.IsWaiting = Project.IsWaiting;
+            this.Comments = Project.Comments;
+            this.ProjectPhaseName = Project.ProjectPhase.ProjectPhaseName;
+            this.ProjectTypeName = Project.ProjectType.ProjectTypeName;
+            this.ProjectStatusName = Project.ProjectStatus.ProjectStatusName;
+        }
+        else {
+            this.ProjectId = 0;
+            this.ProjectName = null;
+            this.ProjectTypeId = 1;
+            this.ProjectStatusId = 1;
+            this.IsInternalIT = null;
+            this.ProjectOwner = null;
+            this.ProjectManager = null;
+            this.StartDate = null;
+            this.ProjectPhaseId = 1;
+            this.PhasePercentComplete = 0;
+            this.PhaseEndDate = null;
+            this.OverallPercentComplete = 0;
+            this.ProjectEndDate = null;
+            this.IsWaiting = null;
+            this.Comments = null;
+        }
+    }
+    ProjectModel.prototype.Reload = function (NewProject) {
+        this.ProjectId = NewProject.ProjectId;
+        this.ProjectName = NewProject.ProjectName;
+        this.ProjectTypeId = NewProject.ProjectTypeId;
+        this.ProjectStatusId = NewProject.ProjectStatusId;
+        this.IsInternalIT = NewProject.IsInternalIT;
+        this.ProjectOwner = NewProject.ProjectOwner;
+        this.ProjectManager = NewProject.ProjectManager;
+        this.StartDate = NewProject.StartDate !== null ? new Date(NewProject.StartDate) : null;
+        this.ProjectPhaseId = NewProject.ProjectPhaseId;
+        this.PhasePercentComplete = NewProject.PhasePercentComplete;
+        this.PhaseEndDate = NewProject.PhaseEndDate !== null ? new Date(NewProject.PhaseEndDate) : null;
+        this.OverallPercentComplete = NewProject.OverallPercentComplete;
+        this.ProjectEndDate = NewProject.ProjectEndDate !== null ? new Date(NewProject.ProjectEndDate) : null;
+        this.IsWaiting = NewProject.IsWaiting;
+        this.Comments = NewProject.Comments;
+    };
+    ProjectModel.prototype.Clear = function () {
+        this.ProjectName = null;
+        this.ProjectTypeId = null;
+        this.ProjectStatusId = null;
+        this.IsInternalIT = null;
+        this.ProjectOwner = null;
+        this.ProjectManager = null;
+        this.StartDate = null;
+        this.ProjectPhaseId = null;
+        this.PhasePercentComplete = null;
+        this.PhaseEndDate = null;
+        this.OverallPercentComplete = null;
+        this.ProjectEndDate = null;
+        this.IsWaiting = null;
+        this.Comments = null;
+    };
+    ProjectModel.prototype.ToObject = function () {
+        return {
+            ProjectId: this.ProjectId,
+            ProjectName: this.ProjectName,
+            ProjectTypeId: this.ProjectTypeId,
+            ProjectStatusId: this.ProjectStatusId,
+            IsInternalIT: this.IsInternalIT === true ? true : false,
+            ProjectOwner: this.ProjectOwner,
+            ProjectManager: this.ProjectManager,
+            StartDate: this.StartDate,
+            ProjectPhaseId: this.ProjectPhaseId,
+            PhasePercentComplete: this.PhasePercentComplete,
+            PhaseEndDate: this.PhaseEndDate,
+            OverallPercentComplete: this.OverallPercentComplete,
+            ProjectEndDate: this.ProjectEndDate,
+            IsWaiting: this.IsWaiting === true ? true : false,
+            Comments: this.Comments
+        };
+    };
+    return ProjectModel;
+}());
+exports.default = ProjectModel;
+
+
+/***/ }),
 /* 88 */,
 /* 89 */,
 /* 90 */,
@@ -7067,7 +7172,8 @@ return jQuery;
 /* 93 */,
 /* 94 */,
 /* 95 */,
-/* 96 */
+/* 96 */,
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7146,115 +7252,6 @@ var DateUtility = /** @class */ (function () {
 exports.DateUtility = DateUtility;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var DateUtility_1 = __webpack_require__(96);
-var ProjectModel = /** @class */ (function () {
-    function ProjectModel(Project) {
-        this.DateUtility = new DateUtility_1.DateUtility();
-        if (Project !== null) {
-            this.ProjectId = Project.ProjectId;
-            this.ProjectName = Project.ProjectName;
-            this.ProjectTypeId = Project.ProjectTypeId;
-            this.ProjectStatusId = Project.ProjectStatusId;
-            this.IsInternalIT = Project.IsInternalIT;
-            this.ProjectOwner = Project.ProjectOwner;
-            this.ProjectManager = Project.ProjectManager;
-            this.StartDate = new Date(Project.StartDate);
-            this.ProjectPhaseId = Project.ProjectPhaseId;
-            this.PhasePercentComplete = Project.PhasePercentComplete;
-            this.PhaseEndDate = new Date(Project.PhaseEndDate);
-            this.OverallPercentComplete = Project.OverallPercentComplete;
-            this.ProjectEndDate = new Date(Project.ProjectEndDate);
-            this.IsWaiting = Project.IsWaiting;
-            this.Comments = Project.Comments;
-            this.ProjectPhaseName = Project.ProjectPhase.ProjectPhaseName;
-            this.ProjectTypeName = Project.ProjectType.ProjectTypeName;
-            this.ProjectStatusName = Project.ProjectStatus.ProjectStatusName;
-        }
-        else {
-            this.ProjectId = 0;
-            this.ProjectName = null;
-            this.ProjectTypeId = 1;
-            this.ProjectStatusId = 1;
-            this.IsInternalIT = null;
-            this.ProjectOwner = null;
-            this.ProjectManager = null;
-            this.StartDate = null;
-            this.ProjectPhaseId = 1;
-            this.PhasePercentComplete = 0;
-            this.PhaseEndDate = null;
-            this.OverallPercentComplete = 0;
-            this.ProjectEndDate = null;
-            this.IsWaiting = null;
-            this.Comments = null;
-        }
-    }
-    ProjectModel.prototype.FormattedStartDate = function () { this.StartDate !== null && this.StartDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.FormattedEndDate = function () { this.ProjectEndDate !== null && this.ProjectEndDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.FormattedPhaseEndDate = function () { this.PhaseEndDate !== null && this.PhaseEndDate.toISOString().substring(0, 10); };
-    ProjectModel.prototype.Reload = function (NewProject) {
-        this.ProjectId = NewProject.ProjectId;
-        this.ProjectName = NewProject.ProjectName;
-        this.ProjectTypeId = NewProject.ProjectTypeId;
-        this.ProjectStatusId = NewProject.ProjectStatusId;
-        this.IsInternalIT = NewProject.IsInternalIT;
-        this.ProjectOwner = NewProject.ProjectOwner;
-        this.ProjectManager = NewProject.ProjectManager;
-        this.StartDate = new Date(NewProject.StartDate);
-        this.ProjectPhaseId = NewProject.ProjectPhaseId;
-        this.PhasePercentComplete = NewProject.PhasePercentComplete;
-        this.PhaseEndDate = new Date(NewProject.PhaseEndDate);
-        this.OverallPercentComplete = NewProject.OverallPercentComplete;
-        this.ProjectEndDate = new Date(NewProject.ProjectEndDate);
-        this.IsWaiting = NewProject.IsWaiting;
-        this.Comments = NewProject.Comments;
-    };
-    ProjectModel.prototype.Clear = function () {
-        this.ProjectName = null;
-        this.ProjectTypeId = null;
-        this.ProjectStatusId = null;
-        this.IsInternalIT = null;
-        this.ProjectOwner = null;
-        this.ProjectManager = null;
-        this.StartDate = null;
-        this.ProjectPhaseId = null;
-        this.PhasePercentComplete = null;
-        this.PhaseEndDate = null;
-        this.OverallPercentComplete = null;
-        this.ProjectEndDate = null;
-        this.IsWaiting = null;
-        this.Comments = null;
-    };
-    ProjectModel.prototype.ToObject = function () {
-        return {
-            ProjectId: this.ProjectId,
-            ProjectName: this.ProjectName,
-            ProjectTypeId: this.ProjectTypeId,
-            ProjectStatusId: this.ProjectStatusId,
-            IsInternalIT: this.IsInternalIT === true ? true : false,
-            ProjectOwner: this.ProjectOwner,
-            ProjectManager: this.ProjectManager,
-            StartDate: this.StartDate,
-            ProjectPhaseId: this.ProjectPhaseId,
-            PhasePercentComplete: this.PhasePercentComplete,
-            PhaseEndDate: this.PhaseEndDate,
-            OverallPercentComplete: this.OverallPercentComplete,
-            ProjectEndDate: this.ProjectEndDate,
-            IsWaiting: this.IsWaiting === true ? true : false,
-            Comments: this.Comments
-        };
-    };
-    return ProjectModel;
-}());
-exports.default = ProjectModel;
-
 
 /***/ }),
 /* 98 */,
@@ -12372,9 +12369,9 @@ exports.default = TypeModel;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(296);
-__webpack_require__(96);
-__webpack_require__(168);
 __webpack_require__(97);
+__webpack_require__(168);
+__webpack_require__(87);
 __webpack_require__(169);
 __webpack_require__(170);
 

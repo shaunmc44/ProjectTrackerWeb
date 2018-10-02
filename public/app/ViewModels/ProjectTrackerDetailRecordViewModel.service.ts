@@ -106,10 +106,10 @@ export class ProjectTrackerDetailRecordViewModel {
             .subscribe(
                 (Result: iProjectModel) => {
                     this.Project.Reload(Result);
-                    this.Project = null;
+                    this.Project = new ProjectModel(null);
                 });
         } else {
-            this.Project = null;
+            this.Project = new ProjectModel(null);
         }
 
         this.displayMode = this.DISPLAY_MODE_NONE;
@@ -120,11 +120,11 @@ export class ProjectTrackerDetailRecordViewModel {
     }
 
     CanExecuteSaveCommand = function () {
-        return this.Project != null && this.IsInInsertMode() && !this.isBusy && this.canSave;
+        return this.Project.ProjectId != null && this.IsInInsertMode() && !this.isBusy && this.canSave;
     }
 
     CanExecuteEditCommand() {
-        return this.Project != null && this.IsInUpdateMode() && !this.isBusy && this.canEdit;
+        return this.Project.ProjectId != null && this.IsInUpdateMode() && !this.isBusy && this.canEdit;
     }
 
     SaveCommand(form) {
@@ -167,7 +167,7 @@ export class ProjectTrackerDetailRecordViewModel {
     }
 
     CanExecuteResetCommand() {
-        return this.Project != null && (this.IsInInsertMode() || this.IsInUpdateMode()) && !this.isBusy;
+        return this.Project.ProjectId != null && (this.IsInInsertMode() || this.IsInUpdateMode()) && !this.isBusy;
     }
 
     ResetCommand() {

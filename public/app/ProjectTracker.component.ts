@@ -24,7 +24,8 @@ import { PagerUtility } from './Utilities/PagerUtility.service';
                 ProjectsDataAccess,
                 ProjectStatusesDataAccess,
                 ProjectTypesDataAccess,
-                ProjectPhasesDataAccess
+                ProjectPhasesDataAccess,
+                PagerUtility
             ]
 })
 export class ProjectTrackerComponent {
@@ -35,7 +36,7 @@ export class ProjectTrackerComponent {
     pager: any;
     pagedItems: any[];
     
-    constructor(@Inject(ProjectTrackerAdminViewModel) private viewModel, @Inject(EventUtility) private EventUtility, @Inject(GridUtility) private projectGrid, @Inject(PageQuantityUtility) private projectPageQuantity, private pagerService: PagerService) {
+    constructor(@Inject(ProjectTrackerAdminViewModel) private viewModel, @Inject(EventUtility) private EventUtility, @Inject(GridUtility) private projectGrid, @Inject(PageQuantityUtility) private projectPageQuantity, private pagerService: PagerUtility) {
         // pager object
         this.pager = {};
                 

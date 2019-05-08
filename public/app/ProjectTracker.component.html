@@ -78,7 +78,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let project of viewModel.List.AllProjects | paginate: { itemsPerPage: 5, currentPage: p };">
+            <!--<tr *ngFor="let project of viewModel.List.AllProjects | paginate: { itemsPerPage: 5, currentPage: p };">-->
+            <tr *ngFor="let project of viewModel.List.AllProjects;">
                 <td>
                     <a href="#" title="View/Edit" event-focus="click" event-focus-id="ProjectName" (click)="viewModel.SelectProject(project)"><strong>{{ project.ProjectName }}</strong></a>
                 </td>
@@ -102,7 +103,7 @@
             </tr>
         </tfoot>
     </table>
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    <!--<pagination-controls (pageChange)="p = $event"></pagination-controls>-->
 </div>
 <div *ngIf="viewModel.IsInDetailMode()">
     <div class="box-body">

@@ -21,7 +21,7 @@
     "html-loader": "0.4.5",
     "html-webpack-plugin": "2.28.0",
     "img-loader": "^3.0.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "ng2-search-filter": "^0.4.7",
     "null-loader": "0.1.1",
     "open": "^6.2.0",
